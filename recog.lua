@@ -62,22 +62,21 @@ minetest.chat_send_all(minetest.serialize(exes))
 end
 function ugid(length)
     local time = minetest.get_us_time()
-    local rnum = math.random(1,67)
     local ggl = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"}
     local presult = {}
     local selvar;
     local result = ""
-    for n=1, length/2, 1 do
-        local num = math.random(1,27)
-        selvar = ggl[num]
-        presult[n] = selvar
-        if(num > 11)then
-            presult[length-n] = math.random(1,num)
-        else presult[length-n] = ggl[num]
-        end
+    for n = 1, length, 1 do
+        local rnum = math.random(1,66)
+        if(rnum <= 26)then
+        table.insert(presult,ggl[rnum])
+        elseif(rnum >= 27)then
+            table.insert(presult,rnum)
+        else end
+
     end
-    for n=1, #presult - 1, 1 do
-        result = result..presult[n] or "x"
+    for n = 1, #presult, 1 do
+        result = result .. presult[n]
     end
     return result
 end
