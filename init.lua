@@ -56,6 +56,18 @@ minetest.register_node("nc_luxgate:luxblende",{
     tiles = {"canvas2.png"},
     on_punch = function(pos)
         pshem(pos,shem_gate_min)
+        local reltab = minetest.find_nodes_in_area({x=pos.x-4,y=pos.y,z=pos.z-4},{x=pos.x+4,y=pos.y+6,z=pos.z+4},"nc_luxgate:vessicle")
+        for k,v in pairs(reltab) do
+            local mm = minetest.get_meta(v)
+            if(mm:get_string("USID") == "")then
+                mm:set_string("USID",ugid(6))
+            elseif(mm:get_string("USID") ~= nil)then
+                --minetest.chat_send_all("STRING ALREADY SET TO: "..mm:get_string("USID"))
+            else
+             --minetest.chat_send_all("Error - ID string")
+            end
+            --minetest.chat_send_all(mm:get_string("USID"))
+        end 
     end
 
 })
@@ -67,13 +79,15 @@ minetest.register_node("nc_luxgate:vessicle",{
     walkable = false,
     on_punch = function(pos,node, puncher)
     --structure_scan(lluxgate.structures.gate_maximal,pos)
-    local player = minetest.get_objects_inside_radius(pos,2)[1]
+    --[[local player = minetest.get_objects_inside_radius(pos,2)[1]
     local playern = player:get_player_name()
     local homepos = pos
     local locale = minetest.find_nodes_in_area({x=pos.x-20,y=pos.y-1,z=pos.z-20},{x=pos.x+20,y=pos.y+1,z=pos.z+20},"nc_lode:block_annealed")
     if(minetest.get_node({x=locale[1].x, y=locale[1].y-1, z=locale[1].z}).name == "nc_lode:block_annealed")then
     player:move_to(locale[1])
-    else minetest.chat_send_all(minetest.get_node({x=locale[1].x, y=locale[1].y-1, z=locale[1].z}).name) end
+    else minetest.chat_send_all(minetest.get_node({x=locale[1].x, y=locale[1].y-1, z=locale[1].z}).name) end]]
+    local mm = minetest.get_meta(pos)
+    minetest.chat_send_all(mm:get_string("USID"))
     end
 })
 minetest.register_node("nc_luxgate:frame_ohm",{
