@@ -32,5 +32,9 @@ data = {
     }
 }
 function pshem(pos, shem)
-minetest.place_schematic(pos, shem, 0,_, false)
+	if(shem == "shem_gate_min")then
+minetest.place_schematic({x=pos.x-1,y=pos.y,z=pos.z-1}, shem_gate_min, 0,_, true)
+	elseif(shem == "shem_gate_max")then
+		minetest.place_schematic({x=pos.x-2,y=pos.y,z=pos.z-1}, shem_gate_max, 0,_, true)
+	else return end
 end

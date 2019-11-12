@@ -55,7 +55,7 @@ minetest.register_node("nc_luxgate:luxblende",{
     },
     tiles = {"canvas2.png"},
     on_punch = function(pos)
-        pshem(pos,shem_gate_min)
+        pshem(pos,"shem_gate_max")
         local reltab = minetest.find_nodes_in_area({x=pos.x-4,y=pos.y,z=pos.z-4},{x=pos.x+4,y=pos.y+6,z=pos.z+4},"nc_luxgate:vessicle")
         for k,v in pairs(reltab) do
             local mm = minetest.get_meta(v)
@@ -105,7 +105,20 @@ minetest.register_node("nc_luxgate:frame_ohm",{
             frame_length = 0.1,
         }
     }},
-    groups = {cracky =1}
+    groups = {cracky =1},
+    on_punch = function(pos)
+        local nmeta = minetest.get_meta(pos)
+        if(nmeta:get_int("charge")==0)then
+        local timer = minetest.get_node_timer(pos)
+        timer:start(10)
+        nmeta:set_int("charge",1)
+        else minetest.chat_send_all("Node already charged!")end
+        suffusion(pos)
+    end,
+    on_timer= function(pos)
+        local nmeta = minetest.get_meta(pos)
+        nmeta:set_int("charge",0)
+    end
 })
 minetest.register_node("nc_luxgate:frame_lam",{
     description = "-NULL-",
