@@ -121,3 +121,19 @@ function suffusion(pos)
     })
 else end
 end
+
+--  --  --  --  --  --  --  Bilateral Search
+function linesrc(pos, dist, dir)
+    local data = {
+        copy = {pos, dist, dir},
+        pseudo = {samp = {},found = {}}
+    }
+    for n = 1, dist, 1 do
+        local eppos = {x=pos.x + n * 5,y=pos.y,z=pos.z}
+        data.pseudo.samp[n] = eppos
+        minetest.set_node(eppos, {name = "nc_luxgate:frame_lam"})
+        local box = minetest.find_node_near(eppos,2,"nc_luxgate:vessicle",true)
+        table.insert(data.pseudo.found,box)
+    end
+    return data.pseudo.found[1]
+end

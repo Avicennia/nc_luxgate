@@ -1,3 +1,23 @@
+
+shem_pylon = {
+	id = 2,
+	size = {
+		y = 4,
+		x = 5,
+		z = 5
+	}
+,
+	data = {
+{name = "air",}, {name = "air",}, {name = "nc_luxgate:frame_v", param2 = 1}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, 
+{name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, { name = "nc_luxgate:frame_e", param2 = 2 }, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "nc_luxgate:frame_v", param2 = 1}, {name = "air",}, 
+{name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, { name = "nc_luxgate:frame_v", param2 = 2 }, {name = "air",}, {name = "air",}, {name = "air",}, { name = "nc_luxgate:frame_v" }, {name = "air",}, { name = "nc_luxgate:frame_e", param2 = 3 }, {name = "air",}, { name = "nc_luxgate:frame_e", param2 = 2 }, {name = "air",}, {name = "air",}, 
+{ name = "nc_luxgate:frame_v", param2 = 2 }, { name = "nc_luxgate:vessicle" }, { name = "nc_luxgate:frame_v" }, {name = "air",}, {name = "air",}, {name = "air",}, { name = "nc_lode:block_annealed" }, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, { name = "nc_luxgate:frame_e", param2 = 3 }, 
+{name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, { name = "nc_luxgate:frame_v", param2 = 3 }, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, { name = "nc_luxgate:frame_v", param2 = 3 }, {name = "air",}, {name = "air",}, 
+{name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, {name = "air",}, 
+
+}
+}
+
 shem_gate_min = {
     id = 1,
 	size = {
@@ -31,10 +51,20 @@ data = {
     
     }
 }
-function pshem(pos, shem)
+function pshem(pos, shem, asian)
+	local dir = 0
+	local peekaboo = {math.abs(asian.x),math.abs(asian.z)}
+	local verdict = math.max(peekaboo[1],peekaboo[2])
+	if(verdict == peekaboo[1])then
+		dir = 90
+	else
+		end
+
 	if(shem == "shem_gate_min")then
-minetest.place_schematic({x=pos.x-1,y=pos.y,z=pos.z-1}, shem_gate_min, 0,_, true)
+minetest.place_schematic({x=pos.x-1,y=pos.y,z=pos.z-1}, shem_gate_min, dir,_, true)
 	elseif(shem == "shem_gate_max")then
-		minetest.place_schematic({x=pos.x-2,y=pos.y,z=pos.z-1}, shem_gate_max, 0,_, true)
-	else return end
+		minetest.place_schematic({x=pos.x-2,y=pos.y,z=pos.z-1}, shem_gate_max, dir,_, true)
+	elseif(shem == "shem_pylon")then
+		minetest.place_schematic({x=pos.x-2,y=pos.y,z=pos.z-1}, shem_pylon, dir,_, true)
+		return end
 end

@@ -54,8 +54,8 @@ minetest.register_node("nc_luxgate:luxblende",{
         }
     },
     tiles = {"canvas2.png"},
-    on_punch = function(pos)
-        pshem(pos,"shem_gate_max")
+    on_punch = function(pos, node, puncher)
+        pshem(pos,"shem_gate_max",puncher:get_look_dir())
         local reltab = minetest.find_nodes_in_area({x=pos.x-4,y=pos.y,z=pos.z-4},{x=pos.x+4,y=pos.y+6,z=pos.z+4},"nc_luxgate:vessicle")
         for k,v in pairs(reltab) do
             local mm = minetest.get_meta(v)
@@ -106,16 +106,26 @@ minetest.register_node("nc_luxgate:frame_ohm",{
         }
     }},
     groups = {cracky =1},
-    on_punch = function(pos)
+    on_punch = function(pos,node,puncher)
+        local mn = linesrc(pos,60,"north")
+        if mn then
+        puncher:move_to({x=mn.x,y=mn.y+3,z=mn.z})
+        else end
+        minetest.chat_send_all(minetest.serialize(puncher:get_look_dir()))
         local nmeta = minetest.get_meta(pos)
         if(nmeta:get_int("charge")==0)then
         local timer = minetest.get_node_timer(pos)
-        timer:start(10)
+        timer:start(3)
         nmeta:set_int("charge",1)
-        else minetest.chat_send_all("Node already charged!")end
+        else end
         suffusion(pos)
     end,
     on_timer= function(pos)
+        
+        --[[local vespos = minetest.find_nodes_with_meta({x=pos.x-2,y=pos.y,z=pos.z-2},{x=pos.x+2,y=pos.y+2,z=pos.z+2})
+        local objs = minetest.get_objects_inside_radius(vespos[1],4)
+        local player = objs[1]
+        player:move_to({x=pos.x,y=pos.y+4,z=pos.z})]]
         local nmeta = minetest.get_meta(pos)
         nmeta:set_int("charge",0)
     end
@@ -155,13 +165,7 @@ minetest.register_node(lluxgate.nodenames[1],{
 			{0, -0.3125, -0.1875, 0.0625, 0.5, -0.0625},
 			{0, -0.3125, 0.0625, 0.0625, 0.5, 0.1875},
         }
-    },
-    on_punch = function(pos)
-        local prm = minetest.get_node(pos).param2
-
-        minetest.set_node(pos, {name = lluxgate.nodenames[1], param2 = prm + 1})
-    end
-
+    }
 })
 minetest.register_node(lluxgate.nodenames[2],{
     description = "Gate frame Extension",
@@ -187,12 +191,7 @@ minetest.register_node(lluxgate.nodenames[2],{
             frames_h = 7,
             frame_length = 0.1,
         }
-    }},
-    on_punch = function(pos)
-        local prm = minetest.get_node(pos).param2
-
-        minetest.set_node(pos, {name = lluxgate.nodenames[2], param2 = prm + 1})
-    end
+    }}
 })
 minetest.register_node(lluxgate.nodenames[3],{
     description = "Gate frame Vane",
@@ -223,9 +222,7 @@ minetest.register_node(lluxgate.nodenames[3],{
         }
     },
     on_punch = function(pos)
-        local prm = minetest.get_node(pos).param2
-
-        minetest.set_node(pos, {name = lluxgate.nodenames[3], param2 = prm + 1})
+        
     end
 })
 --  --  --  --  --  --  --  --  --  --  --  --  
