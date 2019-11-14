@@ -6,19 +6,23 @@ dofile(modpath .. "/shem.lua")
 
 --- NAMING ---
 local lodeb = "nc_lode:block_";
+
 local nlg = {fe = tm.."frame_e", fv = tm .. "frame_v", ig = "air", tl = lodeb .."tempered",
-al = lodeb .. "annealed", gl = "nc_optics:glass", oh = tm .. "frame_ohm", lb = tm .. "frame_lam";}
+
+al = lodeb .. "annealed", gl = "nc_optics:glass", oh = tm .. "frame_ohm", lb = tm .. "frame_lam", vs = tm .. "vessicle"}
+
 local lluxgate = {
 nodenames = {tm .. "frame_b", tm .. "frame_e",tm .. "frame_v"},
+
 functions = {},
+
 structures = {
     pylon = { l=5, w=5, h=5,
        csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
              {nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.fv,nlg.ig,nlg.ig,nlg.ig,nlg.fv},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.fe,nlg.ig,nlg.fe,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.fv,nlg.ig,nlg.fv,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.al,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}
-            },
+             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.al,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
     gate_minimal = { l=5, w=5, h=6, 
         csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
@@ -26,24 +30,31 @@ structures = {
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.al,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
-    gate_standard = { l=5, w=5, h=5, 
+    gate_minimal_90 = { l=5, w=5, h=6, 
         csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.tl,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.tl,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.tl,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.tl,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},}},
+             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
+             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
+             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.vs,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
+             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
+             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.al,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
     gate_maximal = { l=5, w=5, h=5, 
         csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.lb,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.oh,nlg.fv,nlg.ig,nlg.fv,nlg.oh},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.fe,nlg.ig,nlg.ig,nlg.ig,nlg.fe},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.oh,nlg.fv,nlg.ig,nlg.fv,nlg.oh},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             
-        }}
+             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.oh,nlg.fv,nlg.vs,nlg.fv,nlg.oh},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
+    gate_maximal_90 = { l=5, w=5, h=5, 
+        csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
+             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.lb,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
+             {nlg.ig,nlg.ig,nlg.oh,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.oh,nlg.ig,nlg.ig},
+             {nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},
+             {nlg.ig,nlg.ig,nlg.oh,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.vs,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.oh,nlg.ig,nlg.ig},         
+        }
+    }
 }}
 --- NAMING ---^^^
 
---  --  --  --  --  --  Frame nodes --  --  --  --  --  -- 
+--  --  --  --  --  --  Env nodes --  --  --  --  --  -- 
 minetest.register_node("nc_luxgate:luxblende",{
     description = "Lux Vessicle",
     drawtype = "nodebox",
@@ -55,7 +66,7 @@ minetest.register_node("nc_luxgate:luxblende",{
     },
     tiles = {"canvas2.png"},
     on_punch = function(pos, node, puncher)
-        pshem(pos,"shem_gate_max",puncher:get_look_dir())
+        pshem(pos,"shem_gate_min",puncher:get_look_dir())
         local reltab = minetest.find_nodes_in_area({x=pos.x-4,y=pos.y,z=pos.z-4},{x=pos.x+4,y=pos.y+6,z=pos.z+4},"nc_luxgate:vessicle")
         for k,v in pairs(reltab) do
             local mm = minetest.get_meta(v)
@@ -78,7 +89,7 @@ minetest.register_node("nc_luxgate:vessicle",{
     color = {"blue"},
     walkable = false,
     on_punch = function(pos,node, puncher)
-    --structure_scan(lluxgate.structures.gate_maximal,pos)
+    structure_scan(lluxgate.structures.gate_minimal_90,pos)
     --[[local player = minetest.get_objects_inside_radius(pos,2)[1]
     local playern = player:get_player_name()
     local homepos = pos
@@ -90,6 +101,11 @@ minetest.register_node("nc_luxgate:vessicle",{
     minetest.chat_send_all(mm:get_string("USID"))
     end
 })
+--- Env nodes ---^^^
+
+
+--  --  --  --  --  --  Frame nodes --  --  --  --  --  -- 
+
 minetest.register_node("nc_luxgate:frame_ohm",{
     description = "-NULL-",
     tiles = {{name ="ohm_anim.png",
@@ -165,7 +181,7 @@ minetest.register_node(lluxgate.nodenames[1],{
 			{0, -0.3125, -0.1875, 0.0625, 0.5, -0.0625},
 			{0, -0.3125, 0.0625, 0.0625, 0.5, 0.1875},
         }
-    }
+    },
 })
 minetest.register_node(lluxgate.nodenames[2],{
     description = "Gate frame Extension",
