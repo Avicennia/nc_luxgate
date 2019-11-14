@@ -242,4 +242,31 @@ minetest.register_node(lluxgate.nodenames[3],{
         
     end
 })
+minetest.register_node(tm .. "sponge_s",{
+    description = "Sickly Sponge",
+    drawtype = "glasslike",
+    paramtype = "light",
+    groups = {crumbly = 1},
+    tiles = {"sponge_sickly.png"},
+   
+})
+minetest.register_node(tm .. "sponge_h",{
+    description = "Sickly Sponge",
+    drawtype = "glasslike",
+    paramtype = "light",
+    groups = {crumbly = 1},
+    tiles = {{name ="sponge_host.png",
+    animation = {
+        type = "vertical_frames",
+        aspect_w = 16,
+        aspect_h = 16,
+        length = 1},
+        {
+            type = "sheet_2d",
+            frames_w = 1,
+            frames_h = 7,
+            frame_length = 0.1,
+        }
+    }}
+})
 --  --  --  --  --  --  --  --  --  --  --  --  
