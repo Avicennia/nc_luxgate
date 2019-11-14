@@ -46,7 +46,6 @@ function csa_scan(def, pos)
 end
 function structure_scan(def, origin)
     local ppos = origin
-    src_iter = def.l * def.w;
     local exes = {}
     local ind = 0
     for l = 1, def.h, 1 do
@@ -79,6 +78,19 @@ function ugid(length)
         result = result .. presult[n]
     end
     return result
+end
+function unquestionablejudgement(tab)
+    local yea = 0
+    for n=1, #tab, 1 do
+        if(tab[n] == true)then
+            yea = yea + 1
+        else end
+    end
+    if(yea == #tab) then
+        yea = true
+    else yea = false
+    end
+    return yea
 end
 --  --  --  --  --  --  --  Particles
 
@@ -122,7 +134,7 @@ function suffusion(pos)
 else end
 end
 
---  --  --  --  --  --  --  Bilateral Search
+--  --  --  --  --  --  --  Beam Search
 function linesrc(pos, dist, dir)
     local data = {
         copy = {pos, dist, dir},
@@ -131,9 +143,21 @@ function linesrc(pos, dist, dir)
     for n = 1, dist, 1 do
         local eppos = {x=pos.x + n * 5,y=pos.y,z=pos.z}
         data.pseudo.samp[n] = eppos
-        minetest.set_node(eppos, {name = "nc_luxgate:frame_lam"})
-        local box = minetest.find_node_near(eppos,2,"nc_luxgate:vessicle",true)
+        local box = minetest.find_node_near(eppos,2,"nc_luxgate:vessicle",true)        
         table.insert(data.pseudo.found,box)
     end
+    if(data.pseudo.found[1] ~= nil) then
+    local dpos = data.pseudo.found[1]
+    local dposmeta = minetest.get_meta(dpos)
+    local structureID = dposmeta:get_int("structure")
+    local opts = {{x = dpos.x - 3, y = dpos.y - 3, z = dpos.z - 2},{x = dpos.x - 2, y = dpos.y - 3, z = dpos.z - 3}}
+    local scanspot;
+    if(structureID == 3 or 5)
+    then scanspot = opts[1]
+    else scanspot = opts[2]
+    end
+    local check = structure_scan(lluxgate.structures[structureID],scanspot)
     return data.pseudo.found[1]
+else return end
+    return
 end

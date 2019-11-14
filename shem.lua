@@ -52,6 +52,7 @@ data = {
     }
 }
 function pshem(pos, shem, asian)
+	local box
 	if(shem == "shem_gate_min")then
 		local dir = 0
 	local peekaboo = {math.abs(asian.x),math.abs(asian.z)}
@@ -61,6 +62,13 @@ function pshem(pos, shem, asian)
 	else
 		end
 		minetest.place_schematic({x=pos.x-1,y=pos.y,z=pos.z-1}, shem_gate_min, dir,_, true);
+		box = minetest.find_node_near(pos,2,"nc_luxgate:vessicle",true)
+		local boxmeta = minetest.get_meta(box)
+		if(dir == 90) then
+		boxmeta:set_int("structure",3)
+		else boxmeta:set_int("structure",2)
+		end
+
 	elseif(shem == "shem_gate_max")then
 		local dir = 0
 	local peekaboo = {math.abs(asian.x),math.abs(asian.z)}
@@ -77,8 +85,18 @@ function pshem(pos, shem, asian)
 		adjust.x = -2
 		adjust.z = -1 
 	end
-		minetest.place_schematic({x=pos.x+adjust.x,y=pos.y,z=pos.z+adjust.z}, shem_gate_max, dir,_, true)
+		minetest.place_schematic({x=pos.x+adjust.x,y=pos.y,z=pos.z+adjust.z}, shem_gate_max, dir,_, true);
+		box = minetest.find_node_near(pos,3,"nc_luxgate:vessicle",true)
+		if(dir == 90) then
+			boxmeta:set_int("structure",5)
+			else boxmeta:set_int("structure",4)
+			end
+		boxmeta:set_int("structure",3)
 	elseif(shem == "shem_pylon")then
 		minetest.place_schematic({x=pos.x-2,y=pos.y,z=pos.z-2}, shem_pylon, 0,_, true)
+		box = minetest.find_node_near(pos,2,"nc_luxgate:vessicle",true)
+		local boxmeta = minetest.get_meta(box)
+		boxmeta:set_int("structure",1)
 		return end
+
 end

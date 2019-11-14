@@ -11,39 +11,39 @@ local nlg = {fe = tm.."frame_e", fv = tm .. "frame_v", ig = "air", tl = lodeb ..
 
 al = lodeb .. "annealed", gl = "nc_optics:glass", oh = tm .. "frame_ohm", lb = tm .. "frame_lam", vs = tm .. "vessicle"}
 
-local lluxgate = {
+lluxgate = {
 nodenames = {tm .. "frame_b", tm .. "frame_e",tm .. "frame_v"},
 
 functions = {},
 
 structures = {
-    pylon = { l=5, w=5, h=5,
+    { l=5, w=5, h=5, name = "pylon",
        csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
              {nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.fv,nlg.ig,nlg.ig,nlg.ig,nlg.fv},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.fe,nlg.ig,nlg.fe,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.fv,nlg.ig,nlg.fv,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.al,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
-    gate_minimal = { l=5, w=5, h=6, 
+    { l=5, w=5, h=6, name = "gate_minimal",
         csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.al,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
-    gate_minimal_90 = { l=5, w=5, h=6, 
+    { l=5, w=5, h=6, name = "gate_minimal_90",
         csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.vs,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.al,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
-    gate_maximal = { l=5, w=5, h=5, 
+    { l=5, w=5, h=5, name = "gate_maximal",
         csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.lb,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.oh,nlg.fv,nlg.ig,nlg.fv,nlg.oh},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.fe,nlg.ig,nlg.ig,nlg.ig,nlg.fe},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.oh,nlg.fv,nlg.vs,nlg.fv,nlg.oh},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
-    gate_maximal_90 = { l=5, w=5, h=5, 
+    { l=5, w=5, h=5, name = "gate_maximal_90",
         csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
              {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.lb,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
              {nlg.ig,nlg.ig,nlg.oh,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.oh,nlg.ig,nlg.ig},
@@ -73,12 +73,13 @@ minetest.register_node("nc_luxgate:luxblende",{
             if(mm:get_string("USID") == "")then
                 mm:set_string("USID",ugid(6))
             elseif(mm:get_string("USID") ~= nil)then
-                --minetest.chat_send_all("STRING ALREADY SET TO: "..mm:get_string("USID"))
+                minetest.chat_send_all("STRING ALREADY SET TO: "..mm:get_string("USID"))
+                
             else
-             --minetest.chat_send_all("Error - ID string")
+             minetest.chat_send_all("Error - ID string")
             end
-            --minetest.chat_send_all(mm:get_string("USID"))
         end 
+        
     end
 
 })
@@ -89,7 +90,7 @@ minetest.register_node("nc_luxgate:vessicle",{
     color = {"blue"},
     walkable = false,
     on_punch = function(pos,node, puncher)
-    structure_scan(lluxgate.structures.gate_minimal_90,pos)
+    --structure_scan(lluxgate.structures[3],pos)
     --[[local player = minetest.get_objects_inside_radius(pos,2)[1]
     local playern = player:get_player_name()
     local homepos = pos
@@ -99,6 +100,7 @@ minetest.register_node("nc_luxgate:vessicle",{
     else minetest.chat_send_all(minetest.get_node({x=locale[1].x, y=locale[1].y-1, z=locale[1].z}).name) end]]
     local mm = minetest.get_meta(pos)
     minetest.chat_send_all(mm:get_string("USID"))
+    minetest.chat_send_all(mm:get_int("structure"))
     end
 })
 --- Env nodes ---^^^
@@ -125,9 +127,8 @@ minetest.register_node("nc_luxgate:frame_ohm",{
     on_punch = function(pos,node,puncher)
         local mn = linesrc(pos,60,"north")
         if mn then
-        puncher:move_to({x=mn.x,y=mn.y+3,z=mn.z})
+        puncher:move_to({x=mn.x,y=mn.y,z=mn.z})
         else end
-        minetest.chat_send_all(minetest.serialize(puncher:get_look_dir()))
         local nmeta = minetest.get_meta(pos)
         if(nmeta:get_int("charge")==0)then
         local timer = minetest.get_node_timer(pos)
