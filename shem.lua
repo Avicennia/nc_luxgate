@@ -59,12 +59,19 @@ function pshem(pos, shem, asian)
 		dir = 90
 	else
 		end
-
+	local adjust = {x,y,z};
+	if (dir == 90) then
+		adjust.x = -1
+		adjust.z = -2
+	else 
+		adjust.x = -2;
+		adjust.z = -1 
+	end
 	if(shem == "shem_gate_min")then
-minetest.place_schematic({x=pos.x-1,y=pos.y,z=pos.z-1}, shem_gate_min, dir,_, true)
+		minetest.place_schematic({x=pos.x+adjust.x,y=pos.y,z=pos.z+adjust.z}, shem_gate_min, dir,_, true);
 	elseif(shem == "shem_gate_max")then
-		minetest.place_schematic({x=pos.x-2,y=pos.y,z=pos.z-1}, shem_gate_max, dir,_, true)
+		minetest.place_schematic({x=pos.x+adjust.x,y=pos.y,z=pos.z+adjust.z}, shem_gate_max, dir,_, true)
 	elseif(shem == "shem_pylon")then
-		minetest.place_schematic({x=pos.x-2,y=pos.y,z=pos.z-1}, shem_pylon, dir,_, true)
+		minetest.place_schematic({x=pos.x+adjust.x,y=pos.y,z=pos.z+adjust.z}, shem_pylon, dir,_, true)
 		return end
 end
