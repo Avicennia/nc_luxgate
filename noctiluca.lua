@@ -24,21 +24,25 @@ minetest.register_node(tm .. "sponge_h",{
     drawtype = "glasslike",
     paramtype = "light",
     groups = {crumbly = 1},
-    tiles = {{name ="sponge_host.png",
-    animation = {
-        type = "vertical_frames",
-        aspect_w = 16,
-        aspect_h = 16,
-        length = 1},
-        {
-            type = "sheet_2d",
-            frames_w = 1,
-            frames_h = 7,
-            frame_length = 0.1,
-        }
-    }}
+    tiles = {"sponge_host.png"},
+    light_source = 1
 })
-
+minetest.register_node(tm .. "lucshard",{
+    description = "Shard of Luciferin",
+    drawtype = "nodebox",
+    paramtype = "light",
+    groups = {crumbly = 1},
+    tiles = {"luctex.png"},
+    node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.0625, -0.5, 0, 0, -0.25, 0.0625}, -- NodeBox1
+			{0, -0.5, -0.0625, 0.0625, -0.3125, 0}, -- NodeBox2
+			{0, -0.5, 0, 0.0625, -0.3125, 0.0625}, -- NodeBox3
+			{-0.0625, -0.5, -0.0625, 0, -0.375, 0}, -- NodeBox4
+		}
+    }
+})
 --  --  --  --  --  --  ABM's   --  --  --  --  --  --
 minetest.register_abm(
 {
@@ -135,4 +139,38 @@ minetest.register_abm(
         else 
         end
     end
+})
+--  --  --  --  --  --  Crafting    --  --  --  --  --  --  --
+nodecore.register_craft({
+    label = "Prune sponge crystal growths",
+    action = "pummel",
+    priority = 1,
+    toolgroups = {snappy = 1},
+    nodes = {
+        {
+            match = tm .. "sponge_h",
+            replace = "nc_terrain:sand"
+        },
+    },
+    items = {
+        {name = tm .. "lucshard", count = 2, scatter = 5}
+    },
+    itemscatter = 5;
+})
+nodecore.register_craft({
+    label = "Prune sponge crystal growths epiphytic",
+    action = "pummel",
+    priority = 1,
+    toolgroups = {snappy = 1},
+    nodes = {
+        {
+            match = tm .. "sponge_e",
+            replace = "nc_sponge:sponge_living"
+        },
+    },
+    items = {
+        {name = tm .. "lucshard", count = 1, scatter = 5}
+    },
+    itemscatter = 5;
+
 })
