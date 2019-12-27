@@ -6,53 +6,7 @@ dofile(modpath .. "/shem.lua")
 dofile(modpath .. "/noctiluca.lua")
 
 --- NAMING ---
-local lodeb = "nc_lode:block_";
 
-local nlg = {fe = tm.."frame_e", fv = tm .. "frame_v", ig = "air", tl = lodeb .."tempered",
-
-al = lodeb .. "annealed", gl = "nc_optics:glass", oh = tm .. "frame_ohm", lb = tm .. "frame_lam", vs = tm .. "vessicle"}
-
-lluxgate = {
-nodenames = {tm .. "frame_b", tm .. "frame_e",tm .. "frame_v"},
-
-functions = {},
-
-structures = {
-    { l=5, w=5, h=5, name = "pylon",
-       csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
-             {nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.fv,nlg.ig,nlg.ig,nlg.ig,nlg.fv},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.fe,nlg.ig,nlg.fe,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.fv,nlg.ig,nlg.fv,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.al,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
-    { l=5, w=5, h=6, name = "gate_minimal",
-        csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.al,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
-    { l=5, w=5, h=6, name = "gate_minimal_90",
-        csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.vs,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.al,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
-    { l=5, w=5, h=5, name = "gate_maximal",
-        csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.lb,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.oh,nlg.fv,nlg.ig,nlg.fv,nlg.oh},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.fe,nlg.ig,nlg.ig,nlg.ig,nlg.fe},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.oh,nlg.fv,nlg.vs,nlg.fv,nlg.oh},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig}}},
-    { l=5, w=5, h=5, name = "gate_maximal_90",
-        csa = {{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.al,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},{nlg.tl,nlg.tl,nlg.tl,nlg.tl,nlg.tl},
-             {nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.lb,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.oh,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.oh,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.ig,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fe,nlg.ig,nlg.ig},
-             {nlg.ig,nlg.ig,nlg.oh,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.vs,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.fv,nlg.ig,nlg.ig},{nlg.ig,nlg.ig,nlg.oh,nlg.ig,nlg.ig},         
-        }
-    }
-}}
 --- NAMING ---^^^
 
 --  --  --  --  --  --  Env nodes --  --  --  --  --  -- 
@@ -67,7 +21,7 @@ minetest.register_node("nc_luxgate:luxblende",{
     },
     tiles = {"canvas2.png"},
     on_punch = function(pos, node, puncher)
-        pshem(pos,"shem_gate_min",puncher:get_look_dir())
+        pshem(pos,"shem_gate_max",puncher:get_look_dir())
         local reltab = minetest.find_nodes_in_area({x=pos.x-4,y=pos.y,z=pos.z-4},{x=pos.x+4,y=pos.y+6,z=pos.z+4},"nc_luxgate:vessicle")
         for k,v in pairs(reltab) do
             local mm = minetest.get_meta(v)
@@ -88,21 +42,13 @@ minetest.register_node("nc_luxgate:vessicle",{
     description = "-NULL-",
     drawtype = "glasslike",
     tiles = {"dev.png"},
-    color = {"blue"},
     walkable = false,
-    on_punch = function(pos,node, puncher)
-    --structure_scan(lluxgate.structures[3],pos)
-    --[[local player = minetest.get_objects_inside_radius(pos,2)[1]
-    local playern = player:get_player_name()
-    local homepos = pos
-    local locale = minetest.find_nodes_in_area({x=pos.x-20,y=pos.y-1,z=pos.z-20},{x=pos.x+20,y=pos.y+1,z=pos.z+20},"nc_lode:block_annealed")
-    if(minetest.get_node({x=locale[1].x, y=locale[1].y-1, z=locale[1].z}).name == "nc_lode:block_annealed")then
-    player:move_to(locale[1])
-    else minetest.chat_send_all(minetest.get_node({x=locale[1].x, y=locale[1].y-1, z=locale[1].z}).name) end]]
-    local mm = minetest.get_meta(pos)
-    minetest.chat_send_all(mm:get_string("USID"))
-    minetest.chat_send_all(mm:get_int("structure"))
-    end
+    node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.125, 0, 0.001, 0.125, 0.3125, 0}, -- NodeBox1
+		}
+	},
 })
 --- Env nodes ---^^^
 
@@ -125,28 +71,7 @@ minetest.register_node("nc_luxgate:frame_ohm",{
         }
     }},
     groups = {cracky =1},
-    on_punch = function(pos,node,puncher)
-        local mn = linesrc(pos,60,"north")
-        if mn then
-        puncher:move_to({x=mn.x,y=mn.y,z=mn.z})
-        else end
-        local nmeta = minetest.get_meta(pos)
-        if(nmeta:get_int("charge")==0)then
-        local timer = minetest.get_node_timer(pos)
-        timer:start(3)
-        nmeta:set_int("charge",1)
-        else end
-        suffusion(pos)
-    end,
-    on_timer= function(pos)
-        
-        --[[local vespos = minetest.find_nodes_with_meta({x=pos.x-2,y=pos.y,z=pos.z-2},{x=pos.x+2,y=pos.y+2,z=pos.z+2})
-        local objs = minetest.get_objects_inside_radius(vespos[1],4)
-        local player = objs[1]
-        player:move_to({x=pos.x,y=pos.y+4,z=pos.z})]]
-        local nmeta = minetest.get_meta(pos)
-        nmeta:set_int("charge",0)
-    end
+    
 })
 minetest.register_node("nc_luxgate:frame_lam",{
     description = "-NULL-",
@@ -239,9 +164,6 @@ minetest.register_node(lluxgate.nodenames[3],{
 			{-1.3125, 0.4375, -0.375, -0.5625, 0.5, 0.375}, -- NodeBox33
         }
     },
-    on_punch = function(pos)
-        
-    end
 })
 
 --  --  --  --  --  --  --  --  --  --  --  --  

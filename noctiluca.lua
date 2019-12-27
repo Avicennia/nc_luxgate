@@ -41,7 +41,11 @@ minetest.register_node(tm .. "lucshard",{
 			{0, -0.5, 0, 0.0625, -0.3125, 0.0625}, -- NodeBox3
 			{-0.0625, -0.5, -0.0625, 0, -0.375, 0}, -- NodeBox4
 		}
-    }
+    },
+    light_source = 10,
+    on_punch = function(pos)
+        minetest.chat_send_all("I am at "..minetest.serialize(pos))
+    end
 })
 --  --  --  --  --  --  ABM's   --  --  --  --  --  --
 minetest.register_abm(

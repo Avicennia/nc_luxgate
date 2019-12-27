@@ -1,97 +1,7 @@
 local thismod = "nc_luxgate:"
 
 
-function sl_src(pos,len)
-   local ntab = {}
-   for n = 1, len, 1 do
-    ntab[n] = minetest.get_node({x=pos.x + n,y=pos.y,z=pos.z}).name
-   end
-   return ntab
-end
 
-function sl_comp(tabsamp,tabcont)
-    local tft = {}
-    if(#tabsamp == #tabcont)then
-        for n=1, #tabsamp, 1 do
-            if(tabsamp[n] == tabcont[n])then
-                tft[n] = 1
-            elseif(tabsamp[n] ~= tabcont[n]) then
-                tft[n] = 0
-            end
-        end
-    else minetest.chat_send_all("tabulation maximum error!")
-end 
-return tft 
-end
-       
-function sl_compver(tab)
-    local ind = 0
-    local ans = nil
-    for n=1, #tab, 1 do
-        ind = ind + tab[n]
-    end
-    if (ind == #tab) then
-        ans = true
-    elseif (ind ~= #tab) then
-        ans = false
-    end
-    return ans
-end
-
-function csa_scan(def, pos)
-    local total = def.l * def.w;
-    local ledgerline = {pos,{x=pos.x,y=pos.y,z=pos.z+1},{x=pos.x,y=pos.y,z=pos.z+2},
-    {x=pos.x,y=pos.y,z=pos.z+3},{x=pos.x,y=pos.y,z=pos.z+4}};
-
-end
-function structure_scan(def, origin)
-    local ppos = origin
-    local exes = {}
-    local ind = 0
-    for l = 1, def.h, 1 do
-    for n = 1, def.l, 1 do
-        ind = ind + 1
-      table.insert(exes,sl_compver(sl_comp(sl_src(origin,def.l),def.csa[ind])))
-       origin.z = origin.z + 1
-    end
-    origin.y = origin.y + 1
-    origin.z = origin.z - def.w
-end
-minetest.chat_send_all(minetest.serialize(exes))
-end
-function ugid(length)
-    local time = minetest.get_us_time()
-    local ggl = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"}
-    local presult = {}
-    local selvar;
-    local result = ""
-    for n = 1, length, 1 do
-        local rnum = math.random(1,66)
-        if(rnum <= 26)then
-        table.insert(presult,ggl[rnum])
-        elseif(rnum >= 27)then
-            table.insert(presult,rnum)
-        else end
-
-    end
-    for n = 1, #presult, 1 do
-        result = result .. presult[n]
-    end
-    return result
-end
-function unquestionablejudgement(tab)
-    local yea = 0
-    for n=1, #tab, 1 do
-        if(tab[n] == true)then
-            yea = yea + 1
-        else end
-    end
-    if(yea == #tab) then
-        yea = true
-    else yea = false
-    end
-    return yea
-end
 --  --  --  --  --  --  --  Particles
 
 function suffusion(pos)
@@ -133,31 +43,39 @@ function suffusion(pos)
     })
 else end
 end
+function portalhole(pos)
+    minetest.add_particlespawner({
+        amount = 180,
+        time = 3,
+        minpos = {x=pos.x-1.2, y=pos.y-2.4, z=pos.z-1.2},
+        maxpos = {x=pos.x+1.2, y=pos.y+0.1, z=pos.z+1.2},
+        minvel = {x=0, y=0.2, z=0},
+        maxvel = {x=0, y=0.4, z=0},
+        minacc = {x=0, y=0, z=0},
+        maxacc = {x=0, y=1, z=0},
+        minexptime = 0.2,
+        maxexptime = 1.2,
+        minsize = 1,
+        maxsize = 1.6,
+    
+        collisiondetection = false,
+        collision_removal = false,
+        vertical = true,
+        texture = "luxion_anim.png",
+        animation = {
+            type = "vertical_frames",
+            aspect_w = 16,
+            aspect_h = 16,
+            length = 0.8},
+            {
+                type = "sheet_2d",
+                frames_w = 1,
+                frames_h = 6,
+                frame_length = 0.1,
+            },
+        glow = 4
+    })
+
+end
 
 --  --  --  --  --  --  --  Beam Search
-function linesrc(pos, dist, dir)
-    local data = {
-        copy = {pos, dist, dir},
-        pseudo = {samp = {},found = {}}
-    }
-    for n = 1, dist, 1 do
-        local eppos = {x=pos.x + n * 5,y=pos.y,z=pos.z}
-        data.pseudo.samp[n] = eppos
-        local box = minetest.find_node_near(eppos,2,"nc_luxgate:vessicle",true)        
-        table.insert(data.pseudo.found,box)
-    end
-    if(data.pseudo.found[1] ~= nil) then
-    local dpos = data.pseudo.found[1]
-    local dposmeta = minetest.get_meta(dpos)
-    local structureID = dposmeta:get_int("structure")
-    local opts = {{x = dpos.x - 3, y = dpos.y - 3, z = dpos.z - 2},{x = dpos.x - 2, y = dpos.y - 3, z = dpos.z - 3}}
-    local scanspot;
-    if(structureID == 3 or 5)
-    then scanspot = opts[1]
-    else scanspot = opts[2]
-    end
-    local check = structure_scan(lluxgate.structures[structureID],scanspot)
-    return data.pseudo.found[1]
-else return end
-    return
-end
