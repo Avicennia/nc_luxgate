@@ -5,7 +5,8 @@ tm = thismod..":"
 luxgate = {
     functions = {},
     nodes = {names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e"}},
-    nodenumbers = {}
+    nodenumbers = {},
+    dirs = {}
 }
 
 dofile(modpath .. "/smokenmirrors.lua")
@@ -28,7 +29,8 @@ minetest.register_node("nc_luxgate:luxblende",{
     },
     tiles = {"canvas2.png"},
     on_punch = function(pos)
-        minetest.chat_send_all(minetest.serialize(luxgate.functions.unquestionablejudgement(luxgate.functions.area_decode(luxgate.functions.area(pos)),luxgate.numberframe.min)))
+        luxgate.functions.searchlight(pos,2, 1,_)
+        -- minetest.chat_send_all(minetest.serialize(minetest.string_to_pos("(1,1,1)")))
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{
@@ -140,7 +142,10 @@ minetest.register_node("nc_luxgate:frame_e",{
             frames_h = 7,
             frame_length = 0.1,
         }
-    }}
+    }},
+    on_punch = function(pos)
+        suffusion(pos)
+    end
 })
 minetest.register_node("nc_luxgate:frame_v",{
     description = "Gate frame Vane",

@@ -1,3 +1,15 @@
+
+luxgate.dirs = {
+"(1,0,0)",  -- East
+"(-1,0,0)", -- West
+"(0,0,1)", -- North
+"(0,0,-1)", -- South
+"(1,0,1)", -- NorthEast
+"(-1,0,-1)", -- SouthWest
+"(1,0,-1)", -- SouthEast
+"(-1,0,1)"}
+
+
 luxgate.functions.digitizer = function(tab)
     local nodes = {
         names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e"},
@@ -100,3 +112,51 @@ luxgate.functions.redlightgreenlight = function(t1)
 else end
     return ind
 end
+
+luxgate.functions.modcalc = function(tab)
+local modifiers = {"reflect","conduct","attenuate","absorb"} -- For altering actual distance, direction, etc.
+local output = {}
+
+
+end
+--
+
+--
+luxgate.functions.forward = function(origin, dir, dist, ray)
+    local exception = 0;
+    for n = 1, dist, 1 do
+        local dir_new = minetest.string_to_pos(luxgate.dirs[dir]); -- Turning specified dir_index into a vector for use.
+        ray.rate.x,ray.rate.z = ray.rate.x + dir_new.x,ray.rate.z + dir_new.z; -- Using said values to affect rate.
+        vector.add(origin,ray.rate); -- Adding rate value to original pos.
+        local ahead = minetest.get_node(vector.add(origin, ray.rate)).name; -- Node in front of last checked pos.
+            if(ahead == "air")then
+                newpos = {x=origin.x + ray.rate.x, y= origin.y + ray.rate.y, z= origin.z + ray.rate.z}
+                minetest.set_node(newpos, {name = "nc_lode:block_annealed"})
+            else exception = ahead return end
+    end
+    return exception
+end
+--
+
+--
+luxgate.functions.searchlight = function(pos, dir, dist, mod)
+    local origin = pos;
+    local ray = {rate = {x=0,y=0,z=0}, dir = false, mods = {}}
+    local exception;
+    local dirs = {"(1,0,0)",  -- East
+                   "(-1,0,0)", -- West
+                    "(0,0,1)", -- North
+                     "(0,0,-1)", -- South
+                      "(1,0,1)", -- NorthEast
+                       "(-1,0,-1)", -- SouthWest
+                        "(1,0,-1)", -- SouthEast
+                         "(-1,0,1)"}-- For actually pulling positions for the ray's path.
+        if(origin and dir and dist and ray)then
+        local looper = {max = 6, cur = 0}
+        while(luxgate.functions.forward(origin, dir, dist, ray) == 0 and looper.cur <= looper.max)do
+            luxgate.functions.forward(origin, dir, dist, ray)
+            looper.cur = looper.cur + 1;
+        end
+        else end
+end
+
