@@ -1,10 +1,17 @@
 local thismod = minetest.get_current_modname()
 local modpath = minetest.get_modpath(thismod)
 tm = thismod..":"
-dofile(modpath .. "/recog.lua")
+
+luxgate = {
+    functions = {},
+    nodes = {names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e"}},
+    nodenumbers = {}
+}
+
+dofile(modpath .. "/smokenmirrors.lua")
 dofile(modpath .. "/shem.lua")
 dofile(modpath .. "/noctiluca.lua")
-
+dofile(modpath .. "/brainything.lua")
 --- NAMING ---
 
 --- NAMING ---^^^
@@ -20,23 +27,9 @@ minetest.register_node("nc_luxgate:luxblende",{
         }
     },
     tiles = {"canvas2.png"},
-    on_punch = function(pos, node, puncher)
-        pshem(pos,"shem_gate_max",puncher:get_look_dir())
-        local reltab = minetest.find_nodes_in_area({x=pos.x-4,y=pos.y,z=pos.z-4},{x=pos.x+4,y=pos.y+6,z=pos.z+4},"nc_luxgate:vessicle")
-        for k,v in pairs(reltab) do
-            local mm = minetest.get_meta(v)
-            if(mm:get_string("USID") == "")then
-                mm:set_string("USID",ugid(6))
-            elseif(mm:get_string("USID") ~= nil)then
-                minetest.chat_send_all("STRING ALREADY SET TO: "..mm:get_string("USID"))
-                
-            else
-             minetest.chat_send_all("Error - ID string")
-            end
-        end 
-        
+    on_punch = function(pos)
+        minetest.chat_send_all(minetest.serialize(luxgate.functions.unquestionablejudgement(luxgate.functions.area_decode(luxgate.functions.area(pos)),luxgate.numberframe.min)))
     end
-
 })
 minetest.register_node("nc_luxgate:vessicle",{
     description = "-NULL-",
@@ -48,7 +41,17 @@ minetest.register_node("nc_luxgate:vessicle",{
 		fixed = {
 			{-0.125, 0, 0.001, 0.125, 0.3125, 0}, -- NodeBox1
 		}
-	},
+    },
+    groups = {crumbly = 1},
+    on_construct = function(pos)
+        local timer = minetest.get_node_timer(pos)
+        timer:start(3)
+    end,
+    on_timer = function(pos)
+        portalhole(pos)
+        local timer = minetest.get_node_timer(pos)
+        timer:start(3)
+    end
 })
 --- Env nodes ---^^^
 
@@ -71,6 +74,9 @@ minetest.register_node("nc_luxgate:frame_ohm",{
         }
     }},
     groups = {cracky =1},
+    on_punch = function(pos)
+        suffusion(pos)
+    end
     
 })
 minetest.register_node("nc_luxgate:frame_lam",{
@@ -91,7 +97,7 @@ minetest.register_node("nc_luxgate:frame_lam",{
     groups = {cracky =1}
 })
 
-minetest.register_node(lluxgate.nodenames[1],{
+minetest.register_node("nc_luxgate:frame_b",{
     description = "Gate frame Bottom",
     drawtype = "nodebox",
     paramtype = "light",
@@ -110,7 +116,7 @@ minetest.register_node(lluxgate.nodenames[1],{
         }
     },
 })
-minetest.register_node(lluxgate.nodenames[2],{
+minetest.register_node("nc_luxgate:frame_e",{
     description = "Gate frame Extension",
     drawtype = "nodebox",
     paramtype = "light",
@@ -136,7 +142,7 @@ minetest.register_node(lluxgate.nodenames[2],{
         }
     }}
 })
-minetest.register_node(lluxgate.nodenames[3],{
+minetest.register_node("nc_luxgate:frame_v",{
     description = "Gate frame Vane",
     drawtype = "nodebox",
     paramtype = "light",
@@ -164,6 +170,10 @@ minetest.register_node(lluxgate.nodenames[3],{
 			{-1.3125, 0.4375, -0.375, -0.5625, 0.5, 0.375}, -- NodeBox33
         }
     },
+    on_punch = function(pos)
+        local prev = minetest.get_node(pos).param2 + 1
+        minetest.set_node(pos, {name = "nc_luxgate:frame_v", param2 = prev})
+    end
 })
 
 --  --  --  --  --  --  --  --  --  --  --  --  
