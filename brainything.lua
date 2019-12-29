@@ -169,17 +169,35 @@ luxgate.functions.line_inv = function(table) -- Inspects table for nodenames tha
     return out.noi
 end
 
-luxgate.functions.line_calc = function(table)
+luxgate.functions.line_calc = function(tab)
 
-
-    function atten(names,poses)
+    function atten(tab) -- Attempt to quantify reduction in distance due to attenuation.(tab must contain tabs; names,poses and flags)
         local magnitude = 0
-        local nodes_valid = {names = {}, values = {}}
-        if(#names == #poses)then
-
-        end
-
+        local nodes_valid = {names = {"nc_lode:block_tempered","nc_terrain:dirt","nc_terrain:dirt_with_grass","nc_terrain:stone"}, values = {9,5,5,7}}
+        local vals = {}
+            for n = 1, #tab.flags, 1 do
+                if(tab.flags[n])then
+                    for l = 1, #tab.flags[n],1 do
+                        vals[n] = 0
+                    for o = 1, #nodes_valid.names, 1 do
+                        if(tab.names[n] == nodes_valid.names[o])then
+                            vals[n] = nodes_valid.values[o]
+                        else end
+                    end
+                end
+                else minetest.chat_send_all("nonattenuate")
+                end
+            end
+            for n = 2, #vals, 1 do
+                if(vals[n-1] == 0)then
+                elseif(vals[n-1] >= 0 and vals[n] > 0 )then
+                    vals[n] = vals[n]+(vals[n-1]*(n/10))
+                elseif(vals[n-1] == nil)then
+                end
+            end
+        return vals
     end
+    return atten(tab)
 end
 --
 

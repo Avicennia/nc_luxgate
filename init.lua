@@ -30,7 +30,7 @@ minetest.register_node("nc_luxgate:luxblende",{
     tiles = {"canvas2.png"},
     on_punch = function(pos)
         local proberes = luxgate.functions.line_probe(pos,10,3)
-        minetest.chat_send_all(minetest.serialize(luxgate.functions.line_inv(proberes)))
+        minetest.chat_send_all(minetest.serialize(luxgate.functions.line_calc(luxgate.functions.line_inv(proberes))))
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{
