@@ -7,7 +7,8 @@ luxgate.dirs = {
 "(1,0,1)", -- NorthEast
 "(-1,0,-1)", -- SouthWest
 "(1,0,-1)", -- SouthEast
-"(-1,0,1)"}
+"(-1,0,1)" -- NorthWest
+}
 
 
 luxgate.functions.digitizer = function(tab)
@@ -119,22 +120,66 @@ local output = {}
 
 
 end
---
+--[[
+            LINE SEARCH FUNCTION STUFF
+]]
+luxgate.functions.line_probe = function(pos,dis,dir) -- Searches along a line and returns all positions and nodenames found in a given direction for a given distance.
+    local dahta = {nodes_n = {}, nodes_p = {}};
+    if(pos and dis and dir)then
+    local npos = pos;
+    local dir = minetest.string_to_pos(luxgate.dirs[dir])
+        for n = 1, dis, 1 do
+            local npos = vector.add(npos,vector.multiply(dir,n));
+            dahta.nodes_p[n] = npos;
+            dahta.nodes_n[n] = minetest.get_node(npos).name
+        end
+    else end
+    -- Verify equal quantity in both tables
+    if(#dahta.nodes_n ~= #dahta.nodes_p)then
+        dahta = {};
+    else end
+    return dahta -- Return value should contain 2 tables, 1 with names and 2 with positions of entries in 1.
+end
 
---
-luxgate.functions.forward = function(origin, dir, dist, ray)
-    local exception = 0;
-    for n = 1, dist, 1 do
-        local dir_new = minetest.string_to_pos(luxgate.dirs[dir]); -- Turning specified dir_index into a vector for use.
-        ray.rate.x,ray.rate.z = ray.rate.x + dir_new.x,ray.rate.z + dir_new.z; -- Using said values to affect rate.
-        vector.add(origin,ray.rate); -- Adding rate value to original pos.
-        local ahead = minetest.get_node(vector.add(origin, ray.rate)).name; -- Node in front of last checked pos.
-            if(ahead == "air")then
-                newpos = {x=origin.x + ray.rate.x, y= origin.y + ray.rate.y, z= origin.z + ray.rate.z}
-                minetest.set_node(newpos, {name = "nc_lode:block_annealed"})
-            else exception = ahead return end
+luxgate.functions.line_inv = function(table) -- Inspects table for nodenames that require quirky behaviour.
+    local out = {noi = {poses = {}, names = {}, flags = {}}};
+    local noi = {ignore = {"air","nc_optics:glass"}, reflect = {"nc_lode:block_annealed","nc_optics:glass_opaque",}, attenuate = {"nc_terrain:stone", "nc_terrain:dirt", "nc_lode:block_tempered"}}
+    if(table.nodes_n and table.nodes_p)then
+        for n = 1, #table.nodes_n, 1 do
+            if(table.nodes_n[n] == noi.ignore[1] or table.nodes_n[n] == noi.ignore[2])then
+                out.noi.names[n] = table.nodes_n[n]
+                out.noi.poses[n] = table.nodes_p[n]
+                out.noi.flags[n] = "traverse"
+            elseif(table.nodes_n[n] == noi.attenuate[1] or table.nodes_n[n] == noi.attenuate[2] or table.nodes_n[n] == noi.attenuate[3])then
+                out.noi.names[n] = table.nodes_n[n]
+                out.noi.poses[n] = table.nodes_p[n]
+                out.noi.flags[n] = "attenuate"
+            elseif(table.nodes_n[n] == noi.reflect[1] or table.nodes_n[n] == noi.reflect[2])then
+                out.noi.names[n] = table.nodes_n[n]
+                out.noi.poses[n] = table.nodes_p[n]
+                out.noi.flags[n] = "reflect"
+            elseif(table.nodes_n[n])then
+                out.noi.names[n] = table.nodes_n[n]
+                out.noi.poses[n] = table.nodes_p[n]
+                out.noi.flags[n] = "attenuate_u"
+            end
+        end
+
+    else end
+    return out.noi
+end
+
+luxgate.functions.line_calc = function(table)
+
+
+    function atten(names,poses)
+        local magnitude = 0
+        local nodes_valid = {names = {}, values = {}}
+        if(#names == #poses)then
+
+        end
+
     end
-    return exception
 end
 --
 
