@@ -169,35 +169,58 @@ luxgate.functions.line_inv = function(table) -- Inspects table for nodenames tha
     return out.noi
 end
 
-luxgate.functions.line_calc = function(tab)
+luxgate.functions.atten_calc = function(tab)
+ -- Attempt to quantify reduction in distance due to attenuation.(tab must contain tabs; names,poses and flags)
+    local magnitude = 0
+    local nodes_valid = {names = {"nc_lode:block_tempered","nc_terrain:dirt","nc_terrain:dirt_with_grass","nc_terrain:stone"}, values = {0.7,0.1,0.13,0.2}}
+    local vals = {}
+        for n = 1, #tab.flags, 1 do
+            if(tab.flags[n])then
+                for l = 1, #tab.flags[n],1 do
+                    vals[n] = 0
+                for o = 1, #nodes_valid.names, 1 do
+                    if(tab.names[n] == nodes_valid.names[o])then
+                        vals[n] = nodes_valid.values[o]
+                    else end
+                end
+            end
+            else minetest.chat_send_all("nonattenuate")
+            end
+        end
+        for n = 2, #vals, 1 do -- Increasing the value of attenuation per node based on previous node's value.
+            if(vals[n-1] == 0)then
+            elseif(vals[n-1] >= 0 and vals[n] > 0 )then
+                vals[n] = vals[n]+(vals[n-1]*(n/10))
+            elseif(vals[n-1] == nil)then
+            end
+        end
+        for k,v in pairs(vals)do
+            magnitude = magnitude + v
+        end
+        vals[#vals+1] = "Magnitude of ".. magnitude
+    return vals
+end
 
-    function atten(tab) -- Attempt to quantify reduction in distance due to attenuation.(tab must contain tabs; names,poses and flags)
-        local magnitude = 0
-        local nodes_valid = {names = {"nc_lode:block_tempered","nc_terrain:dirt","nc_terrain:dirt_with_grass","nc_terrain:stone"}, values = {9,5,5,7}}
-        local vals = {}
-            for n = 1, #tab.flags, 1 do
-                if(tab.flags[n])then
-                    for l = 1, #tab.flags[n],1 do
-                        vals[n] = 0
-                    for o = 1, #nodes_valid.names, 1 do
-                        if(tab.names[n] == nodes_valid.names[o])then
-                            vals[n] = nodes_valid.values[o]
-                        else end
-                    end
-                end
-                else minetest.chat_send_all("nonattenuate")
-                end
-            end
-            for n = 2, #vals, 1 do
-                if(vals[n-1] == 0)then
-                elseif(vals[n-1] >= 0 and vals[n] > 0 )then
-                    vals[n] = vals[n]+(vals[n-1]*(n/10))
-                elseif(vals[n-1] == nil)then
-                end
-            end
-        return vals
-    end
-    return atten(tab)
+luxgate.functions.refl_find = function(tab)
+    local data = {ind = false, quant = 0, poses = {}, names = {}}
+        for n = 1, #tab.flags, 1 do
+            if(tab.flags[n] ~= "reflect")then
+            elseif(tab.flags[n] == "reflect")then
+            data.quant = data.quant + 1;
+            data.ind = true;
+            data.poses[n] = tab.poses[n]
+            data.names[n] = tab.names[n]
+            else end
+        end
+    local first = {ind = 0, keys = {}}
+        for k,v in pairs(data.names)do
+            first.ind = first.ind + 1
+            first.keys[first.ind] = k;
+        end
+    local first = math.min(unpack(first.keys))
+        data.ind = first;
+        first = nil;
+    return data
 end
 --
 
