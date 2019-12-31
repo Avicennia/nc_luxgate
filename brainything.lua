@@ -158,10 +158,10 @@ luxgate.functions.line_inv = function(table) -- Inspects table for nodenames tha
                 out.noi.names[n] = table.nodes_n[n]
                 out.noi.poses[n] = table.nodes_p[n]
                 out.noi.flags[n] = "reflect"
-            elseif(table.nodes_n[n])then
+            elseif(table.nodes_n[n])then -- Abandoncase
                 out.noi.names[n] = table.nodes_n[n]
                 out.noi.poses[n] = table.nodes_p[n]
-                out.noi.flags[n] = "attenuate_u"
+                out.noi.flags[n] = "traverse"
             end
         end
 
@@ -184,13 +184,13 @@ luxgate.functions.atten_calc = function(tab)
                     else end
                 end
             end
-            else minetest.chat_send_all("nonattenuate")
+            else
             end
         end
         for n = 2, #vals, 1 do -- Increasing the value of attenuation per node based on previous node's value.
             if(vals[n-1] == 0)then
-            elseif(vals[n-1] >= 0 and vals[n] > 0 )then
-                vals[n] = vals[n]+(vals[n-1]*(n/10))
+            elseif(vals[n-1] >= 0 and vals[n] > 0 )then -- If there is an attenuating node behind the specified node, then the specified node's value should be increased by some value.
+                vals[n] = vals[n]+(vals[n-1]*(n/10)) 
             elseif(vals[n-1] == nil)then
             end
         end
@@ -201,7 +201,7 @@ luxgate.functions.atten_calc = function(tab)
     return vals
 end
 
-luxgate.functions.refl_find = function(tab)
+luxgate.functions.refl_find = function(tab) -- Find all nodes that can cause ray reflection in the specified path.
     local data = {ind = false, quant = 0, poses = {}, names = {}}
         for n = 1, #tab.flags, 1 do
             if(tab.flags[n] ~= "reflect")then
@@ -212,15 +212,63 @@ luxgate.functions.refl_find = function(tab)
             data.names[n] = tab.names[n]
             else end
         end
-    local first = {ind = 0, keys = {}}
+        if(data.quant > 1)then
+        local first = {ind = 0, keys = {}} -- We want the first reflective in the node path.
         for k,v in pairs(data.names)do
             first.ind = first.ind + 1
             first.keys[first.ind] = k;
         end
     local first = math.min(unpack(first.keys))
-        data.ind = first;
+        data.ind = first; -- In this case, we want the lowest key to be prioritized and returned.
         first = nil;
+    else end -- data.ind is false by default and when no reflective nodes are present, true if only one is present, and integral when there are multiple.
     return data
+end
+
+luxgate.functions.refl_redir = function(pos,dir,oldline,rpos) -- essentially creates a new line from a pos, in a new dir, using the remaining data from and oldline
+    
+end
+
+luxgate.functions.incip_dir = function(pos)
+    local data = {
+        poses = {{x = pos.x + 2, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 1, z = pos.z - 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z + 2}},
+        region = {nodes = {}, rods = {}}
+    }
+    data.region.nodes[1],data.region.nodes[2] = minetest.find_node_near(pos,5,"nc_lode:block_annealed", false), minetest.find_node_near(pos,5,"nc_luxgate:vessicle", false);
+
+    for n = 1, #data.poses, 1 do
+        if(minetest.get_node(data.poses[n]).name == "nc_lode:rod_annealed")then
+            data.region.rods[n] = "1";
+        else data.region.rods[n] = "0";
+        end
+    end
+    for n = 2, #data.region.rods, 1 do
+        data.region.rods[1] = data.region.rods[1]..data.region.rods[n]
+    end
+    data.region.rods = unpack(data.region.rods);
+    if(data.region.rods == "1111")then
+        data.region.rods = {9,"none"}
+    elseif(data.region.rods == "0000")then
+        data.region.rods = {10, "any"}
+    elseif(data.region.rods == "0101")then
+        data.region.rods = {1, "east"}
+    elseif(data.region.rods == "1001")then
+        data.region.rods = {2, "south"}
+    elseif(data.region.rods == "1010")then
+        data.region.rods = {3, "west"}
+    elseif(data.region.rods == "0110")then
+        data.region.rods = {4, "north"}
+    elseif(data.region.rods == "0111")then
+        data.region.rods = {5, "northeast"}
+    elseif(data.region.rods == "1101")then
+        data.region.rods = {6, "southeast"}
+    elseif(data.region.rods == "1011")then
+        data.region.rods = {7, "southwest"}
+    elseif(data.region.rods == "1110")then
+        data.region.rods = {8, "northwest"}
+    else 
+    end
+    return data.region.rods
 end
 --
 
@@ -229,20 +277,6 @@ luxgate.functions.searchlight = function(pos, dir, dist, mod)
     local origin = pos;
     local ray = {rate = {x=0,y=0,z=0}, dir = false, mods = {}}
     local exception;
-    local dirs = {"(1,0,0)",  -- East
-                   "(-1,0,0)", -- West
-                    "(0,0,1)", -- North
-                     "(0,0,-1)", -- South
-                      "(1,0,1)", -- NorthEast
-                       "(-1,0,-1)", -- SouthWest
-                        "(1,0,-1)", -- SouthEast
-                         "(-1,0,1)"}-- For actually pulling positions for the ray's path.
-        if(origin and dir and dist and ray)then
-        local looper = {max = 6, cur = 0}
-        while(luxgate.functions.forward(origin, dir, dist, ray) == 0 and looper.cur <= looper.max)do
-            luxgate.functions.forward(origin, dir, dist, ray)
-            looper.cur = looper.cur + 1;
-        end
-        else end
+        
 end
 

@@ -10,7 +10,7 @@ luxgate = {
 }
 
 dofile(modpath .. "/smokenmirrors.lua")
-dofile(modpath .. "/shem.lua")
+dofile(modpath .. "/legothingies.lua")
 dofile(modpath .. "/noctiluca.lua")
 dofile(modpath .. "/brainything.lua")
 --- NAMING ---
@@ -29,8 +29,7 @@ minetest.register_node("nc_luxgate:luxblende",{
     },
     tiles = {"canvas2.png"},
     on_punch = function(pos)
-        local proberes = luxgate.functions.line_probe(pos,20,3)
-        minetest.chat_send_all(minetest.serialize(luxgate.functions.refl_find(luxgate.functions.line_inv(proberes))))
+        minetest.chat_send_all(minetest.serialize(luxgate.functions.incip_dir(pos)))
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{
