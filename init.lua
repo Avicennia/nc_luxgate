@@ -4,7 +4,8 @@ tm = thismod..":"
 
 luxgate = {
     functions = {},
-    nodes = {names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e"}},
+    particles = {},
+    nodes = {names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed"}},
     nodenumbers = {},
     dirs = {}
 }
@@ -29,7 +30,21 @@ minetest.register_node("nc_luxgate:luxblende",{
     },
     tiles = {"canvas2.png"},
     on_punch = function(pos)
-        minetest.chat_send_all(minetest.serialize(luxgate.functions.incip_dir(pos)))
+        --minetest.chat_send_all(luxgate.functions.whosthere(pos))
+        local chainpairs = {{{x = pos.x - 2, y = pos.y + 1, z = pos.z},{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2}},
+                            {{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2}},
+                            {{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 1, z = pos.z}},
+                            {{x = pos.x + 2, y = pos.y + 1, z = pos.z},{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2}},
+                            {{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 1, y = pos.y + 1, z = pos.z + 2}},
+                            {{x = pos.x - 1, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z}},
+                            {{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2},{x = pos.x, y = pos.y + 1, z = pos.z}},
+                            {{x = pos.x, y = pos.y + 1, z = pos.z},{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2}},
+                            {{x = pos.x, y = pos.y + 1, z = pos.z},{x = pos.x - 2, y = pos.y + 1, z = pos.z}}
+                        }
+
+        for n=1, #chainpairs, 1 do
+        darkchain(chainpairs[n][1],chainpairs[n][2])
+        end
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{

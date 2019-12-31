@@ -75,6 +75,8 @@ luxgate.functions.area_decode = function(table) -- Converts certain table values
             output[n] = 5;
         elseif(table[n].name == luxgate.nodes.names[6])then
             output[n] = 6;
+        elseif(table[n].name == luxgate.nodes.names[7])then
+            output[n] = 7;
         else output[n] = 9 end
     end
     return output
@@ -82,37 +84,42 @@ end
 
 luxgate.functions.unquestionablejudgement = function(table, guess) -- Give table, and template table (guess), and outputs true or false accordingly.
     local output = {}
+    local rv = 0;
         if(table and guess)then
-        if(#table == #guess)then
-    for n = 1, #table, 1 do
-        if(table[n] == guess[n])then
-            output[n] = true
-        else output[n] = false
+
+            if(#guess < #table)then -- Append 0's onto the end of tables if there is a mismatch with the template.
+                for n = #guess + 1, #table,1 do
+                    guess[n] = 0
+                end
+            end
+
+            if(#table == #guess)then -- checks if both tables line up for same values.
+                for n = 1, #table, 1 do
+                    if(table[n] == guess[n])then
+                    output[n] = true
+                    else output[n] = false
+                    end
+                end
+            else output = {"wrong size", #table, #guess}
+            end
+        else end
+
+
+        for n = 1, #table - #guess + #table, 1 do -- Create a numerical record of how many trues in output.
+            if(output[n] == true)then
+                rv = rv + 1;
+            else end
         end
-    end
-else 
-end
-else end
-return output
+
+
+        if(rv == #table and #output)then
+            output = nil;
+            rv = true;
+        else end
+        
+return rv
 end
 
-luxgate.functions.redlightgreenlight = function(t1)
-    local ind = 0
-    local dni = 0
-    for n = 1, #t1, 1 do
-        if(t1[n] == true)then
-            ind = ind + 1;
-        elseif(t1[n] == false)then
-            dni = dni + 1;
-        end
-    end
-    if(ind == #t1)then
-        ind = true
-    elseif(ind ~= #t1)then
-        ind = "Size error " .. #t1 .. " || ".. ind .. " || " .. dni;
-else end
-    return ind
-end
 
 luxgate.functions.modcalc = function(tab)
 local modifiers = {"reflect","conduct","attenuate","absorb"} -- For altering actual distance, direction, etc.
@@ -120,9 +127,42 @@ local output = {}
 
 
 end
+
+--[[
+
+            IDENTIFICATION ASSIGNMENT STUFF
+
+]]
+luxgate.functions.knockknock = function()
+end
+
+luxgate.functions.whosthere = function(pos)
+    
+    local gather = luxgate.functions.area(pos)
+    local digitize = luxgate.functions.area_decode(gather)
+    local antoninscalia;
+    for n = 1, #luxgate.numberframe, 1 do
+        if(luxgate.functions.unquestionablejudgement(digitize,luxgate.numberframe[n]) == true)then
+            antoninscalia = n
+        else antoninscalia = false end
+    end
+
+    return antoninscalia;
+end
+
+
+
+
+
+--------------------------------------------------------------
+
+
 --[[
             LINE SEARCH FUNCTION STUFF
 ]]
+
+
+
 luxgate.functions.line_probe = function(pos,dis,dir) -- Searches along a line and returns all positions and nodenames found in a given direction for a given distance.
     local dahta = {nodes_n = {}, nodes_p = {}};
     if(pos and dis and dir)then
@@ -230,6 +270,7 @@ luxgate.functions.refl_redir = function(pos,dir,oldline,rpos) -- essentially cre
 end
 
 luxgate.functions.incip_dir = function(pos)
+-- Scans area, after a verification, searches for specific positions of annealed lode bars to determine which of the 2d primary and secondary cardinal directions to return. if false then reject.
     local data = {
         poses = {{x = pos.x + 2, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 1, z = pos.z - 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z + 2}},
         region = {nodes = {}, rods = {}}
@@ -243,30 +284,30 @@ luxgate.functions.incip_dir = function(pos)
         end
     end
     for n = 2, #data.region.rods, 1 do
-        data.region.rods[1] = data.region.rods[1]..data.region.rods[n]
+        data.region.rods[1] = data.region.rods[1]..data.region.rods[n];
     end
     data.region.rods = unpack(data.region.rods);
     if(data.region.rods == "1111")then
-        data.region.rods = {9,"none"}
+        data.region.rods = {9,"none"};
     elseif(data.region.rods == "0000")then
-        data.region.rods = {10, "any"}
+        data.region.rods = {10, "any"};
     elseif(data.region.rods == "0101")then
-        data.region.rods = {1, "east"}
+        data.region.rods = {1, "east"};
     elseif(data.region.rods == "1001")then
-        data.region.rods = {2, "south"}
+        data.region.rods = {2, "south"};
     elseif(data.region.rods == "1010")then
-        data.region.rods = {3, "west"}
+        data.region.rods = {3, "west"};
     elseif(data.region.rods == "0110")then
-        data.region.rods = {4, "north"}
+        data.region.rods = {4, "north"};
     elseif(data.region.rods == "0111")then
-        data.region.rods = {5, "northeast"}
+        data.region.rods = {5, "northeast"};
     elseif(data.region.rods == "1101")then
-        data.region.rods = {6, "southeast"}
+        data.region.rods = {6, "southeast"};
     elseif(data.region.rods == "1011")then
-        data.region.rods = {7, "southwest"}
+        data.region.rods = {7, "southwest"};
     elseif(data.region.rods == "1110")then
-        data.region.rods = {8, "northwest"}
-    else 
+        data.region.rods = {8, "northwest"};
+    else data.region.rods = false;
     end
     return data.region.rods
 end

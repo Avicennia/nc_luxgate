@@ -78,4 +78,40 @@ function portalhole(pos)
 
 end
 
+function darkchain(pos1, pos2)
+    local dirp = vector.direction(pos1, pos2)
+    minetest.add_particlespawner({
+        amount = 10,
+        time = 0,
+        minpos = {x=pos1.x, y=pos1.y + 0.5, z=pos1.z},
+        maxpos = {x=pos1.x, y=pos1.y + 0.5, z=pos1.z},
+        minvel = {x=dirp.x, y=0, z=dirp.z},
+        maxvel = {x=dirp.x, y=0, z=dirp.z},
+        minacc = {x=0, y=0, z=0},
+        maxacc = {x=0, y=0, z=0},
+        minexptime = 2.0,
+        maxexptime = 2.1,
+        minsize = 1,
+        maxsize = 1.2,
+    
+        collisiondetection = false,
+        collision_removal = false,
+        vertical = false,
+        texture = "darkcurl.png",
+        animation = {
+            type = "vertical_frames",
+            aspect_w = 16,
+            aspect_h = 16,
+            length = 0.2},
+            {
+                type = "sheet_2d",
+                frames_w = 1,
+                frames_h = 4,
+                frame_length = 0.1,
+            },
+        glow = 4
+    })
+
+end
+
 --  --  --  --  --  --  --  Beam Search
