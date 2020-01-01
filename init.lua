@@ -39,7 +39,7 @@ minetest.register_node("nc_luxgate:luxblende",{
                             {{x = pos.x - 1, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z}},
                             {{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2},{x = pos.x, y = pos.y + 1, z = pos.z}},
                             {{x = pos.x, y = pos.y + 1, z = pos.z},{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2}},
-                            {{x = pos.x, y = pos.y + 1, z = pos.z},{x = pos.x - 2, y = pos.y + 1, z = pos.z}}
+                            {{x = pos.x, y = pos.y + 1, z = pos.z},{x = pos.x - 2, y = pos.y + 1, z = pos.z }}
                         }
 
         for n=1, #chainpairs, 1 do
@@ -91,7 +91,7 @@ minetest.register_node("nc_luxgate:frame_ohm",{
     }},
     groups = {cracky =1},
     on_punch = function(pos)
-        suffusion(pos)
+        luxgate.functions.powerpull(pos)
     end
     
 })

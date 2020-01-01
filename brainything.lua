@@ -150,7 +150,18 @@ luxgate.functions.whosthere = function(pos)
     return antoninscalia;
 end
 
+luxgate.functions.powerpull = function(pos) -- Function for doing crude energy pull by ohmic or power trans frame nodes.
+    local nod = minetest.find_node_near(pos, 5, {"group:lux_emit"}, false) -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
+    if(minetest.get_node(nod).name ~= "nc_lux:flux_flowing" and minetest.get_node(nod).name ~= "nc_lux:flux_source")then
+        suffusion(pos, nod)
+        minetest.after(3, function() minetest.set_node(nod, {name = "nc_lux:cobble1"})end)
+        nod = {true, minetest.get_node(nod).name};
+    else end
 
+    if(nod[2])then -- If a lux cobble is found, it's number is used to gain a max of 8 (energy units/synon with nodes atm) to contribute to vessicle search distance for a maximum of 8 x 8 x 4 between all 4 in a large portal.
+        nod = string.sub(nod[2],14) * 8
+    else nod = 0 end
+end
 
 
 

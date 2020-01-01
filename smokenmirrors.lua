@@ -4,15 +4,14 @@ local thismod = "nc_luxgate:"
 
 --  --  --  --  --  --  --  Particles
 
-function suffusion(pos)
-    local orig = pos
-    local dest = (minetest.find_node_near(pos, 3, {"group:lux_emit"}, false) or false)
+function suffusion(pos, dest)
+   
     
-    if(orig and dest ~= false)then
-    local velv = vector.subtract(orig,dest) or {0,0,0}
+    if(pos and dest)then
+    local velv = vector.subtract(pos,dest)
     minetest.add_particlespawner({
         amount = 120,
-        time = 10,
+        time = 4,
         minpos = {x=dest.x-0.6, y=dest.y-0.6, z=dest.z-0.6},
         maxpos = {x=dest.x+0.6, y=dest.y+0.6, z=dest.z+0.6},
         minvel = {x=velv.x, y=velv.y, z=velv.z},
