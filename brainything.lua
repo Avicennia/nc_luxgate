@@ -38,16 +38,16 @@ end
 
 
 
-luxgate.functions.area = function(pos) -- Grabs a 5x5x6 area of nodes and outputs their names as a table.
+luxgate.functions.area = function(pos,len,wid,hei) -- Grabs a lenxwidxhei area of nodes and outputs them as a large table.
     local output = {};
     local ori = pos;
     local inc = 0
-    for n = 1, 6, 1 do -- Y axis, height.
-        for o = 1, 5, 1 do -- Z axis, length.
-            for t = 1, 5, 1 do -- X axis, girth. function that does the actual searching.
+    for n = 1, hei, 1 do -- Y axis, height.
+        for o = 1, len, 1 do -- Z axis, length.
+            for t = 1, wid, 1 do -- X axis, girth. function that does the actual searching.
                 ori.x = ori.x + 1
                 inc = inc + 1
-                output[inc] = minetest.get_node(ori)
+                output[inc] = minetest.get_node(ori).name
             end
             ori.x = ori.x - 5
             ori.z = ori.z + 1
@@ -61,22 +61,24 @@ end
 luxgate.functions.area_decode = function(table) -- Converts certain table values into numbers for interpretation.
     local output = {};
     for n = 1, #table, 1 do
-        if(table[n].name == "air")then
+        if(table[n] == "air")then
             output[n] = 0;
-        elseif(table[n].name == luxgate.nodes.names[1])then
+        elseif(table[n] == luxgate.nodes.names[1])then
             output[n] = 1;
-        elseif(table[n].name == luxgate.nodes.names[2])then
+        elseif(table[n] == luxgate.nodes.names[2])then
             output[n] = 2;
-        elseif(table[n].name == luxgate.nodes.names[3])then
+        elseif(table[n] == luxgate.nodes.names[3])then
             output[n] = 3;
-        elseif(table[n].name == luxgate.nodes.names[4])then
+        elseif(table[n] == luxgate.nodes.names[4])then
             output[n] = 4;
-        elseif(table[n].name == luxgate.nodes.names[5])then
+        elseif(table[n] == luxgate.nodes.names[5])then
             output[n] = 5;
-        elseif(table[n].name == luxgate.nodes.names[6])then
+        elseif(table[n] == luxgate.nodes.names[6])then
             output[n] = 6;
-        elseif(table[n].name == luxgate.nodes.names[7])then
+        elseif(table[n] == luxgate.nodes.names[7])then
             output[n] = 7;
+        elseif(table[n] == luxgate.nodes.names[8])then
+            output[n] = 8;
         else output[n] = 9 end
     end
     return output
@@ -86,12 +88,6 @@ luxgate.functions.unquestionablejudgement = function(table, guess) -- Give table
     local output = {}
     local rv = 0;
         if(table and guess)then
-
-            if(#guess < #table)then -- Append 0's onto the end of tables if there is a mismatch with the template.
-                for n = #guess + 1, #table,1 do
-                    guess[n] = 0
-                end
-            end
 
             if(#table == #guess)then -- checks if both tables line up for same values.
                 for n = 1, #table, 1 do
@@ -105,16 +101,16 @@ luxgate.functions.unquestionablejudgement = function(table, guess) -- Give table
         else end
 
 
-        for n = 1, #table - #guess + #table, 1 do -- Create a numerical record of how many trues in output.
+        for n = 1, #output, 1 do -- Create a numerical record of how many trues in output.
             if(output[n] == true)then
                 rv = rv + 1;
             else end
         end
 
 
-        if(rv == #table and #output)then
+        if(rv == #table)then
             output = nil;
-            rv = true;
+            rv = "true";
         else end
         
 return rv
@@ -136,20 +132,26 @@ end
 luxgate.functions.knockknock = function()
 end
 
-luxgate.functions.whosthere = function(pos)
+luxgate.functions.whosthere = function(pos,areaparams) -- Confirms whether structure true passed by unquestionablejudgement is a valid structure and reports which it fits.
     
-    local gather = luxgate.functions.area(pos)
+    local gather = luxgate.functions.area(pos, areaparams[1], areaparams[2], areaparams[3])
     local digitize = luxgate.functions.area_decode(gather)
-    local antoninscalia;
+    local antoninscalia = {}
     for n = 1, #luxgate.numberframe, 1 do
         if(luxgate.functions.unquestionablejudgement(digitize,luxgate.numberframe[n]) == true)then
-            antoninscalia = n
-        else antoninscalia = false end
+            antoninscalia[n] = true;
+        else antoninscalia[n] = luxgate.functions.unquestionablejudgement(digitize,luxgate.numberframe[n]) end
     end
 
     return antoninscalia;
 end
 
+
+--[[
+
+            LUX POWER STUFF
+
+]]
 luxgate.functions.powerpull = function(pos) -- Function for doing crude energy pull by ohmic or power trans frame nodes.
     local nod = minetest.find_node_near(pos, 2, {"group:lux_emit"}, false) -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
     local val = 0;
@@ -177,7 +179,19 @@ luxgate.functions.powerpull = function(pos) -- Function for doing crude energy p
 end
 
 
+--[[
 
+            PORTAL CREATION STUFF
+
+]]
+luxgate.functions.tetris = function(pos, areaparams)
+    local structurekey = luxgate.functions.whosthere(pos, areaparams);
+    local areagrab = luxgate.functions.area(pos,areaparams[1],areaparams[2],areaparams[3])
+    
+    minetest.chat_send_all(minetest.serialize(structurekey))
+    
+
+end
 --------------------------------------------------------------
 
 

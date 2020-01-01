@@ -5,7 +5,7 @@ tm = thismod..":"
 luxgate = {
     functions = {},
     particles = {},
-    nodes = {names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed"}},
+    nodes = {names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle"}},
     nodenumbers = {},
     dirs = {}
 }
@@ -45,13 +45,17 @@ minetest.register_node("nc_luxgate:luxblende",{
         for n=1, #chainpairs, 1 do
         darkchain(chainpairs[n][1],chainpairs[n][2])
         end]]
-        local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
+
+
+
+
+        --[[local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
         local val = 0;
         for n=1,#places,1 do
             val = val + luxgate.functions.powerpull(places[n])
         end
-        minetest.chat_send_all(val)
-
+        minetest.chat_send_all(val)]]
+        luxgate.functions.tetris(pos, {5,5,6})
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{
