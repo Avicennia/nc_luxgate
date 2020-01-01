@@ -151,16 +151,29 @@ luxgate.functions.whosthere = function(pos)
 end
 
 luxgate.functions.powerpull = function(pos) -- Function for doing crude energy pull by ohmic or power trans frame nodes.
-    local nod = minetest.find_node_near(pos, 5, {"group:lux_emit"}, false) -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
-    if(minetest.get_node(nod).name ~= "nc_lux:flux_flowing" and minetest.get_node(nod).name ~= "nc_lux:flux_source")then
-        suffusion(pos, nod)
-        minetest.after(3, function() minetest.set_node(nod, {name = "nc_lux:cobble1"})end)
-        nod = {true, minetest.get_node(nod).name};
-    else end
+    local nod = minetest.find_node_near(pos, 2, {"group:lux_emit"}, false) -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
+    local val = 0;
+    if(nod ~= nil)then
+        if(minetest.get_node(nod).name ~= "nc_lux:flux_flowing" and minetest.get_node(nod).name ~= "nc_lux:flux_source")then -- Dont want flux nodes, but want to use group:lux_emit.
+            suffusion(pos, nod)
+            minetest.after(3,
+            function()
+            if(minetest.get_node(nod).name ~= "nc_lux:cobble1")then -- using lowest level lux cobble will not work and will result in loss of lux cobble. Normally higher levels of lux cobble will be turned to lowest level, requiring recharging.
+            val = {true, minetest.get_node(nod).name}; -- want to return true and name.
+            minetest.set_node(nod, {name = "nc_lux:cobble1"})
+            else minetest.set_node(nod, {name = "nc_fire:ash"})
+            end end)
 
-    if(nod[2])then -- If a lux cobble is found, it's number is used to gain a max of 8 (energy units/synon with nodes atm) to contribute to vessicle search distance for a maximum of 8 x 8 x 4 between all 4 in a large portal.
-        nod = string.sub(nod[2],14) * 8
-    else nod = 0 end
+            if(val)then
+            if(val[2] ~= "nc_lux:cobble1" and string.sub(val[2],14))then -- If a lux cobble is found, it's number is used to gain a max of 8 (energy units/synon with nodes atm) to contribute to vessicle search distance for a maximum of 8 x 8 x 4 between all 4 in a large portal.
+                val = string.sub(val[2],14) * 8
+            else end
+        else end
+        else end
+
+        
+    else end
+    return val
 end
 
 

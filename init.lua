@@ -31,7 +31,7 @@ minetest.register_node("nc_luxgate:luxblende",{
     tiles = {"canvas2.png"},
     on_punch = function(pos)
         --minetest.chat_send_all(luxgate.functions.whosthere(pos))
-        local chainpairs = {{{x = pos.x - 2, y = pos.y + 1, z = pos.z},{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2}},
+        --[[local chainpairs = {{{x = pos.x - 2, y = pos.y + 1, z = pos.z},{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2}},
                             {{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2}},
                             {{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 1, z = pos.z}},
                             {{x = pos.x + 2, y = pos.y + 1, z = pos.z},{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2}},
@@ -44,7 +44,14 @@ minetest.register_node("nc_luxgate:luxblende",{
 
         for n=1, #chainpairs, 1 do
         darkchain(chainpairs[n][1],chainpairs[n][2])
+        end]]
+        local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
+        local val = 0;
+        for n=1,#places,1 do
+            val = val + luxgate.functions.powerpull(places[n])
         end
+        minetest.chat_send_all(val)
+
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{
