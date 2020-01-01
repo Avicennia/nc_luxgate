@@ -186,11 +186,15 @@ end
 ]]
 luxgate.functions.tetris = function(pos, areaparams)
     local structurekey = luxgate.functions.whosthere(pos, areaparams);
+    local numnum = #luxgate.functions.whosthere(pos, areaparams)
     local areagrab = luxgate.functions.area(pos,areaparams[1],areaparams[2],areaparams[3])
-    
-    minetest.chat_send_all(minetest.serialize(structurekey))
-    
-
+    local num;
+    for ll = 1, #structurekey, 1 do
+       if(structurekey[ll] == "true")then
+        num = ll;
+       else end
+    end
+        minetest.chat_send_all(minetest.serialize(num))
 end
 --------------------------------------------------------------
 
