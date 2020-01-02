@@ -4,43 +4,46 @@ local thismod = "nc_luxgate:"
 
 --  --  --  --  --  --  --  Particles
 
-function suffusion(pos, dest)
-   
-    
+luxgate.particles.suffusion = function(pos, dest)
+
     if(pos and dest)then
-    local velv = vector.subtract(pos,dest)
-    minetest.add_particlespawner({
-        amount = 90,
-        time = 3,
-        minpos = {x=dest.x-0.6, y=dest.y-0.6, z=dest.z-0.6},
-        maxpos = {x=dest.x+0.6, y=dest.y+0.6, z=dest.z+0.6},
-        minvel = {x=velv.x, y=velv.y, z=velv.z},
-        maxvel = {x=velv.x+0.1, y=velv.y+0.1, z=velv.z+0.1},
-        minacc = {x=0, y=0, z=0},
-        maxacc = {x=0.05, y=0.05, z=0.05},
-        minexptime = 0.2,
-        maxexptime = 0.9,
-        minsize = 1.6,
-        maxsize = 2.2,
-    
-        collisiondetection = false,
-        collision_removal = false,
-        vertical = false,
-        texture = "luxion_anim.png",
-        animation = {
-            type = "vertical_frames",
-            aspect_w = 16,
-            aspect_h = 16,
-            length = 0.5},
-            {
-                type = "sheet_2d",
-                frames_w = 1,
-                frames_h = 6,
-                frame_length = 0.5,
-            },
-        glow = 4
-    })
-else end
+
+        local velv = vector.subtract(pos,dest)
+
+        minetest.add_particlespawner({
+            amount = 90,
+            time = 3,
+            minpos = {x=dest.x-0.6, y=dest.y-0.6, z=dest.z-0.6},
+            maxpos = {x=dest.x+0.6, y=dest.y+0.6, z=dest.z+0.6},
+            minvel = {x=velv.x, y=velv.y, z=velv.z},
+            maxvel = {x=velv.x+0.1, y=velv.y+0.1, z=velv.z+0.1},
+            minacc = {x=0, y=0, z=0},
+            maxacc = {x=0.05, y=0.05, z=0.05},
+            minexptime = 0.2,
+            maxexptime = 0.9,
+            minsize = 1.6,
+            maxsize = 2.2,
+        
+            collisiondetection = false,
+            collision_removal = false,
+            vertical = false,
+            texture = "luxion_anim.png",
+            animation = {
+                type = "vertical_frames",
+                aspect_w = 16,
+                aspect_h = 16,
+                length = 0.5},
+                {
+                    type = "sheet_2d",
+                    frames_w = 1,
+                    frames_h = 6,
+                    frame_length = 0.5,
+                },
+            glow = 4
+        })
+
+    else end
+
 end
 function portalhole(pos)
     minetest.add_particlespawner({
@@ -78,7 +81,9 @@ function portalhole(pos)
 end
 
 function darkchain(pos1, pos2)
+
     local dirp = vector.direction(pos1, pos2)
+    
     minetest.add_particlespawner({
         amount = 10,
         time = 0,

@@ -10,33 +10,7 @@ luxgate.dirs = {
 "(-1,0,1)" -- NorthWest
 }
 
-
-luxgate.functions.digitizer = function(tab)
-    local nodes = {
-        names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e"},
-        output = {}
-    }
-    for x = 1, #tab, 1 do
-        for n = 1, #nodes.names, 1 do
-            if(tab[x] == nodes.names[n])then
-                nodes.output[x] = n
-            else end
-        end
-    end
-    return nodes.output
-end
-
-luxgate.functions.papersplease = function(origin, intable, temptable)
-    if(origin and intable and outable)then
-        local data = {
-            incoming = {seq = intable},
-            template = {seq = temptable},
-            outgoing = {seq}
-        }
-    else end
-end
-
-
+-- AREA FETCHING THINGY
 
 luxgate.functions.area = function(pos,len,wid,hei) -- Grabs a lenxwidxhei area of nodes and outputs them as a large table.
     local output = {};
@@ -57,7 +31,11 @@ luxgate.functions.area = function(pos,len,wid,hei) -- Grabs a lenxwidxhei area o
     end
     return output
 end
+--[[
 
+            IDENTIFICATION  and ASSIGNMENT STUFF
+
+]]
 luxgate.functions.area_decode = function(table) -- Converts certain table values into numbers for interpretation.
     local output = {};
     for n = 1, #table, 1 do
@@ -117,18 +95,7 @@ return rv
 end
 
 
-luxgate.functions.modcalc = function(tab)
-local modifiers = {"reflect","conduct","attenuate","absorb"} -- For altering actual distance, direction, etc.
-local output = {}
 
-
-end
-
---[[
-
-            IDENTIFICATION ASSIGNMENT STUFF
-
-]]
 luxgate.functions.knockknock = function()
 end
 
@@ -152,6 +119,7 @@ end
             LUX POWER STUFF
 
 ]]
+
 luxgate.functions.powerpull = function(pos) -- Function for doing crude energy pull by ohmic or power trans frame nodes.
     local nod = {minetest.find_node_near(pos, 2, {"group:lux_emit"}, false)} -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
     local val = 0;
@@ -172,6 +140,7 @@ end
             PORTAL CREATION STUFF
 
 ]]
+
 luxgate.functions.tetris = function(pos, areaparams)
     local structurekey = luxgate.functions.whosthere(pos, areaparams);
     local numnum = #luxgate.functions.whosthere(pos, areaparams)
@@ -184,7 +153,7 @@ luxgate.functions.tetris = function(pos, areaparams)
     end
         minetest.chat_send_all(minetest.serialize(num))
 end
---------------------------------------------------------------
+
 
 
 --[[
@@ -252,7 +221,7 @@ luxgate.functions.line_inv = function(table) -- Inspects table for nodenames tha
     return out.noi
 end
 
-luxgate.functions.atten_calc = function(tab)
+--[[luxgate.functions.atten_calc = function(tab)
  -- Attempt to quantify reduction in distance due to attenuation.(tab must contain tabs; names,poses and flags)
     local magnitude = 0
     local nodes_valid = {names = {"nc_lode:block_tempered","nc_terrain:dirt","nc_terrain:dirt_with_grass","nc_terrain:stone"}, values = {0.7,0.1,0.13,0.2}}
@@ -282,7 +251,7 @@ luxgate.functions.atten_calc = function(tab)
         end
         vals[#vals+1] = "Magnitude of ".. magnitude
     return vals
-end
+end]]
 
 luxgate.functions.refl_find = function(tab) -- Find all nodes that can cause ray reflection in the specified path.
     local data = {ind = false, quant = 0, poses = {}, names = {}}
@@ -365,6 +334,8 @@ luxgate.functions.searchlight = function(pos, dir, dis, exc) -- Searches for nod
 
     ray.nodes = minetest.find_nodes_with_meta(origin, cess)
 
-
 end
 
+luxgate.functions.recalc = function(original_line, traversed_distance, player)
+
+end
