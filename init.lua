@@ -29,7 +29,7 @@ minetest.register_node("nc_luxgate:luxblende",{
         }
     },
     tiles = {"canvas2.png"},
-    on_punch = function(pos)
+    on_punch = function(pos,node,puncher)
         --minetest.chat_send_all(luxgate.functions.whosthere(pos))
 
         --DARKCHAIN TESTING STUFF
@@ -59,7 +59,12 @@ minetest.register_node("nc_luxgate:luxblende",{
         minetest.chat_send_all(vale.." "..vale / 4)
         --luxgate.functions.tetris(pos, {5,5,6})]]
 
-        minetest.chat_send_all(minetest.serialize(luxgate.functions.conscription(luxgate.functions.line_probe(pos,250, 3))))
+        local something = luxgate.functions.conscription(luxgate.functions.line_probe(pos,250, 3))
+        local tab = luxgate.functions.line_probe(pos,250,3).nodes_p[something]
+        if(tab)then
+            minetest.chat_send_all(minetest.serialize(tab))
+            puncher:set_pos(tab)
+        else minetest.chat_send_all("nothing") end
 
 
 

@@ -212,17 +212,14 @@ luxgate.functions.line_probe = function(pos,dis,dir) -- Searches along a line an
 end
 
 luxgate.functions.conscription = function(tab) -- specifically for return values of above function. force loads nodes.
-    local rv = {}
-    if(tab.nodes_n and tab.nodes_p)then
-        for n = 1, #tab.nodes_n, 1 do
-            if(tab.nodes_n[n] == "ignore")then
-                minetest.forceload_block(tab.nodes_p[n])
-                rv[n] = minetest.get_node(tab.nodes_p[n]).name
-                
-            else rv[n] = minetest.get_node(tab.nodes_p[n]).name end
-        end
-    else end
-    rv = {tab.nodes_p, rv}
+    local rv = 0
+    for n = 1, #tab.nodes_n, 1 do
+        
+        if(tab.nodes_n[n] == "ignore")then
+            rv = n;
+            break
+        else end
+    end
     return rv
 end
 
