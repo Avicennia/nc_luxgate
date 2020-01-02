@@ -162,7 +162,7 @@ luxgate.functions.powerpull = function(pos) -- Function for doing crude energy p
             suffusion(pos,nod[1])
             val = string.sub(nod[2],14) * 8; 
             minetest.set_node(nod[1],{name = "nc_lux:cobble1"})
-        else minetest.chat_send_all(minetest.serialize(nod)) end 
+        else end 
     else end
     return val
 end
@@ -211,9 +211,25 @@ luxgate.functions.line_probe = function(pos,dis,dir) -- Searches along a line an
     return dahta -- Return value should contain 2 tables, 1 with names and 2 with positions of entries in 1.
 end
 
+luxgate.functions.conscription = function(tab) -- specifically for return values of above function. force loads nodes.
+    local rv = {}
+    if(tab.nodes_n and tab.nodes_p)then
+        for n = 1, #tab.nodes_n, 1 do
+            if(tab.nodes_n[n] == "ignore")then
+                minetest.forceload_block(tab.nodes_p[n])
+                rv[n] = minetest.get_node(tab.nodes_p[n]).name
+                
+            else rv[n] = minetest.get_node(tab.nodes_p[n]).name end
+        end
+    else end
+    rv = {tab.nodes_p, rv}
+    return rv
+end
+
+
 luxgate.functions.line_inv = function(table) -- Inspects table for nodenames that require quirky behaviour.
     local out = {noi = {poses = {}, names = {}, flags = {}}};
-    local noi = {ignore = {"air","nc_optics:glass"}, reflect = {"nc_lode:block_annealed","nc_optics:glass_opaque",}, attenuate = {"nc_terrain:stone", "nc_terrain:dirt", "nc_lode:block_tempered"}}
+    local noi = {ignore = {"air","nc_optics:glass"}, reflect = {"nc_lode:block_annealed","nc_optics:glass_opaque","ignore"}, attenuate = {"nc_terrain:stone", "nc_terrain:dirt", "nc_lode:block_tempered"}}
     if(table.nodes_n and table.nodes_p)then
         for n = 1, #table.nodes_n, 1 do
             if(table.nodes_n[n] == noi.ignore[1] or table.nodes_n[n] == noi.ignore[2])then
@@ -224,7 +240,7 @@ luxgate.functions.line_inv = function(table) -- Inspects table for nodenames tha
                 out.noi.names[n] = table.nodes_n[n]
                 out.noi.poses[n] = table.nodes_p[n]
                 out.noi.flags[n] = "attenuate"
-            elseif(table.nodes_n[n] == noi.reflect[1] or table.nodes_n[n] == noi.reflect[2])then
+            elseif(table.nodes_n[n] == noi.reflect[1] or table.nodes_n[n] == noi.reflect[2] or table.nodes_n[n] == noi.reflect[3])then
                 out.noi.names[n] = table.nodes_n[n]
                 out.noi.poses[n] = table.nodes_p[n]
                 out.noi.flags[n] = "reflect"
@@ -344,10 +360,14 @@ end
 --
 
 --
-luxgate.functions.searchlight = function(pos, dir, dist, mod)
+luxgate.functions.searchlight = function(pos, dir, dis, exc) -- Searches for nodes in a radius around a line at invervals.
     local origin = pos;
-    local ray = {rate = {x=0,y=0,z=0}, dir = false, mods = {}}
-    local exception;
-        
+    local ray = {rate = {x=0,y=0,z=0}, nodes, mods = {}, interval = 10}
+    local cess = origin;
+    cess = cess + ( vector.multiply(minetest.string_to_pos(luxgate.dirs[dir]), dis) );
+
+    ray.nodes = minetest.find_nodes_with_meta(origin, cess)
+
+
 end
 

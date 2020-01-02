@@ -31,6 +31,8 @@ minetest.register_node("nc_luxgate:luxblende",{
     tiles = {"canvas2.png"},
     on_punch = function(pos)
         --minetest.chat_send_all(luxgate.functions.whosthere(pos))
+
+        --DARKCHAIN TESTING STUFF
         --[[local chainpairs = {{{x = pos.x - 2, y = pos.y + 1, z = pos.z},{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2}},
                             {{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2}},
                             {{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 1, z = pos.z}},
@@ -48,14 +50,19 @@ minetest.register_node("nc_luxgate:luxblende",{
 
 
 
-
-        local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
+        --POWERPULL TESTING STUFF
+        --[[local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
         local vale = 0;
         for n=1,#places,1 do
             vale = vale + luxgate.functions.powerpull(places[n])
         end
         minetest.chat_send_all(vale.." "..vale / 4)
-        --luxgate.functions.tetris(pos, {5,5,6})
+        --luxgate.functions.tetris(pos, {5,5,6})]]
+
+        minetest.chat_send_all(minetest.serialize(luxgate.functions.conscription(luxgate.functions.line_probe(pos,250, 3))))
+
+
+
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{
