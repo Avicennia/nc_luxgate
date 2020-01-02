@@ -49,13 +49,13 @@ minetest.register_node("nc_luxgate:luxblende",{
 
 
 
-        --[[local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
-        local val = 0;
+        local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
+        local vale = 0;
         for n=1,#places,1 do
-            val = val + luxgate.functions.powerpull(places[n])
+            vale = vale + luxgate.functions.powerpull(places[n])
         end
-        minetest.chat_send_all(val)]]
-        luxgate.functions.tetris(pos, {5,5,6})
+        minetest.chat_send_all(vale.." "..vale / 4)
+        --luxgate.functions.tetris(pos, {5,5,6})
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{

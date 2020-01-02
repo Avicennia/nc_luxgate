@@ -10,8 +10,8 @@ function suffusion(pos, dest)
     if(pos and dest)then
     local velv = vector.subtract(pos,dest)
     minetest.add_particlespawner({
-        amount = 120,
-        time = 4,
+        amount = 90,
+        time = 3,
         minpos = {x=dest.x-0.6, y=dest.y-0.6, z=dest.z-0.6},
         maxpos = {x=dest.x+0.6, y=dest.y+0.6, z=dest.z+0.6},
         minvel = {x=velv.x, y=velv.y, z=velv.z},
@@ -20,8 +20,8 @@ function suffusion(pos, dest)
         maxacc = {x=0.05, y=0.05, z=0.05},
         minexptime = 0.2,
         maxexptime = 0.9,
-        minsize = 0.8,
-        maxsize = 1.2,
+        minsize = 1.6,
+        maxsize = 2.2,
     
         collisiondetection = false,
         collision_removal = false,
@@ -46,8 +46,8 @@ function portalhole(pos)
     minetest.add_particlespawner({
         amount = 110,
         time = 3,
-        minpos = {x=pos.x-1.2, y=pos.y-2.4, z=pos.z-1.2},
-        maxpos = {x=pos.x+1.2, y=pos.y+0.1, z=pos.z+1.2},
+        minpos = {x=pos.x-1.2, y=pos.y-0.4, z=pos.z-1.2},
+        maxpos = {x=pos.x+1.2, y=pos.y+2.1, z=pos.z+1.2},
         minvel = {x=0, y=0.2, z=0},
         maxvel = {x=0, y=0.4, z=0},
         minacc = {x=0, y=0, z=0},
