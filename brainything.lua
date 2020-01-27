@@ -1,18 +1,8 @@
 
-luxgate.dirs = {
-"(1,0,0)",  -- East
-"(-1,0,0)", -- West
-"(0,0,1)", -- North
-"(0,0,-1)", -- South
-"(1,0,1)", -- NorthEast
-"(-1,0,-1)", -- SouthWest
-"(1,0,-1)", -- SouthEast
-"(-1,0,1)" -- NorthWest
-}
 
 -- AREA FETCHING THINGY
 
-luxgate.functions.area = function(pos,len,wid,hei) -- Grabs a lenxwidxhei area of nodes and outputs them as a large table.
+luxgate.functions.area = function(pos,len,wid,hei) -- Grabs a len x wid x hei area of nodes and outputs them as a large table.
     local output = {};
     local ori = pos;
     local inc = 0
@@ -120,14 +110,14 @@ end
 
 ]]
 
-luxgate.functions.powerpull = function(pos) -- Function for doing crude energy pull by ohmic or power trans frame nodes.
+luxgate.functions.powerpull = function(pos) -- Function for doing crude "energy pull" particle effect by ohmic or power trans frame nodes.
     local nod = {minetest.find_node_near(pos, 2, {"group:lux_emit"}, false)} -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
     local val = 0;
     if(nod[1])then
         nod[2] = minetest.get_node(nod[1]).name
         if(nod[1] and nod[2] and tonumber(string.sub(nod[2],14)) > 1 and  minetest.get_meta(nod):get_int("occ") ~= 2)then
             minetest.get_meta(nod[1]):set_int("occ", 2)
-            suffusion(pos,nod[1])
+            luxgate.particles.suffusion(pos,nod[1])
             val = string.sub(nod[2],14) * 8; 
             minetest.set_node(nod[1],{name = "nc_lux:cobble1"})
         else end 

@@ -45,9 +45,9 @@ luxgate.particles.suffusion = function(pos, dest)
     else end
 
 end
-function portalhole(pos)
+function luxgate.particles.portalhole(pos, qty)
     minetest.add_particlespawner({
-        amount = 110,
+        amount = qty or 110,
         time = 3,
         minpos = {x=pos.x-1.2, y=pos.y-0.4, z=pos.z-1.2},
         maxpos = {x=pos.x+1.2, y=pos.y+2.1, z=pos.z+1.2},
@@ -80,7 +80,7 @@ function portalhole(pos)
 
 end
 
-function darkchain(pos1, pos2)
+function luxgate.particles.darkchain(pos1, pos2)
 
     local dirp = vector.direction(pos1, pos2)
     
@@ -89,8 +89,8 @@ function darkchain(pos1, pos2)
         time = 0,
         minpos = {x=pos1.x, y=pos1.y + 0.5, z=pos1.z},
         maxpos = {x=pos1.x, y=pos1.y + 0.5, z=pos1.z},
-        minvel = {x=dirp.x, y=0, z=dirp.z},
-        maxvel = {x=dirp.x, y=0, z=dirp.z},
+        minvel = {x=dirp.x, y=dirp.y, z=dirp.z},
+        maxvel = {x=dirp.x, y=dirp.y, z=dirp.z},
         minacc = {x=0, y=0, z=0},
         maxacc = {x=0, y=0, z=0},
         minexptime = 2.0,
@@ -116,6 +116,37 @@ function darkchain(pos1, pos2)
         glow = 4
     })
 
+end
+
+function luxgate.particles.seenoevil(player)
+    if(player)then
+        local pos = player:get_pos()
+        player:set_look_vertical(1)
+        pos.y = pos.y
+        for n = 1, 8, 1 do
+        minetest.add_particlespawner({
+            amount = 10,
+            time = 2,
+            minpos = vector.add(pos,vector.divide(minetest.string_to_pos(luxgate.dirs[n]),2)),
+            maxpos = vector.add(pos,vector.divide(minetest.string_to_pos(luxgate.dirs[n]),2)),
+            minvel = {x=0, y=1, z=0},
+            maxvel = {x=0, y=2, z=0},
+            minacc = {x=0, y=0.3, z=0},
+            maxacc = {x=0, y=0, z=0},
+            minexptime = 3.0,
+            maxexptime = 3.1,
+            minsize = 8,
+            maxsize = 8,
+        
+            collisiondetection = false,
+            collision_removal = false,
+            vertical = true,
+            texture = "canvas2.png",
+            glow = 4
+        })
+    end
+    
+    else end
 end
 
 --  --  --  --  --  --  --  Beam Search

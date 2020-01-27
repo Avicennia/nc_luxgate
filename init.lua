@@ -5,14 +5,24 @@ tm = thismod..":"
 luxgate = {
     functions = {},
     particles = {},
-    nodes = {names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle"}},
+    nodes = {
+        ulvo = {},
+        names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle"}},
     nodenumbers = {},
-    dirs = {}
+    dirs = {
+        "(1,0,0)",  -- East
+        "(-1,0,0)", -- West
+        "(0,0,1)", -- North
+        "(0,0,-1)", -- South
+        "(1,0,1)", -- NorthEast
+        "(-1,0,-1)", -- SouthWest
+        "(1,0,-1)", -- SouthEast
+        "(-1,0,1)" -- NorthWest
+        }
 }
 
 dofile(modpath .. "/smokenmirrors.lua")
 dofile(modpath .. "/legothingies.lua")
-dofile(modpath .. "/noctiluca.lua")
 dofile(modpath .. "/brainything.lua")
 --- NAMING ---
 
@@ -45,7 +55,7 @@ minetest.register_node("nc_luxgate:luxblende",{
                         }
 
         for n=1, #chainpairs, 1 do
-        darkchain(chainpairs[n][1],chainpairs[n][2])
+        luxgate.particles.darkchain(chainpairs[n][1],chainpairs[n][2])
         end]]
 
 
@@ -64,6 +74,7 @@ minetest.register_node("nc_luxgate:luxblende",{
         if(tab)then
             minetest.chat_send_all(minetest.serialize(tab))
             puncher:set_pos(tab)
+            luxgate.particles.seenoevil(puncher)
         else minetest.chat_send_all("nothing") end
 
 
@@ -78,7 +89,7 @@ minetest.register_node("nc_luxgate:vessicle",{
     node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.125, 0, 0.001, 0.125, 0.3125, 0}, -- NodeBox1
+			{-0.125, 0, 0.001, 0.125, 0.3125, 0},
 		}
     },
     groups = {crumbly = 1},
@@ -87,12 +98,12 @@ minetest.register_node("nc_luxgate:vessicle",{
         timer:start(3)
     end,
     on_timer = function(pos)
-        portalhole(pos)
+        luxgate.particles.portalhole(pos)
         local timer = minetest.get_node_timer(pos)
         timer:start(3)
     end
 })
---- Env nodes ---^^^
+--- Control nodes ---^^^
 
 
 --  --  --  --  --  --  Frame nodes --  --  --  --  --  -- 
@@ -181,7 +192,7 @@ minetest.register_node("nc_luxgate:frame_e",{
         }
     }},
     on_punch = function(pos)
-        suffusion(pos)
+        luxgate.particles.suffusion(pos)
     end
 })
 minetest.register_node("nc_luxgate:frame_v",{
@@ -194,22 +205,22 @@ minetest.register_node("nc_luxgate:frame_v",{
     node_box = {
         type = "fixed",
         fixed = {
-            {-0.375, -0.5, -0.375, 0.375, -0.4375, 0.375}, -- NodeBox18
-			{-0.4375, -0.4375, -0.375, 0.3125, -0.375, 0.375}, -- NodeBox19
-			{-0.5, -0.375, -0.375, 0.25, -0.3125, 0.375}, -- NodeBox20
-			{-0.5625, -0.3125, -0.375, 0.1875, -0.25, 0.375}, -- NodeBox21
-			{-0.625, -0.25, -0.375, 0.125, -0.1875, 0.375}, -- NodeBox22
-			{-0.6875, -0.1875, -0.375, 0.0625, -0.125, 0.375}, -- NodeBox23
-			{-0.75, -0.125, -0.375, 0, -0.0625, 0.375}, -- NodeBox24
-			{-0.8125, -0.0625, -0.375, -0.0625, 0, 0.375}, -- NodeBox25
-			{-0.875, 0, -0.375, -0.125, 0.0625, 0.375}, -- NodeBox26
-			{-0.9375, 0.0625, -0.375, -0.1875, 0.125, 0.375}, -- NodeBox27
-			{-1, 0.125, -0.375, -0.25, 0.1875, 0.375}, -- NodeBox28
-			{-1.0625, 0.1875, -0.375, -0.3125, 0.25, 0.375}, -- NodeBox29
-			{-1.125, 0.25, -0.375, -0.375, 0.3125, 0.375}, -- NodeBox30
-			{-1.1875, 0.3125, -0.375, -0.4375, 0.375, 0.375}, -- NodeBox31
-			{-1.25, 0.375, -0.375, -0.5, 0.4375, 0.375}, -- NodeBox32
-			{-1.3125, 0.4375, -0.375, -0.5625, 0.5, 0.375}, -- NodeBox33
+            {-0.375, -0.5, -0.375, 0.375, -0.4375, 0.375},
+			{-0.4375, -0.4375, -0.375, 0.3125, -0.375, 0.375},
+			{-0.5, -0.375, -0.375, 0.25, -0.3125, 0.375},
+			{-0.5625, -0.3125, -0.375, 0.1875, -0.25, 0.375},
+			{-0.625, -0.25, -0.375, 0.125, -0.1875, 0.375},
+			{-0.6875, -0.1875, -0.375, 0.0625, -0.125, 0.375},
+			{-0.75, -0.125, -0.375, 0, -0.0625, 0.375}, 
+			{-0.8125, -0.0625, -0.375, -0.0625, 0, 0.375}, 
+			{-0.875, 0, -0.375, -0.125, 0.0625, 0.375},
+			{-0.9375, 0.0625, -0.375, -0.1875, 0.125, 0.375}, 
+			{-1, 0.125, -0.375, -0.25, 0.1875, 0.375},
+			{-1.0625, 0.1875, -0.375, -0.3125, 0.25, 0.375}, 
+			{-1.125, 0.25, -0.375, -0.375, 0.3125, 0.375}, 
+			{-1.1875, 0.3125, -0.375, -0.4375, 0.375, 0.375},
+			{-1.25, 0.375, -0.375, -0.5, 0.4375, 0.375},
+			{-1.3125, 0.4375, -0.375, -0.5625, 0.5, 0.375},
         }
     },
     on_punch = function(pos)
@@ -217,5 +228,10 @@ minetest.register_node("nc_luxgate:frame_v",{
         minetest.set_node(pos, {name = "nc_luxgate:frame_v", param2 = prev})
     end
 })
-
+minetest.register_node("nc_luxgate:ulvo",{
+    description = "ulvo",
+    paramtype = "light",
+    groups = {crumbly = 1},
+    tiles = {"canvas2.png"},
+   })
 --  --  --  --  --  --  --  --  --  --  --  --  
