@@ -332,3 +332,31 @@ end
 luxgate.core.oregive = function()
     minetest.chat_send_all(minetest.serialize(minetest.registered_nodes["nc_lode:ore"].on_destruct))
 end
+
+nodecore.register_craft({
+    label = "heat ilmenite shard",
+    action = "cook",
+    touchgroups = {flame = 4},
+    duration = 5,
+    cookfx = true,
+    nodes = {
+        {
+            match = {groups = {paramag = true}},
+            replace = "nc_luxgate:shard_ilmenite_int"
+        }
+    }
+})
+nodecore.register_craft({
+    label = "forge ilmenite block",
+    action = "pummel",
+    toolgroups = {thumpy = 1},
+    nodes = {
+        {
+            match = {name = "nc_luxgate:shard_ilmenite", count = 8},
+            replace = "air"
+        }
+    },
+    items = {
+        "nc_luxgate:block_ilmenite"
+    }
+})

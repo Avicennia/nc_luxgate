@@ -7,7 +7,7 @@ luxgate = {
     core = {},
     particles = {},
     nodes = {
-        ulvo = {},
+        ilmenite = {},
         names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle"}},
     nodenumbers = {},
     dirs = {
@@ -231,17 +231,41 @@ minetest.register_node("nc_luxgate:frame_v",{
         minetest.set_node(pos, {name = "nc_luxgate:frame_v", param2 = prev})
     end
 })
-minetest.register_node("nc_luxgate:ulvo",{
-    description = "ulvo",
+minetest.register_node("nc_luxgate:shard_ilmenite_int",{
+    description = "ilmenite",
+    drawtype = "airlike",
     paramtype = "light",
     groups = {crumbly = 1},
-    tiles = {"canvas2.png"},
+    on_construct = function(pos)
+        nodecore.item_eject(pos, "nc_luxgate:shard_ilmenite_hot",9,1, {x = 0, y = 3, z = 0})
+        minetest.remove_node(pos)
+    end
+   })
+   minetest.register_node("nc_luxgate:block_ilmenite",{
+    description = "ilmenite block",
+    drawtype = "allfaces_optional",
+    paramtype = "light",
+    tiles = {"block_ilmenite.png"},
+    groups = {crumbly = 1, paramag = 1},
+    on_punch = function(pos)
+    local meta = minetest.get_meta(pos)
+    minetest.chat_send_all(meta:get_int("poled"))
+    end
    })
 --  --  --  --  --  --  --  --  --  --  --  --  
-minetest.register_craftitem("nc_luxgate:shard_ulvo", {
-    description = "Ulvo shard",
-    inventory_image = "shard_ulvo.png",
-    wield_image = "shard_ulvo.png",
+minetest.register_craftitem("nc_luxgate:shard_ilmenite", {
+    description = "ilmenite shard",
+    inventory_image = "shard_ilmenite.png",
+    wield_image = "shard_ilmenite.png",
+    wield_scale = {x = 1.25, y = 1.25, z = 1.75},
+    sounds = nodecore.sounds("nc_terrain_stony"),
+    groups = {paramag = 1}
+})
+minetest.register_craftitem("nc_luxgate:shard_ilmenite_hot", {
+    description = "ilmenite shard",
+    inventory_image = "shard_ilmenite_hot.png",
+    wield_image = "shard_ilmenite_hot.png",
     wield_scale = {x = 1.25, y = 1.25, z = 1.75},
     sounds = nodecore.sounds("nc_terrain_stony")
+
 })
