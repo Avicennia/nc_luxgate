@@ -2,8 +2,9 @@ local thismod = minetest.get_current_modname()
 local modpath = minetest.get_modpath(thismod)
 tm = thismod..":"
 
+
 luxgate = {
-    functions = {},
+    core = {},
     particles = {},
     nodes = {
         ulvo = {},
@@ -24,6 +25,8 @@ luxgate = {
 dofile(modpath .. "/smokenmirrors.lua")
 dofile(modpath .. "/legothingies.lua")
 dofile(modpath .. "/brainything.lua")
+dofile(modpath .. "/paramag.lua")
+
 --- NAMING ---
 
 --- NAMING ---^^^
@@ -40,7 +43,7 @@ minetest.register_node("nc_luxgate:luxblende",{
     },
     tiles = {"canvas2.png"},
     on_punch = function(pos,node,puncher)
-        --minetest.chat_send_all(luxgate.functions.whosthere(pos))
+        --minetest.chat_send_all(luxgate.core.whosthere(pos))
 
         --DARKCHAIN TESTING STUFF
         --[[local chainpairs = {{{x = pos.x - 2, y = pos.y + 1, z = pos.z},{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2}},
@@ -64,13 +67,13 @@ minetest.register_node("nc_luxgate:luxblende",{
         --[[local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
         local vale = 0;
         for n=1,#places,1 do
-            vale = vale + luxgate.functions.powerpull(places[n])
+            vale = vale + luxgate.core.powerpull(places[n])
         end
         minetest.chat_send_all(vale.." "..vale / 4)
-        --luxgate.functions.tetris(pos, {5,5,6})]]
+        --luxgate.core.tetris(pos, {5,5,6})]]
 
-        local something = luxgate.functions.conscription(luxgate.functions.line_probe(pos,250, 3))
-        local tab = luxgate.functions.line_probe(pos,250,3).nodes_p[something]
+        local something = luxgate.core.conscription(luxgate.core.line_probe(pos,250, 3))
+        local tab = luxgate.core.line_probe(pos,250,3).nodes_p[something]
         if(tab)then
             minetest.chat_send_all(minetest.serialize(tab))
             puncher:set_pos(tab)
@@ -125,7 +128,7 @@ minetest.register_node("nc_luxgate:frame_ohm",{
     }},
     groups = {cracky =1},
     on_punch = function(pos)
-        luxgate.functions.powerpull(pos)
+        luxgate.core.powerpull(pos)
     end
     
 })
@@ -235,3 +238,10 @@ minetest.register_node("nc_luxgate:ulvo",{
     tiles = {"canvas2.png"},
    })
 --  --  --  --  --  --  --  --  --  --  --  --  
+minetest.register_craftitem("nc_luxgate:shard_ulvo", {
+    description = "Ulvo shard",
+    inventory_image = "shard_ulvo.png",
+    wield_image = "shard_ulvo.png",
+    wield_scale = {x = 1.25, y = 1.25, z = 1.75},
+    sounds = nodecore.sounds("nc_terrain_stony")
+})

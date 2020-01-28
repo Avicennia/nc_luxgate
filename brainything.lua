@@ -2,7 +2,7 @@
 
 -- AREA FETCHING THINGY
 
-luxgate.functions.area = function(pos,len,wid,hei) -- Grabs a len x wid x hei area of nodes and outputs them as a large table.
+luxgate.core.area = function(pos,len,wid,hei) -- Grabs a len x wid x hei area of nodes and outputs them as a large table.
     local output = {};
     local ori = pos;
     local inc = 0
@@ -26,7 +26,7 @@ end
             IDENTIFICATION  and ASSIGNMENT STUFF
 
 ]]
-luxgate.functions.area_decode = function(table) -- Converts certain table values into numbers for interpretation.
+luxgate.core.area_decode = function(table) -- Converts certain table values into numbers for interpretation.
     local output = {};
     for n = 1, #table, 1 do
         if(table[n] == "air")then
@@ -52,7 +52,7 @@ luxgate.functions.area_decode = function(table) -- Converts certain table values
     return output
 end
 
-luxgate.functions.unquestionablejudgement = function(table, guess) -- Give table, and template table (guess), and outputs true or false accordingly.
+luxgate.core.unquestionablejudgement = function(table, guess) -- Give table, and template table (guess), and outputs true or false accordingly.
     local output = {}
     local rv = 0;
         if(table and guess)then
@@ -86,18 +86,18 @@ end
 
 
 
-luxgate.functions.knockknock = function()
+luxgate.core.knockknock = function()
 end
 
-luxgate.functions.whosthere = function(pos,areaparams) -- Confirms whether structure true passed by unquestionablejudgement is a valid structure and reports which it fits.
+luxgate.core.whosthere = function(pos,areaparams) -- Confirms whether structure true passed by unquestionablejudgement is a valid structure and reports which it fits.
     
-    local gather = luxgate.functions.area(pos, areaparams[1], areaparams[2], areaparams[3])
-    local digitize = luxgate.functions.area_decode(gather)
+    local gather = luxgate.core.area(pos, areaparams[1], areaparams[2], areaparams[3])
+    local digitize = luxgate.core.area_decode(gather)
     local antoninscalia = {}
     for n = 1, #luxgate.numberframe, 1 do
-        if(luxgate.functions.unquestionablejudgement(digitize,luxgate.numberframe[n]) == true)then
+        if(luxgate.core.unquestionablejudgement(digitize,luxgate.numberframe[n]) == true)then
             antoninscalia[n] = true;
-        else antoninscalia[n] = luxgate.functions.unquestionablejudgement(digitize,luxgate.numberframe[n]) end
+        else antoninscalia[n] = luxgate.core.unquestionablejudgement(digitize,luxgate.numberframe[n]) end
     end
 
     return antoninscalia;
@@ -110,7 +110,7 @@ end
 
 ]]
 
-luxgate.functions.powerpull = function(pos) -- Function for doing crude "energy pull" particle effect by ohmic or power trans frame nodes.
+luxgate.core.powerpull = function(pos) -- Function for doing crude "energy pull" particle effect by ohmic or power trans frame nodes.
     local nod = {minetest.find_node_near(pos, 2, {"group:lux_emit"}, false)} -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
     local val = 0;
     if(nod[1])then
@@ -131,10 +131,10 @@ end
 
 ]]
 
-luxgate.functions.tetris = function(pos, areaparams)
-    local structurekey = luxgate.functions.whosthere(pos, areaparams);
-    local numnum = #luxgate.functions.whosthere(pos, areaparams)
-    local areagrab = luxgate.functions.area(pos,areaparams[1],areaparams[2],areaparams[3])
+luxgate.core.tetris = function(pos, areaparams)
+    local structurekey = luxgate.core.whosthere(pos, areaparams);
+    local numnum = #luxgate.core.whosthere(pos, areaparams)
+    local areagrab = luxgate.core.area(pos,areaparams[1],areaparams[2],areaparams[3])
     local num;
     for ll = 1, #structurekey, 1 do
        if(structurekey[ll] == "true")then
@@ -145,14 +145,12 @@ luxgate.functions.tetris = function(pos, areaparams)
 end
 
 
-
 --[[
             LINE SEARCH FUNCTION STUFF
 ]]
 
 
-
-luxgate.functions.line_probe = function(pos,dis,dir) -- Searches along a line and returns all positions and nodenames found in a given direction for a given distance.
+luxgate.core.line_probe = function(pos,dis,dir) -- Searches along a line and returns all positions and nodenames found in a given direction for a given distance.
     local dahta = {nodes_n = {}, nodes_p = {}};
     if(pos and dis and dir)then
     local npos = pos;
@@ -170,7 +168,7 @@ luxgate.functions.line_probe = function(pos,dis,dir) -- Searches along a line an
     return dahta -- Return value should contain 2 tables, 1 with names and 2 with positions of entries in 1.
 end
 
-luxgate.functions.conscription = function(tab) -- specifically for return values of above function. force loads nodes.
+luxgate.core.conscription = function(tab) -- specifically for return values of above function. force loads nodes.
     local rv = 0
     for n = 1, #tab.nodes_n, 1 do
         
@@ -183,7 +181,7 @@ luxgate.functions.conscription = function(tab) -- specifically for return values
 end
 
 
-luxgate.functions.line_inv = function(table) -- Inspects table for nodenames that require quirky behaviour.
+luxgate.core.line_inv = function(table) -- Inspects table for nodenames that require quirky behaviour.
     local out = {noi = {poses = {}, names = {}, flags = {}}};
     local noi = {ignore = {"air","nc_optics:glass"}, reflect = {"nc_lode:block_annealed","nc_optics:glass_opaque","ignore"}, attenuate = {"nc_terrain:stone", "nc_terrain:dirt", "nc_lode:block_tempered"}}
     if(table.nodes_n and table.nodes_p)then
@@ -211,7 +209,7 @@ luxgate.functions.line_inv = function(table) -- Inspects table for nodenames tha
     return out.noi
 end
 
---[[luxgate.functions.atten_calc = function(tab)
+--[[luxgate.core.atten_calc = function(tab)
  -- Attempt to quantify reduction in distance due to attenuation.(tab must contain tabs; names,poses and flags)
     local magnitude = 0
     local nodes_valid = {names = {"nc_lode:block_tempered","nc_terrain:dirt","nc_terrain:dirt_with_grass","nc_terrain:stone"}, values = {0.7,0.1,0.13,0.2}}
@@ -243,7 +241,7 @@ end
     return vals
 end]]
 
-luxgate.functions.refl_find = function(tab) -- Find all nodes that can cause ray reflection in the specified path.
+luxgate.core.refl_find = function(tab) -- Find all nodes that can cause ray reflection in the specified path.
     local data = {ind = false, quant = 0, poses = {}, names = {}}
         for n = 1, #tab.flags, 1 do
             if(tab.flags[n] ~= "reflect")then
@@ -267,11 +265,11 @@ luxgate.functions.refl_find = function(tab) -- Find all nodes that can cause ray
     return data
 end
 
-luxgate.functions.refl_redir = function(pos,dir,oldline,rpos) -- essentially creates a new line from a pos, in a new dir, using the remaining data from and oldline
+luxgate.core.refl_redir = function(pos,dir,oldline,rpos) -- essentially creates a new line from a pos, in a new dir, using the remaining data from and oldline
     
 end
 
-luxgate.functions.incip_dir = function(pos)
+luxgate.core.incip_dir = function(pos)
 -- Scans area, after a verification, searches for specific positions of annealed lode bars to determine which of the 2d primary and secondary cardinal directions to return. if false then reject.
     local data = {
         poses = {{x = pos.x + 2, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 1, z = pos.z - 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z + 2}},
@@ -316,7 +314,7 @@ end
 --
 
 --
-luxgate.functions.searchlight = function(pos, dir, dis, exc) -- Searches for nodes in a radius around a line at invervals.
+luxgate.core.searchlight = function(pos, dir, dis, exc) -- Searches for nodes in a radius around a line at invervals.
     local origin = pos;
     local ray = {rate = {x=0,y=0,z=0}, nodes, mods = {}, interval = 10}
     local cess = origin;
@@ -326,6 +324,11 @@ luxgate.functions.searchlight = function(pos, dir, dis, exc) -- Searches for nod
 
 end
 
-luxgate.functions.recalc = function(original_line, traversed_distance, player)
+luxgate.core.recalc = function(original_line, traversed_distance, player)
 
+end
+
+
+luxgate.core.oregive = function()
+    minetest.chat_send_all(minetest.serialize(minetest.registered_nodes["nc_lode:ore"].on_destruct))
 end
