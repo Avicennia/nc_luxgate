@@ -246,7 +246,8 @@ minetest.register_node("nc_luxgate:shard_ilmenite_int",{
     drawtype = "allfaces_optional",
     paramtype = "light",
     tiles = {"block_ilmenite.png"},
-    groups = {crumbly = 1, paramag = 1},
+    groups = {crumbly = 1,falling_node = 1, paramag = 1},
+    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     on_punch = function(pos)
     local meta = minetest.get_meta(pos)
     minetest.chat_send_all(meta:get_int("poled"))
@@ -258,7 +259,7 @@ minetest.register_craftitem("nc_luxgate:shard_ilmenite", {
     inventory_image = "shard_ilmenite.png",
     wield_image = "shard_ilmenite.png",
     wield_scale = {x = 1.25, y = 1.25, z = 1.75},
-    sounds = nodecore.sounds("nc_terrain_stony"),
+    sounds = nodecore.sounds("nc_luxgate_ilmenite"),
     groups = {paramag = 1}
 })
 minetest.register_craftitem("nc_luxgate:shard_ilmenite_hot", {
@@ -266,6 +267,6 @@ minetest.register_craftitem("nc_luxgate:shard_ilmenite_hot", {
     inventory_image = "shard_ilmenite_hot.png",
     wield_image = "shard_ilmenite_hot.png",
     wield_scale = {x = 1.25, y = 1.25, z = 1.75},
-    sounds = nodecore.sounds("nc_terrain_stony")
+    sounds = nodecore.sounds("nc_luxgate_ilmenite"),
 
 })

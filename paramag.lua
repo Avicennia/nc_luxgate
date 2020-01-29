@@ -15,10 +15,7 @@ minetest.register_on_dignode(
         interval = 1,
         chance = 1, -- Select every 1 in 50 nodes
         action = function(pos, node, active_object_count,active_object_count_wider)
-            local neighborhood = minetest.find_nodes_in_area({x = pos.x - 3, y= pos.y - 3, z = pos.z - 3},{x = pos.x + 3, y= pos.y + 3, z = pos.z + 3}, "group:paramag")
-            local range = #neighborhood or 2
-            local immneighbor = minetest.find_node_near(pos, 1, "group:paramag", false)
-            local neighbor = minetest.find_node_near(pos, range, "group:paramag", false)
+            local neighbor = minetest.find_node_near(pos, 1, "group:paramag", false)
             local smeta = minetest.get_meta(pos)
 
             if(neighbor)then
@@ -44,7 +41,7 @@ minetest.register_on_dignode(
                         nmeta:set_int("poled",1)
                         minetest.remove_node(neighbor)
                 else end
-            elseif (immneighbor == nil) then smeta:set_int("poled",0) minetest.chat_send_all("he") end
+            elseif (neighbor == nil) then smeta:set_int("poled",0) minetest.chat_send_all("he") end
             --minetest.remove_node(pos)
         end
     })
