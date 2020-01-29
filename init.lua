@@ -243,15 +243,35 @@ minetest.register_node("nc_luxgate:shard_ilmenite_int",{
    })
    minetest.register_node("nc_luxgate:block_ilmenite",{
     description = "ilmenite block",
-    drawtype = "allfaces_optional",
     paramtype = "light",
     tiles = {"block_ilmenite.png"},
     groups = {crumbly = 1,falling_node = 1, paramag = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
-    on_punch = function(pos)
-    local meta = minetest.get_meta(pos)
-    minetest.chat_send_all(meta:get_int("poled"))
-    end
+    
+   })
+   minetest.register_node("nc_luxgate:cobble_ilmenite",{
+    description = "ilmenite block",
+    paramtype = "light",
+    tiles = {"block_ilmenite.png^nc_terrain_cobble.png"},
+    groups = {crumbly = 1,falling_node = 1},
+    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    
+   })
+   minetest.register_node("nc_luxgate:block_ilmenite_inv",{
+    description = "ilmenite block",
+    paramtype = "light",
+    tiles = {"block_ilmenite_shifted.png"},
+    groups = {crumbly = 1,falling_node = 1},
+    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    
+   })
+   minetest.register_node("nc_luxgate:cobble_ilmenite_inv",{
+    description = "ilmenite block",
+    paramtype = "light",
+    tiles = {"block_ilmenite_shifted.png^nc_terrain_cobble.png"},
+    groups = {crumbly = 1,falling_node = 1, paramag_r = 1},
+    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    
    })
 --  --  --  --  --  --  --  --  --  --  --  --  
 minetest.register_craftitem("nc_luxgate:shard_ilmenite", {
@@ -262,11 +282,21 @@ minetest.register_craftitem("nc_luxgate:shard_ilmenite", {
     sounds = nodecore.sounds("nc_luxgate_ilmenite"),
     groups = {paramag = 1}
 })
-minetest.register_craftitem("nc_luxgate:shard_ilmenite_hot", {
-    description = "ilmenite shard",
-    inventory_image = "shard_ilmenite_hot.png",
-    wield_image = "shard_ilmenite_hot.png",
-    wield_scale = {x = 1.25, y = 1.25, z = 1.75},
-    sounds = nodecore.sounds("nc_luxgate_ilmenite"),
 
+nodecore.register_craft({
+    label = "macerate ilmenite block to cobble",
+    action = "pummel",
+    nodes = {
+        {match = "nc_luxgate:block_ilmenite", replace = "nc_luxgate:cobble_ilmenite"}
+    },
+    toolgroups = {cracky = 2},
+
+})
+nodecore.register_craft({
+    label = "pound ilmenite cobble into a solid node",
+    action = "pummel",
+    nodes = {
+        {match = "nc_luxgate:cobble_ilmenite", replace = "nc_luxgate:block_ilmenite"}
+    },
+    toolgroups = {thumpy = 3},
 })

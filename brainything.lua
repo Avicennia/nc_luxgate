@@ -334,15 +334,15 @@ luxgate.core.oregive = function()
 end
 
 nodecore.register_craft({
-    label = "heat ilmenite shard",
+    label = "heat ilmenite and irreversibly reverse polarity",
     action = "cook",
-    touchgroups = {flame = 4},
+    touchgroups = {flame = 1},
     duration = 5,
     cookfx = true,
     nodes = {
         {
-            match = {groups = {paramag = true}},
-            replace = "nc_luxgate:shard_ilmenite_int"
+            match = {groups = {paramag}},
+            replace = "air"
         }
     }
 })
