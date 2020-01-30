@@ -3,7 +3,7 @@
 -- AREA FETCHING THINGY
 
 luxgate.core.area = function(pos,len,wid,hei) -- Grabs a len x wid x hei area of nodes and outputs them as a large table.
-    local output = {};
+    local output = {}; -- NOTE: NOT a corner search
     local ori = pos;
     local inc = 0
     for n = 1, hei, 1 do -- Y axis, height.
@@ -13,10 +13,10 @@ luxgate.core.area = function(pos,len,wid,hei) -- Grabs a len x wid x hei area of
                 inc = inc + 1
                 output[inc] = minetest.get_node(ori).name
             end
-            ori.x = ori.x - 5
+            ori.x = ori.x - len
             ori.z = ori.z + 1
         end
-        ori.z = ori.z - 5
+        ori.z = ori.z - wid
         ori.y = ori.y + 1
     end
     return output
@@ -47,7 +47,11 @@ luxgate.core.area_decode = function(table) -- Converts certain table values into
             output[n] = 7;
         elseif(table[n] == luxgate.nodes.names[8])then
             output[n] = 8;
-        else output[n] = 9 end
+        elseif(table[n] == luxgate.nodes.names[9])then
+            output[n] = 9;
+        elseif(table[n] == luxgate.nodes.names[10])then
+            output[n] = 10;
+        else output[n] = "x" end
     end
     return output
 end
@@ -86,7 +90,29 @@ end
 
 
 
-luxgate.core.knockknock = function()
+luxgate.core.knockknock = function(pos) -- finds the node near the node below pos to determine which of the three structures it should be.
+    local dat = {
+        below = {x = pos.x, y= pos.y -1, z = pos.z},
+        lamb = false,
+        sample = nil,
+        tipo = nil
+    };
+    if(minetest.get_node(dat.below).name == luxgate.nodes.names[4])then
+    dat.lamb = true;
+    else end
+    
+    if(dat.lamb == true)then
+        dat.sample = minetest.get_node({x = dat.below.x - 1, y = dat.below.y, z = dat.below.z}).name
+    else end
+
+    if(dat.sample == "nc_luxgate:frame_v")then
+        dat.tipo = 1
+    elseif(dat.sample == "air")then
+        dat.tipo = 2
+    elseif(dat.sample == "nc_lode:block_annealed")then
+        dat.tipo = 3
+else dat.tipo = "undyfne" end
+return dat.tipo
 end
 
 luxgate.core.whosthere = function(pos,areaparams) -- Confirms whether structure true passed by unquestionablejudgement is a valid structure and reports which it fits.
@@ -99,7 +125,7 @@ luxgate.core.whosthere = function(pos,areaparams) -- Confirms whether structure 
             antoninscalia[n] = true;
         else antoninscalia[n] = luxgate.core.unquestionablejudgement(digitize,luxgate.numberframe[n]) end
     end
-
+    
     return antoninscalia;
 end
 
@@ -336,13 +362,39 @@ end
 nodecore.register_craft({
     label = "heat ilmenite and irreversibly reverse polarity",
     action = "cook",
-    touchgroups = {flame = 1},
+    touchgroups = {flame = 2},
     duration = 5,
     cookfx = true,
     nodes = {
         {
-            match = {groups = {paramag}},
-            replace = "air"
+            match = {groups = {paramag = true}},
+            replace = "nc_luxgate:block_ilmenite_inv"
+        }
+    }
+})
+nodecore.register_craft({
+    label = "heat ilmenite and irreversibly destroy polarity 1",
+    action = "cook",
+    touchgroups = {flame = 1},
+    duration = 10,
+    cookfx = true,
+    nodes = {
+        {
+            match = {groups = {paramag = true, paramag_r = true}},
+            replace = "nc_terrain:stone"
+        }
+    }
+})
+nodecore.register_craft({
+    label = "heat ilmenite and irreversibly destroy polarity 2",
+    action = "cook",
+    touchgroups = {flame = 1},
+    duration = 10,
+    cookfx = true,
+    nodes = {
+        {
+            match = {groups = {paramag_r = true}},
+            replace = "nc_terrain:stone"
         }
     }
 })

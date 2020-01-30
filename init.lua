@@ -8,7 +8,7 @@ luxgate = {
     particles = {},
     nodes = {
         ilmenite = {},
-        names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle"}},
+        names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle","nc_luxgate:block_ilmenite","nc_luxgate:block_ilmenite_inv"}},
     nodenumbers = {},
     dirs = {
         "(1,0,0)",  -- East
@@ -33,7 +33,7 @@ dofile(modpath .. "/paramag.lua")
 
 --  --  --  --  --  --  Env nodes --  --  --  --  --  -- 
 minetest.register_node("nc_luxgate:luxblende",{
-    description = "Lux Vessicle",
+    description = "Box thing",
     drawtype = "nodebox",
     node_box = {
         type = "fixed",
@@ -88,7 +88,7 @@ minetest.register_node("nc_luxgate:vessicle",{
     description = "-NULL-",
     drawtype = "glasslike",
     tiles = {"dev.png"},
-    walkable = false,
+    --walkable = false,
     node_box = {
 		type = "fixed",
 		fixed = {
@@ -101,9 +101,13 @@ minetest.register_node("nc_luxgate:vessicle",{
         timer:start(3)
     end,
     on_timer = function(pos)
+
         luxgate.particles.portalhole(pos)
         local timer = minetest.get_node_timer(pos)
         timer:start(3)
+    end,
+    on_punch = function(pos)
+    minetest.chat_send_all(luxgate.core.knockknock(pos))
     end
 })
 --- Control nodes ---^^^
@@ -147,7 +151,11 @@ minetest.register_node("nc_luxgate:frame_lam",{
             frame_length = 0.1,
         }
     }},
-    groups = {cracky =1}
+    groups = {cracky =1},
+    on_punch = function(pos)
+    minetest.chat_send_all(minetest.serialize(luxgate.core.whosthere(pos,{5,5,5})))
+    
+    end
 })
 
 minetest.register_node("nc_luxgate:frame_b",{
@@ -253,7 +261,7 @@ minetest.register_node("nc_luxgate:shard_ilmenite_int",{
     description = "ilmenite block",
     paramtype = "light",
     tiles = {"block_ilmenite.png^nc_terrain_cobble.png"},
-    groups = {crumbly = 1,falling_node = 1},
+    groups = {crumbly = 1,falling_node = 1, paramag = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     
    })
@@ -261,8 +269,11 @@ minetest.register_node("nc_luxgate:shard_ilmenite_int",{
     description = "ilmenite block",
     paramtype = "light",
     tiles = {"block_ilmenite_shifted.png"},
-    groups = {crumbly = 1,falling_node = 1},
+    groups = {crumbly = 1,falling_node = 1, paramag_r = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    on_punch = function(pos, node, puncher)
+        minetest.chat_send_all(minetest.serialize(vector.direction(pos,puncher:get_pos())))
+    end
     
    })
    minetest.register_node("nc_luxgate:cobble_ilmenite_inv",{
