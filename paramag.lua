@@ -61,7 +61,7 @@ minetest.register_abm({
             
             if(nmeta:get_int("poled") == 0 and smeta:get_int("poled") == 0)then
                 
-                local space = minetest.get_node({x = pos.x - 1, y = pos.y, z = pos.z}).name
+                local space = minetest.get_node({x = pos.x + 1, y = pos.y, z = pos.z}).name
                 if(space == "air")then
                     local neighname = minetest.get_node(neighbor).name
                     space = {x = pos.x - 1, y = pos.y, z = pos.z}

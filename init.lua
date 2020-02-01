@@ -107,7 +107,8 @@ minetest.register_node("nc_luxgate:vessicle",{
         timer:start(3)
     end,
     on_punch = function(pos)
-    minetest.chat_send_all(luxgate.core.knockknock(pos))
+   -- minetest.chat_send_all(luxgate.core.knockknock(pos))
+    minetest.chat_send_all(minetest.serialize(luxgate.core.whosthere(pos)))
     end
 })
 --- Control nodes ---^^^
@@ -176,6 +177,12 @@ minetest.register_node("nc_luxgate:frame_b",{
 			{0, -0.3125, 0.0625, 0.0625, 0.5, 0.1875},
         }
     },
+    on_punch = function(pos)
+        local ori = {x = pos.x, y= pos.y, z = pos.z}
+    minetest.set_node(ori,{name = "nc_terrain:stone"})
+    ori.y = ori.y + 4
+    minetest.set_node(pos,{name = "nc_terrain:sand"})
+    end
 })
 minetest.register_node("nc_luxgate:frame_e",{
     description = "Gate frame Extension",

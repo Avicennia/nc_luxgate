@@ -118,6 +118,7 @@ return dat.tipo
 end
 
 luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed by unquestionablejudgement is a valid structure and reports which it fits.
+    --minetest.chat_send_all("hi")
     local areaparams;
     local ori = {x = pos.x, y = pos.y, z = pos.z}
     local num = luxgate.core.knockknock(pos)
@@ -133,7 +134,7 @@ luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed
         ori.z = ori.z - 2
     else end
 
-    if(type(areaparams) == "number" )then
+    if(type(areaparams) == "table" )then
     local gather = luxgate.core.area(ori, areaparams[1], areaparams[2], areaparams[3])
     local digitize = luxgate.core.area_decode(gather)
     local antoninscalia = {}
@@ -144,9 +145,6 @@ luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed
             minetest.chat_send_all(minetest.serialize(digitize))
             minetest.chat_send_all(minetest.serialize(luxgate.numberframe[num]))end
 
-        if(antoninscalia == true)then
-            antoninscalia = num
-        else end
 
         return antoninscalia
     else end
