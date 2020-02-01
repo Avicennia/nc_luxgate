@@ -12,6 +12,7 @@ luxgate.core.area = function(pos,len,wid,hei) -- Grabs a len x wid x hei area of
                 ori.x = ori.x + 1
                 inc = inc + 1
                 output[inc] = minetest.get_node(ori).name
+                --minetest.set_node(ori, {name = "nc_tree:stick"})
             end
             ori.x = ori.x - len
             ori.z = ori.z + 1
@@ -103,11 +104,12 @@ luxgate.core.knockknock = function(pos) -- finds the node near the node below po
     
     if(dat.lamb == true)then
         dat.sample = minetest.get_node({x = dat.below.x - 1, y = dat.below.y, z = dat.below.z}).name
+        dat.sample2 = minetest.get_node({x = dat.below.x, y = dat.below.y, z = dat.below.z - 1}).name
     else end
 
-    if(dat.sample == "nc_luxgate:frame_v")then
+    if(dat.sample == "nc_luxgate:frame_v" and dat.sample2 == "air")then
         dat.tipo = 1
-    elseif(dat.sample == "air")then
+    elseif(dat.sample == "air" and dat.sample2 == "nc_luxgate:frame_v")then
         dat.tipo = 2
     elseif(dat.sample == "nc_lode:block_annealed")then
         dat.tipo = 3
@@ -115,19 +117,41 @@ else dat.tipo = "undyfne" end
 return dat.tipo
 end
 
-luxgate.core.whosthere = function(pos,areaparams) -- Confirms whether structure true passed by unquestionablejudgement is a valid structure and reports which it fits.
-    
-    local gather = luxgate.core.area(pos, areaparams[1], areaparams[2], areaparams[3])
+luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed by unquestionablejudgement is a valid structure and reports which it fits.
+    local areaparams;
+    local ori = {x = pos.x, y = pos.y, z = pos.z}
+    local num = luxgate.core.knockknock(pos)
+   if(num == 3)then
+    areaparams = {3,3,2}
+        ori.y = ori.y - 1
+        ori.x = ori.x - 2
+        ori.z = ori.z - 1
+    elseif(num == 1 or num == 2)then
+    areaparams = {5,5,5}
+        ori.y = ori.y - 2
+        ori.x = ori.x - 3
+        ori.z = ori.z - 2
+    else end
+
+    if(type(areaparams) == "number" )then
+    local gather = luxgate.core.area(ori, areaparams[1], areaparams[2], areaparams[3])
     local digitize = luxgate.core.area_decode(gather)
     local antoninscalia = {}
-    for n = 1, #luxgate.numberframe, 1 do
-        if(luxgate.core.unquestionablejudgement(digitize,luxgate.numberframe[n]) == true)then
-            antoninscalia[n] = true;
-        else antoninscalia[n] = luxgate.core.unquestionablejudgement(digitize,luxgate.numberframe[n]) end
+     
+        if(luxgate.core.unquestionablejudgement(digitize,luxgate.numberframe[num]) == "true")then
+            antoninscalia = true;
+        else antoninscalia = false; 
+            minetest.chat_send_all(minetest.serialize(digitize))
+            minetest.chat_send_all(minetest.serialize(luxgate.numberframe[num]))end
+
+        if(antoninscalia == true)then
+            antoninscalia = num
+        else end
+
+        return antoninscalia
+    else end
     end
     
-    return antoninscalia;
-end
 
 
 --[[
