@@ -46,7 +46,7 @@ minetest.register_node("nc_luxgate:luxblende",{
         --minetest.chat_send_all(luxgate.core.whosthere(pos))
 
         --DARKCHAIN TESTING STUFF
-        --[[local chainpairs = {{{x = pos.x - 2, y = pos.y + 1, z = pos.z},{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2}},
+        local chainpairs = {{{x = pos.x - 2, y = pos.y + 1, z = pos.z},{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2}},
                             {{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2}},
                             {{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 1, z = pos.z}},
                             {{x = pos.x + 2, y = pos.y + 1, z = pos.z},{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2}},
@@ -59,7 +59,7 @@ minetest.register_node("nc_luxgate:luxblende",{
 
         for n=1, #chainpairs, 1 do
         luxgate.particles.darkchain(chainpairs[n][1],chainpairs[n][2])
-        end]]
+        end
 
 
 
@@ -72,16 +72,19 @@ minetest.register_node("nc_luxgate:luxblende",{
         minetest.chat_send_all(vale.." "..vale / 4)
         --luxgate.core.tetris(pos, {5,5,6})]]
 
-        local something = luxgate.core.conscription(luxgate.core.line_probe(pos,250, 3))
+        --[[local something = luxgate.core.conscription(luxgate.core.line_probe(pos,250, 3))
         local tab = luxgate.core.line_probe(pos,250,3).nodes_p[something]
         if(tab)then
             minetest.chat_send_all(minetest.serialize(tab))
-            puncher:set_pos(tab)
+            local ves = minetest.find_node_near(tab, 10, "nc_luxgate:vessicle", true)
+            if(ves and luxgate.core.whosthere(ves) == true)then
+            puncher:set_pos(ves)
             luxgate.particles.seenoevil(puncher)
+            else end
         else minetest.chat_send_all("nothing") end
 
 
-
+]]
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{
@@ -246,16 +249,7 @@ minetest.register_node("nc_luxgate:frame_v",{
         minetest.set_node(pos, {name = "nc_luxgate:frame_v", param2 = prev})
     end
 })
-minetest.register_node("nc_luxgate:shard_ilmenite_int",{
-    description = "ilmenite",
-    drawtype = "airlike",
-    paramtype = "light",
-    groups = {crumbly = 1},
-    on_construct = function(pos)
-        nodecore.item_eject(pos, "nc_luxgate:shard_ilmenite_hot",9,1, {x = 0, y = 3, z = 0})
-        minetest.remove_node(pos)
-    end
-   })
+
    minetest.register_node("nc_luxgate:block_ilmenite",{
     description = "ilmenite block",
     paramtype = "light",
@@ -278,9 +272,7 @@ minetest.register_node("nc_luxgate:shard_ilmenite_int",{
     tiles = {"block_ilmenite_shifted.png"},
     groups = {crumbly = 1,falling_node = 1, paramag_r = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
-    on_punch = function(pos, node, puncher)
-        minetest.chat_send_all(minetest.serialize(vector.direction(pos,puncher:get_pos())))
-    end
+    
     
    })
    minetest.register_node("nc_luxgate:cobble_ilmenite_inv",{
@@ -288,6 +280,14 @@ minetest.register_node("nc_luxgate:shard_ilmenite_int",{
     paramtype = "light",
     tiles = {"block_ilmenite_shifted.png^nc_terrain_cobble.png"},
     groups = {crumbly = 1,falling_node = 1, paramag_r = 1},
+    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    
+   })
+   minetest.register_node("nc_luxgate:ulvstone",{
+    description = "Ulvstone",
+    paramtype = "light",
+    tiles = {"canvas2.png"},
+    groups = {crumbly = 1,falling_node = 1, ulv = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     
    })
