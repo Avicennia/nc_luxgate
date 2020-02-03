@@ -6,6 +6,7 @@ tm = thismod..":"
 luxgate = {
     core = {},
     particles = {},
+    schem = {},
     nodes = {
         ilmenite = {},
         names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle","nc_luxgate:block_ilmenite","nc_luxgate:block_ilmenite_inv"}},
