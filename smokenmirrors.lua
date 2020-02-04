@@ -85,8 +85,8 @@ function luxgate.particles.darkchain(pos1, pos2)
     local dirp = vector.direction(pos1, pos2)
     
     minetest.add_particlespawner({
-        amount = 10,
-        time = 0,
+        amount = 100,
+        time = 10,
         minpos = {x=pos1.x, y=pos1.y + 0.5, z=pos1.z},
         maxpos = {x=pos1.x, y=pos1.y + 0.5, z=pos1.z},
         minvel = {x=dirp.x, y=dirp.y, z=dirp.z},

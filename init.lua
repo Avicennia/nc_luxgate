@@ -99,7 +99,7 @@ minetest.register_node("nc_luxgate:vessicle",{
 			{-0.125, 0, 0.001, 0.125, 0.3125, 0},
 		}
     },
-    groups = {crumbly = 1},
+    groups = {crumbly = 1, luxg = 1},
     on_construct = function(pos)
         local timer = minetest.get_node_timer(pos)
         timer:start(3)
@@ -135,7 +135,7 @@ minetest.register_node("nc_luxgate:frame_ohm",{
             frame_length = 0.1,
         }
     }},
-    groups = {cracky =1},
+    groups = { luxg = 1,cracky =1},
     on_punch = function(pos)
         luxgate.core.powerpull(pos)
     end
@@ -156,7 +156,7 @@ minetest.register_node("nc_luxgate:frame_lam",{
             frame_length = 0.1,
         }
     }},
-    groups = {cracky =1},
+    groups = { luxg = 1,cracky =1},
     on_punch = function(pos)
     minetest.chat_send_all(minetest.serialize(luxgate.core.whosthere(pos,{5,5,5})))
     
@@ -170,7 +170,7 @@ minetest.register_node("nc_luxgate:frame_b",{
     glow = 3,
     paramtype2 = "facedir",
     tiles = {"canvas2.png"},
-    groups = {crumbly = 1},
+    groups = { luxg = 1,crumbly = 1},
     node_box = {
         type = "fixed",
         fixed = {
@@ -193,7 +193,7 @@ minetest.register_node("nc_luxgate:frame_e",{
     drawtype = "nodebox",
     paramtype = "light",
     paramtype2 = "facedir",
-    groups = {crumbly = 1},
+    groups = { luxg = 1,crumbly = 1},
     node_box = {
         type = "fixed",
         fixed = {
@@ -222,7 +222,7 @@ minetest.register_node("nc_luxgate:frame_v",{
     drawtype = "nodebox",
     paramtype = "light",
     paramtype2 = "facedir",
-    groups = {crumbly = 1},
+    groups = { luxg = 1,crumbly = 1},
     tiles = {"canvas2.png"},
     node_box = {
         type = "fixed",
@@ -255,7 +255,7 @@ minetest.register_node("nc_luxgate:frame_v",{
     description = "ilmenite block",
     paramtype = "light",
     tiles = {"block_ilmenite.png"},
-    groups = {crumbly = 1,falling_node = 1, paramag = 1},
+    groups = { luxg = 1,crumbly = 1,falling_node = 1, paramag = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     
    })
@@ -263,7 +263,7 @@ minetest.register_node("nc_luxgate:frame_v",{
     description = "ilmenite block",
     paramtype = "light",
     tiles = {"block_ilmenite.png^nc_terrain_cobble.png"},
-    groups = {crumbly = 1,falling_node = 1, paramag = 1},
+    groups = { luxg = 1,crumbly = 1,falling_node = 1, paramag = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     
    })
@@ -271,7 +271,7 @@ minetest.register_node("nc_luxgate:frame_v",{
     description = "ilmenite block",
     paramtype = "light",
     tiles = {"block_ilmenite_shifted.png"},
-    groups = {crumbly = 1,falling_node = 1, paramag_r = 1},
+    groups = { luxg = 1,crumbly = 1,falling_node = 1, paramag_r = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     
     
@@ -280,7 +280,7 @@ minetest.register_node("nc_luxgate:frame_v",{
     description = "ilmenite block",
     paramtype = "light",
     tiles = {"block_ilmenite_shifted.png^nc_terrain_cobble.png"},
-    groups = {crumbly = 1,falling_node = 1, paramag_r = 1},
+    groups = { luxg = 1,crumbly = 1,falling_node = 1, paramag_r = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     
    })
@@ -288,7 +288,7 @@ minetest.register_node("nc_luxgate:frame_v",{
     description = "Ulvstone",
     paramtype = "light",
     tiles = {"canvas2.png"},
-    groups = {crumbly = 1,falling_node = 1, ulv = 1},
+    groups = { luxg = 1,crumbly = 1,falling_node = 1, ulv = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     
    })
@@ -299,7 +299,7 @@ minetest.register_craftitem("nc_luxgate:shard_ilmenite", {
     wield_image = "shard_ilmenite.png",
     wield_scale = {x = 1.25, y = 1.25, z = 1.75},
     sounds = nodecore.sounds("nc_luxgate_ilmenite"),
-    groups = {paramag = 1}
+    groups = { luxg = 1,paramag = 1}
 })
 
 nodecore.register_craft({
@@ -308,7 +308,7 @@ nodecore.register_craft({
     nodes = {
         {match = "nc_luxgate:block_ilmenite", replace = "nc_luxgate:cobble_ilmenite"}
     },
-    toolgroups = {cracky = 2},
+    toolgroups = { luxg = 1,cracky = 2},
 
 })
 nodecore.register_craft({
@@ -317,5 +317,5 @@ nodecore.register_craft({
     nodes = {
         {match = "nc_luxgate:cobble_ilmenite", replace = "nc_luxgate:block_ilmenite"}
     },
-    toolgroups = {thumpy = 3},
+    toolgroups = { luxg = 1,thumpy = 3},
 })
