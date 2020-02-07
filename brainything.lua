@@ -231,17 +231,13 @@ end
 
 luxgate.core.line_inv = function(table) -- Inspects table for nodenames that require quirky behaviour.
     local out = {noi = {poses = {}, names = {}, flags = {}}};
-    local noi = {ignore = {"air","nc_optics:glass"}, reflect = {"nc_lode:block_annealed","nc_optics:glass_opaque","ignore"}, attenuate = {"nc_terrain:stone", "nc_terrain:dirt", "nc_lode:block_tempered"}}
+    local noi = {ignore = {"air","nc_optics:glass"}, reflect = {"nc_lode:block_annealed","nc_optics:glass_opaque","ignore"}}
     if(table.nodes_n and table.nodes_p)then
         for n = 1, #table.nodes_n, 1 do
             if(table.nodes_n[n] == noi.ignore[1] or table.nodes_n[n] == noi.ignore[2])then
                 out.noi.names[n] = table.nodes_n[n]
                 out.noi.poses[n] = table.nodes_p[n]
                 out.noi.flags[n] = "traverse"
-            elseif(table.nodes_n[n] == noi.attenuate[1] or table.nodes_n[n] == noi.attenuate[2] or table.nodes_n[n] == noi.attenuate[3])then
-                out.noi.names[n] = table.nodes_n[n]
-                out.noi.poses[n] = table.nodes_p[n]
-                out.noi.flags[n] = "attenuate"
             elseif(table.nodes_n[n] == noi.reflect[1] or table.nodes_n[n] == noi.reflect[2] or table.nodes_n[n] == noi.reflect[3])then
                 out.noi.names[n] = table.nodes_n[n]
                 out.noi.poses[n] = table.nodes_p[n]
@@ -256,38 +252,6 @@ luxgate.core.line_inv = function(table) -- Inspects table for nodenames that req
     else end
     return out.noi
 end
-
---[[luxgate.core.atten_calc = function(tab)
- -- Attempt to quantify reduction in distance due to attenuation.(tab must contain tabs; names,poses and flags)
-    local magnitude = 0
-    local nodes_valid = {names = {"nc_lode:block_tempered","nc_terrain:dirt","nc_terrain:dirt_with_grass","nc_terrain:stone"}, values = {0.7,0.1,0.13,0.2}}
-    local vals = {}
-        for n = 1, #tab.flags, 1 do
-            if(tab.flags[n])then
-                for l = 1, #tab.flags[n],1 do
-                    vals[n] = 0
-                for o = 1, #nodes_valid.names, 1 do
-                    if(tab.names[n] == nodes_valid.names[o])then
-                        vals[n] = nodes_valid.values[o]
-                    else end
-                end
-            end
-            else
-            end
-        end
-        for n = 2, #vals, 1 do -- Increasing the value of attenuation per node based on previous node's value.
-            if(vals[n-1] == 0)then
-            elseif(vals[n-1] >= 0 and vals[n] > 0 )then -- If there is an attenuating node behind the specified node, then the specified node's value should be increased by some value.
-                vals[n] = vals[n]+(vals[n-1]*(n/10)) 
-            elseif(vals[n-1] == nil)then
-            end
-        end
-        for k,v in pairs(vals)do
-            magnitude = magnitude + v
-        end
-        vals[#vals+1] = "Magnitude of ".. magnitude
-    return vals
-end]]
 
 luxgate.core.refl_find = function(tab) -- Find all nodes that can cause ray reflection in the specified path.
     local data = {ind = false, quant = 0, poses = {}, names = {}}
