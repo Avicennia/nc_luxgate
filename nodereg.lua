@@ -10,25 +10,9 @@ minetest.register_node("nc_luxgate:luxblende",{
     tiles = {"canvas2.png"},
     on_punch = function(pos,node,puncher)
         --minetest.chat_send_all(luxgate.core.whosthere(pos))
+    luxgate.core.line_slfl(pos, 250, 1)
 
-        --DARKCHAIN TESTING STUFF
-        local chainpairs = {{{x = pos.x - 2, y = pos.y + 1, z = pos.z},{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2}},
-                            {{x = pos.x - 1, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2}},
-                            {{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 1, z = pos.z}},
-                            {{x = pos.x + 2, y = pos.y + 1, z = pos.z},{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2}},
-                            {{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 1, y = pos.y + 1, z = pos.z + 2}},
-                            {{x = pos.x - 1, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z}},
-                            {{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2},{x = pos.x, y = pos.y + 1, z = pos.z}},
-                            {{x = pos.x, y = pos.y + 1, z = pos.z},{x = pos.x + 1, y = pos.y + 1, z = pos.z - 2}},
-                            {{x = pos.x, y = pos.y + 1, z = pos.z},{x = pos.x - 2, y = pos.y + 1, z = pos.z }}
-                        }
-
-        for n=1, #chainpairs, 1 do
-        luxgate.particles.darkchain(chainpairs[n][1],chainpairs[n][2])
-        end
-
-
-
+        --minetest.remove_node(pos)
         --POWERPULL TESTING STUFF
         --[[local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
         local vale = 0;
@@ -71,8 +55,33 @@ minetest.register_node("nc_luxgate:vessicle",{
         timer:start(3)
     end,
     on_timer = function(pos)
-
         luxgate.particles.portalhole(pos)
+        
+        --minetest.chat_send_all(minetest.serialize(luxgate.core.incip_dir(pos)[1]))
+        
+        local objs = minetest.get_objects_inside_radius(pos, 1)
+        if(objs and #objs > 1)then
+            local players = {}
+            local rabble = {}
+            for n = 1, #objs, 1 do
+                if(objs[n]:is_player() == true)then
+                    table.insert(players, objs[n])
+                else table.insert(rabble, objs[n])
+                end
+            end
+            local num = luxgate.core.incip_dir(pos)
+       local something = luxgate.core.conscription(luxgate.core.line_probe(pos,250,1))
+       local tab = luxgate.core.line_probe(pos,250,1).nodes_p[something]
+        if(tab)then
+            local ves = minetest.find_node_near(tab, 18, "nc_luxgate:vessicle", false)
+            if(ves)then
+            local pl = players[1]
+            pl:set_pos(tab)
+            luxgate.particles.seenoevil(pl)
+            else end
+        else minetest.chat_send_all(minetest.serialize(something)) end
+else end
+
         local timer = minetest.get_node_timer(pos)
         timer:start(3)
     end,

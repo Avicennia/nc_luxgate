@@ -202,9 +202,8 @@ luxgate.core.line_probe = function(pos,dis,dir) -- Searches along a line and ret
     local dahta = {nodes_n = {}, nodes_p = {}};
     if(pos and dis and dir)then
     local npos = pos;
-    local dir = minetest.string_to_pos(luxgate.dirs[dir])
         for n = 1, dis, 1 do
-            local npos = vector.add(npos,vector.multiply(dir,n));
+            npos = vector.add(npos,luxgate.dirs[dir]);
             dahta.nodes_p[n] = npos;
             dahta.nodes_n[n] = minetest.get_node(npos).name
         end
@@ -213,6 +212,7 @@ luxgate.core.line_probe = function(pos,dis,dir) -- Searches along a line and ret
     if(#dahta.nodes_n ~= #dahta.nodes_p)then
         dahta = {};
     else end
+
     return dahta -- Return value should contain 2 tables, 1 with names and 2 with positions of entries in 1.
 end
 
@@ -220,7 +220,7 @@ luxgate.core.conscription = function(tab) -- specifically for return values of a
     local rv = 0
     for n = 1, #tab.nodes_n, 1 do
         
-        if(tab.nodes_n[n] == "ignore")then
+        if(tab.nodes_n[n] == "nc_lode:block_annealed")then
             rv = n;
             break
         else end
@@ -228,6 +228,19 @@ luxgate.core.conscription = function(tab) -- specifically for return values of a
     return rv
 end
 
+luxgate.core.line_slfl = function(pos,dis,dir)
+    local npos = {x = pos.x, y = pos.y, z = pos.z}
+    local loc = {}
+    for n = 10, dis, 10 do
+    npos = vector.add(npos,vector.multiply(luxgate.dirs[dir],10))
+    local vs = minetest.find_node_near(npos,5,"nc_lode:block_tempered", true)
+    if(vs)then
+       loc = vs
+    else end
+        
+    end
+    minetest.chat_send_all(minetest.serialize(loc))
+end
 
 luxgate.core.line_inv = function(table) -- Inspects table for nodenames that require quirky behaviour.
     local out = {noi = {poses = {}, names = {}, flags = {}}};
@@ -284,7 +297,7 @@ end
 luxgate.core.incip_dir = function(pos)
 -- Scans area, after a verification, searches for specific positions of annealed lode bars to determine which of the 2d primary and secondary cardinal directions to return. if false then reject.
     local data = {
-        poses = {{x = pos.x + 2, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 1, z = pos.z - 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z + 2}},
+        poses = {{x = pos.x + 2, y = pos.y - 1, z = pos.z + 2},{x = pos.x - 2, y = pos.y - 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y - 1, z = pos.z - 2},{x = pos.x - 2, y = pos.y - 1, z = pos.z + 2}},
         region = {nodes = {}, rods = {}}
     }
     data.region.nodes[1],data.region.nodes[2] = minetest.find_node_near(pos,5,"nc_lode:block_annealed", false), minetest.find_node_near(pos,5,"nc_luxgate:vessicle", false);
@@ -298,6 +311,7 @@ luxgate.core.incip_dir = function(pos)
     for n = 2, #data.region.rods, 1 do
         data.region.rods[1] = data.region.rods[1]..data.region.rods[n];
     end
+    --minetest.chat_send_all(minetest.serialize(data.region.rods))
     data.region.rods = unpack(data.region.rods);
     if(data.region.rods == "1111")then
         data.region.rods = {9,"none"};
@@ -321,7 +335,8 @@ luxgate.core.incip_dir = function(pos)
         data.region.rods = {8, "northwest"};
     else data.region.rods = false;
     end
-    return data.region.rods
+    data.region.rods = data.region.rods or {1}
+    return data.region.rods[1]
 end
 --
 

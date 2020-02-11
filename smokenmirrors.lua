@@ -127,8 +127,8 @@ function luxgate.particles.seenoevil(player)
         minetest.add_particlespawner({
             amount = 10,
             time = 2,
-            minpos = vector.add(pos,vector.divide(minetest.string_to_pos(luxgate.dirs[n]),2)),
-            maxpos = vector.add(pos,vector.divide(minetest.string_to_pos(luxgate.dirs[n]),2)),
+            minpos = vector.add(pos,vector.divide(luxgate.dirs[n])),
+            maxpos = vector.add(pos,vector.divide(luxgate.dirs[n])),
             minvel = {x=0, y=1, z=0},
             maxvel = {x=0, y=2, z=0},
             minacc = {x=0, y=0.3, z=0},
