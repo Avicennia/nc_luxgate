@@ -10,8 +10,9 @@ minetest.register_node("nc_luxgate:luxblende",{
     tiles = {"canvas2.png"},
     on_punch = function(pos,node,puncher)
         --minetest.chat_send_all(luxgate.core.whosthere(pos))
-    luxgate.core.line_slfl(pos, 250, 1)
-
+    
+        luxgate.core.line_slfl(pos, 250, 1)
+    
         --minetest.remove_node(pos)
         --POWERPULL TESTING STUFF
         --[[local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
@@ -42,7 +43,7 @@ minetest.register_node("nc_luxgate:vessicle",{
     drawtype = "glasslike",
     tiles = {"dev.png"},
     walkable = false,
-    pointable = false,
+    pointable = true,
     node_box = {
 		type = "fixed",
 		fixed = {
@@ -70,16 +71,17 @@ minetest.register_node("nc_luxgate:vessicle",{
                 end
             end
             local num = luxgate.core.incip_dir(pos)
-       local something = luxgate.core.conscription(luxgate.core.line_probe(pos,250,1))
-       local tab = luxgate.core.line_probe(pos,250,1).nodes_p[something]
-        if(tab)then
-            local ves = minetest.find_node_near(tab, 18, "nc_luxgate:vessicle", false)
+       --local something = luxgate.core.conscription(luxgate.core.line_probe(pos,250,1))
+       --local tab = luxgate.core.line_probe(pos,250,1).nodes_p[something]
+        --if(tab)then
+            local ves = luxgate.core.line_slfl(pos, 250, 1)
             if(ves)then
+                minetest.chat_send_all(minetest.serialize(ves))
             local pl = players[1]
-            pl:set_pos(tab)
-            luxgate.particles.seenoevil(pl)
+            pl:set_pos(ves[1])
+            --luxgate.particles.seenoevil(pl)
             else end
-        else minetest.chat_send_all(minetest.serialize(something)) end
+        --else minetest.chat_send_all(minetest.serialize("something")) end
 else end
 
         local timer = minetest.get_node_timer(pos)

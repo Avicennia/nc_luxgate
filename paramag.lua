@@ -1,4 +1,3 @@
---minetest.override_item("nc_terrain:dirt", {on_punch = function() luxgate.core.oregive() end})
 minetest.register_on_dignode(
     function(pos, oldnode, digger)
         if(oldnode.name == "nc_lode:ore")then
@@ -9,7 +8,7 @@ minetest.register_on_dignode(
         else end
     end)
 
-    minetest.register_abm({
+--[[    minetest.register_abm({
         nodenames = {"group:paramag"},
         neighbors = {"air"},
         interval = 1,
@@ -85,3 +84,4 @@ minetest.register_abm({
         --minetest.remove_node(pos)
     end
 })
+]]

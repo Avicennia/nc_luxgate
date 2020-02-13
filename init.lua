@@ -30,3 +30,12 @@ dofile(modpath .. "/legothingies.lua")
 dofile(modpath .. "/brainything.lua")
 dofile(modpath .. "/paramag.lua")
 dofile(modpath .. "/nodereg.lua")
+
+minetest.register_node("nc_luxgate:vn",{
+    description = "Picture Perfect Veneer",
+    paramtype = "light",
+    tiles = {"veneer.png"},
+    groups = { luxg = 1,crumbly = 1,falling_node = 1,},
+    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    
+   })

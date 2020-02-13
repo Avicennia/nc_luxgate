@@ -12,7 +12,6 @@ luxgate.core.area = function(pos,len,wid,hei) -- Grabs a len x wid x hei area of
                 ori.x = ori.x + 1
                 inc = inc + 1
                 output[inc] = minetest.get_node(ori).name
-                --minetest.set_node(ori, {name = "nc_tree:stick"})
             end
             ori.x = ori.x - len
             ori.z = ori.z + 1
@@ -118,7 +117,6 @@ return dat.tipo
 end
 
 luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed by unquestionablejudgement is a valid structure and reports which it fits.
-    --minetest.chat_send_all("hi")
     local areaparams;
     local ori = {x = pos.x, y = pos.y, z = pos.z}
     local num = luxgate.core.knockknock(pos)
@@ -138,9 +136,9 @@ luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed
     local gather = luxgate.core.area(ori, areaparams[1], areaparams[2], areaparams[3])
     local digitize = luxgate.core.area_decode(gather)
     local antoninscalia = {}
-     
+     --minetest.chat_send_all("batty "..num)
         if(luxgate.core.unquestionablejudgement(digitize,luxgate.numberframe[num]) == "true")then
-            antoninscalia = true;
+            antoninscalia = num;
         else antoninscalia = false; 
             minetest.chat_send_all(minetest.serialize(digitize))
             minetest.chat_send_all(minetest.serialize(luxgate.numberframe[num]))end
@@ -230,16 +228,17 @@ end
 
 luxgate.core.line_slfl = function(pos,dis,dir)
     local npos = {x = pos.x, y = pos.y, z = pos.z}
-    local loc = {}
-    for n = 10, dis, 10 do
-    npos = vector.add(npos,vector.multiply(luxgate.dirs[dir],10))
-    local vs = minetest.find_node_near(npos,5,"nc_lode:block_tempered", true)
-    if(vs)then
-       loc = vs
-    else end
+    local loc = 10
+    for n = loc, dis, 10 do
+    npos = vector.add(npos,vector.multiply(luxgate.dirs[dir],loc))
+    local vs = minetest.find_node_near(npos,(loc/4) + 3,"nc_luxgate:vessicle", true)
+    if(vs ~= nil and luxgate.core.whosthere(vs) and luxgate.core.whosthere(vs) ~= false)then
+       
+       return {vs,luxgate.core.whosthere(vs)}
+    else vs = nil end
         
     end
-    minetest.chat_send_all(minetest.serialize(loc))
+    
 end
 
 luxgate.core.line_inv = function(table) -- Inspects table for nodenames that require quirky behaviour.
