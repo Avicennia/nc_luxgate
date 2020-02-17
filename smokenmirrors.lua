@@ -117,6 +117,50 @@ function luxgate.particles.darkchain(pos1, pos2)
     })
 
 end
+function luxgate.particles.powah(pos1, pos2, dir)
+
+    local dirp = vector.direction(pos1, pos2)
+    if(dir == "x")then
+        dirp.z,dirp.y = 0,0
+    elseif(dir == "y")then
+        dirp.z,dirp.x = 0,0
+    elseif(dir == "z")then
+        dirp.y,dirp.x = 0,0
+    else end
+
+    minetest.add_particlespawner({
+        amount = 100,
+        time = 4,
+        minpos = {x=pos1.x, y=pos1.y, z=pos1.z},
+        maxpos = {x=pos1.x, y=pos1.y, z=pos1.z},
+        minvel = {x=dirp.x*2, y=dirp.y, z=dirp.z*2},
+        maxvel = {x=dirp.x*2, y=dirp.y, z=dirp.z*2},
+        minacc = {x=0, y=0, z=0},
+        maxacc = {x=0, y=0, z=0},
+        minexptime = 1,
+        maxexptime = 1,
+        minsize = 1,
+        maxsize = 1.2,
+    
+        collisiondetection = false,
+        collision_removal = false,
+        vertical = false,
+        texture = "darkcurl.png",
+        animation = {
+            type = "vertical_frames",
+            aspect_w = 16,
+            aspect_h = 16,
+            length = 0.2},
+            {
+                type = "sheet_2d",
+                frames_w = 1,
+                frames_h = 4,
+                frame_length = 0.1,
+            },
+        glow = 4
+    })
+
+end
 
 function luxgate.particles.seenoevil(player)
     if(player)then

@@ -112,7 +112,7 @@ luxgate.core.knockknock = function(pos) -- finds the node near the node below po
         dat.tipo = 2
     elseif(dat.sample == "nc_lode:block_annealed")then
         dat.tipo = 3
-else dat.tipo = "undyfne" end
+else dat.tipo = 0 end
 return dat.tipo
 end
 
@@ -139,7 +139,7 @@ luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed
      --minetest.chat_send_all("batty "..num)
         if(luxgate.core.unquestionablejudgement(digitize,luxgate.numberframe[num]) == "true")then
             antoninscalia = num;
-        else antoninscalia = false; 
+        else antoninscalia = 0; 
             minetest.chat_send_all(minetest.serialize(digitize))
             minetest.chat_send_all(minetest.serialize(luxgate.numberframe[num]))end
 
@@ -177,6 +177,48 @@ end
 
 ]]
 
+
+luxgate.core.socialmediapost = function(pos) -- checks if the vessicle at pos is registered. If not, assigns it to active.
+    local val = luxgate.core.whosthere(pos) 
+    local postring = pos.x.."_"..pos.y.."_"..pos.z.."_"..val
+    local ind;
+    for n = 0, #luxgate.bill.gates, 1 do
+        if(luxgate.bill.gates[n] == postring)then
+            ind = n
+            return
+        else end
+    end
+    if(ind == nil)then
+        table.insert(luxgate.bill.gates,postring)
+    else end
+end
+
+luxgate.core.portalwork = function(pos)
+    local objs = minetest.get_objects_inside_radius(pos, 1)
+    if(objs and #objs > 1)then
+        local players = {}
+        local rabble = {}
+        for n = 1, #objs, 1 do
+            if(objs[n]:is_player() == true)then
+                table.insert(players, objs[n])
+            else table.insert(rabble, objs[n])
+            end
+        end
+        local num = luxgate.core.incip_dir(pos)
+   minetest.chat_send_all(minetest.serialize(luxgate.core.conscription(luxgate.core.line_probe(pos,250,1),"ignore")))
+   --local tab = luxgate.core.line_probe(pos,250,1).nodes_p[something]
+    --if(tab)then
+        local dd = luxgate.core.incip_dir(pos)
+        minetest.chat_send_all(dd)
+        local ves = luxgate.core.line_slfl(pos, 250, dd)
+        if(ves)then
+            minetest.chat_send_all(minetest.serialize(ves))
+        local pl = players[1]
+        pl:set_pos(ves[1])
+        else end
+    else end
+end
+
 luxgate.core.tetris = function(pos, areaparams)
     local structurekey = luxgate.core.whosthere(pos, areaparams);
     local numnum = #luxgate.core.whosthere(pos, areaparams)
@@ -196,102 +238,7 @@ end
 ]]
 
 
-luxgate.core.line_probe = function(pos,dis,dir) -- Searches along a line and returns all positions and nodenames found in a given direction for a given distance.
-    local dahta = {nodes_n = {}, nodes_p = {}};
-    if(pos and dis and dir)then
-    local npos = pos;
-        for n = 1, dis, 1 do
-            npos = vector.add(npos,luxgate.dirs[dir]);
-            dahta.nodes_p[n] = npos;
-            dahta.nodes_n[n] = minetest.get_node(npos).name
-        end
-    else end
-    -- Verify equal quantity in both tables
-    if(#dahta.nodes_n ~= #dahta.nodes_p)then
-        dahta = {};
-    else end
 
-    return dahta -- Return value should contain 2 tables, 1 with names and 2 with positions of entries in 1.
-end
-
-luxgate.core.conscription = function(tab) -- specifically for return values of above function. force loads nodes.
-    local rv = 0
-    for n = 1, #tab.nodes_n, 1 do
-        
-        if(tab.nodes_n[n] == "nc_lode:block_annealed")then
-            rv = n;
-            break
-        else end
-    end
-    return rv
-end
-
-luxgate.core.line_slfl = function(pos,dis,dir)
-    local npos = {x = pos.x, y = pos.y, z = pos.z}
-    local loc = 10
-    for n = loc, dis, 10 do
-    npos = vector.add(npos,vector.multiply(luxgate.dirs[dir],loc))
-    local vs = minetest.find_node_near(npos,(loc/4) + 3,"nc_luxgate:vessicle", true)
-    if(vs ~= nil and luxgate.core.whosthere(vs) and luxgate.core.whosthere(vs) ~= false)then
-       
-       return {vs,luxgate.core.whosthere(vs)}
-    else vs = nil end
-        
-    end
-    
-end
-
-luxgate.core.line_inv = function(table) -- Inspects table for nodenames that require quirky behaviour.
-    local out = {noi = {poses = {}, names = {}, flags = {}}};
-    local noi = {ignore = {"air","nc_optics:glass"}, reflect = {"nc_lode:block_annealed","nc_optics:glass_opaque","ignore"}}
-    if(table.nodes_n and table.nodes_p)then
-        for n = 1, #table.nodes_n, 1 do
-            if(table.nodes_n[n] == noi.ignore[1] or table.nodes_n[n] == noi.ignore[2])then
-                out.noi.names[n] = table.nodes_n[n]
-                out.noi.poses[n] = table.nodes_p[n]
-                out.noi.flags[n] = "traverse"
-            elseif(table.nodes_n[n] == noi.reflect[1] or table.nodes_n[n] == noi.reflect[2] or table.nodes_n[n] == noi.reflect[3])then
-                out.noi.names[n] = table.nodes_n[n]
-                out.noi.poses[n] = table.nodes_p[n]
-                out.noi.flags[n] = "reflect"
-            elseif(table.nodes_n[n])then -- Abandoncase
-                out.noi.names[n] = table.nodes_n[n]
-                out.noi.poses[n] = table.nodes_p[n]
-                out.noi.flags[n] = "traverse"
-            end
-        end
-
-    else end
-    return out.noi
-end
-
-luxgate.core.refl_find = function(tab) -- Find all nodes that can cause ray reflection in the specified path.
-    local data = {ind = false, quant = 0, poses = {}, names = {}}
-        for n = 1, #tab.flags, 1 do
-            if(tab.flags[n] ~= "reflect")then
-            elseif(tab.flags[n] == "reflect")then
-            data.quant = data.quant + 1;
-            data.ind = true;
-            data.poses[n] = tab.poses[n]
-            data.names[n] = tab.names[n]
-            else end
-        end
-        if(data.quant > 1)then
-        local first = {ind = 0, keys = {}} -- We want the first reflective in the node path.
-        for k,v in pairs(data.names)do
-            first.ind = first.ind + 1
-            first.keys[first.ind] = k;
-        end
-    local first = math.min(unpack(first.keys))
-        data.ind = first; -- In this case, we want the lowest key to be prioritized and returned.
-        first = nil;
-    else end -- data.ind is false by default and when no reflective nodes are present, true if only one is present, and integral when there are multiple.
-    return data
-end
-
-luxgate.core.refl_redir = function(pos,dir,oldline,rpos) -- essentially creates a new line from a pos, in a new dir, using the remaining data from and oldline
-    
-end
 
 luxgate.core.incip_dir = function(pos)
 -- Scans area, after a verification, searches for specific positions of annealed lode bars to determine which of the 2d primary and secondary cardinal directions to return. if false then reject.
@@ -340,24 +287,11 @@ end
 --
 
 --
-luxgate.core.searchlight = function(pos, dir, dis, exc) -- Searches for nodes in a radius around a line at invervals.
-    local origin = pos;
-    local ray = {rate = {x=0,y=0,z=0}, nodes, mods = {}, interval = 10}
-    local cess = origin;
-    cess = cess + ( vector.multiply(minetest.string_to_pos(luxgate.dirs[dir]), dis) );
-
-    ray.nodes = minetest.find_nodes_with_meta(origin, cess)
-
-end
-
-luxgate.core.recalc = function(original_line, traversed_distance, player)
-
-end
 
 
-luxgate.core.oregive = function()
-    minetest.chat_send_all(minetest.serialize(minetest.registered_nodes["nc_lode:ore"].on_destruct))
-end
+
+
+
 
 nodecore.register_craft({
     label = "heat ilmenite and irreversibly reverse polarity",

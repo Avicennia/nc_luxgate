@@ -22,7 +22,8 @@ luxgate = {
         {-1,0,1}, -- NorthWest
         {x=1,y=0,z=0},
         {x=1,y=0,z=0}
-    }
+    },
+    bill = {gates = {"AUG"}}
 }
 
 dofile(modpath .. "/smokenmirrors.lua")
@@ -37,5 +38,15 @@ minetest.register_node("nc_luxgate:vn",{
     tiles = {"veneer.png"},
     groups = { luxg = 1,crumbly = 1,falling_node = 1,},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    on_punch = function(pos)
+        luxgate.particles.powah({x = pos.x - 0.49, y = pos.y + 0.40, z = pos.z - 0.55},{x = pos.x + 0.51, y = pos.y + 0.40, z = pos.z},"x")
+        luxgate.particles.powah({x = pos.x + 0.49, y = pos.y + 0.40, z = pos.z + 0.55},{x = pos.x - 0.51, y = pos.y + 0.40, z = pos.z},"x")
+        luxgate.particles.powah({x = pos.x - 0.49, y = pos.y - 0.40, z = pos.z + 0.55},{x = pos.x + 0.51, y = pos.y - 0.40, z = pos.z},"x")
+        luxgate.particles.powah({x = pos.x + 0.49, y = pos.y - 0.40, z = pos.z - 0.55},{x = pos.x - 0.51, y = pos.y - 0.40, z = pos.z},"x")
     
+        luxgate.particles.powah({x = pos.x - 0.55, y = pos.y + 0.40, z = pos.z - 0.49},{x = pos.x, y = pos.y + 0.40, z = pos.z + 0.51},"z")
+        luxgate.particles.powah({x = pos.x + 0.55, y = pos.y + 0.40, z = pos.z + 0.49},{x = pos.x, y = pos.y + 0.40, z = pos.z - 0.51},"z")
+        luxgate.particles.powah({x = pos.x - 0.55, y = pos.y - 0.40, z = pos.z + 0.49},{x = pos.x, y = pos.y - 0.40, z = pos.z - 0.51},"z")
+        luxgate.particles.powah({x = pos.x + 0.55, y = pos.y - 0.40, z = pos.z - 0.49},{x = pos.x, y = pos.y - 0.40, z = pos.z + 0.51},"z")
+    end
    })

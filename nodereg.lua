@@ -8,6 +8,7 @@ minetest.register_node("nc_luxgate:luxblende",{
         }
     },
     tiles = {"canvas2.png"},
+    light_source = 1,
     on_punch = function(pos,node,puncher)
         --minetest.chat_send_all(luxgate.core.whosthere(pos))
     
@@ -42,6 +43,7 @@ minetest.register_node("nc_luxgate:vessicle",{
     description = "-NULL-",
     drawtype = "glasslike",
     tiles = {"dev.png"},
+    light_source = 7,
     walkable = false,
     pointable = true,
     node_box = {
@@ -57,32 +59,13 @@ minetest.register_node("nc_luxgate:vessicle",{
     end,
     on_timer = function(pos)
         luxgate.particles.portalhole(pos)
-        
-        --minetest.chat_send_all(minetest.serialize(luxgate.core.incip_dir(pos)[1]))
-        
-        local objs = minetest.get_objects_inside_radius(pos, 1)
-        if(objs and #objs > 1)then
-            local players = {}
-            local rabble = {}
-            for n = 1, #objs, 1 do
-                if(objs[n]:is_player() == true)then
-                    table.insert(players, objs[n])
-                else table.insert(rabble, objs[n])
-                end
-            end
-            local num = luxgate.core.incip_dir(pos)
-       --local something = luxgate.core.conscription(luxgate.core.line_probe(pos,250,1))
-       --local tab = luxgate.core.line_probe(pos,250,1).nodes_p[something]
-        --if(tab)then
-            local ves = luxgate.core.line_slfl(pos, 250, 1)
-            if(ves)then
-                minetest.chat_send_all(minetest.serialize(ves))
-            local pl = players[1]
-            pl:set_pos(ves[1])
-            --luxgate.particles.seenoevil(pl)
-            else end
+
+        minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
+
+        luxgate.core.trifecta(pos)
+
+        luxgate.core.portalwork(pos)
         --else minetest.chat_send_all(minetest.serialize("something")) end
-else end
 
         local timer = minetest.get_node_timer(pos)
         timer:start(3)
@@ -90,6 +73,7 @@ else end
     on_punch = function(pos)
    -- minetest.chat_send_all(luxgate.core.knockknock(pos))
     minetest.chat_send_all(minetest.serialize(luxgate.core.whosthere(pos)))
+    minetest.set_node(pos, {name = "nc_luxgate:vessicle"})
     end
 })
 --- Control nodes ---^^^
@@ -99,6 +83,7 @@ else end
 
 minetest.register_node("nc_luxgate:frame_ohm",{
     description = "-NULL-",
+    light_source = 4,
     tiles = {{name ="ohm_anim.png",
     animation = {
         type = "vertical_frames",
@@ -120,6 +105,7 @@ minetest.register_node("nc_luxgate:frame_ohm",{
 })
 minetest.register_node("nc_luxgate:frame_lam",{
     description = "-NULL-",
+    light_source = 4,
     tiles = {{name ="lam_anim.png",
     animation = {
         type = "vertical_frames",
@@ -167,6 +153,7 @@ minetest.register_node("nc_luxgate:frame_b",{
 })
 minetest.register_node("nc_luxgate:frame_e",{
     description = "Gate frame Extension",
+    light_source = 2,
     drawtype = "nodebox",
     paramtype = "light",
     paramtype2 = "facedir",
@@ -196,6 +183,7 @@ minetest.register_node("nc_luxgate:frame_e",{
 })
 minetest.register_node("nc_luxgate:frame_v",{
     description = "Gate frame Vane",
+    light_source = 2,
     drawtype = "nodebox",
     paramtype = "light",
     paramtype2 = "facedir",
