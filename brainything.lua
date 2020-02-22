@@ -1,4 +1,16 @@
 
+-- UTIL
+luxgate.core.adiff = function(num1, num2)
+    if(num1 <= 0 and num2 >= 0)then
+        return math.abs(num1 - num2)
+    elseif(num1 >= 0 and num2 <= 0)then
+        return math.abs(num1 - num2)
+    elseif(num1 <= 0 and num2 <= 0)then
+        return math.abs(math.abs(num1) - math.abs(num2))
+    else return math.abs(num1 - num2)
+    end
+end
+
 
 -- AREA FETCHING THINGY
 
@@ -180,7 +192,8 @@ end
 
 luxgate.core.socialmediapost = function(pos) -- checks if the vessicle at pos is registered. If not, assigns it to active.
     local val = luxgate.core.whosthere(pos) 
-    local postring = pos.x.."_"..pos.y.."_"..pos.z.."_"..val
+    if(val)then
+    local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
     local ind;
     for n = 0, #luxgate.bill.gates, 1 do
         if(luxgate.bill.gates[n] == postring)then
@@ -191,6 +204,24 @@ luxgate.core.socialmediapost = function(pos) -- checks if the vessicle at pos is
     if(ind == nil)then
         table.insert(luxgate.bill.gates,postring)
     else end
+else end
+end
+
+
+luxgate.core.decode = function(str)
+local x,y,z = string.find(str,"x"),string.find(str,"y"),string.find(str,"z")
+ix, iy, iz, it = tonumber(string.sub(str,1, x - 1)),tonumber(string.sub(str, x + 1, y - 1)),tonumber(string.sub(str, y + 1, z - 1)),tonumber(string.sub(str, z + 1))
+
+return {{ix,iy,iz}, it}
+end  
+
+luxgate.core.seekout = function(pos)
+    local vd = {}
+    for _,v in pairs(luxgate.bill.gates)do
+        local dc = luxgate.core.decode(v)[1]
+        table.insert(vd, {luxgate.core.adiff(pos.x,dc[1]),luxgate.core.adiff(pos.y,dc[2]),luxgate.core.adiff(pos.z,dc[3])})
+    end
+    return vd
 end
 
 luxgate.core.portalwork = function(pos)
@@ -205,17 +236,10 @@ luxgate.core.portalwork = function(pos)
             end
         end
         local num = luxgate.core.incip_dir(pos)
-   minetest.chat_send_all(minetest.serialize(luxgate.core.conscription(luxgate.core.line_probe(pos,250,1),"ignore")))
    --local tab = luxgate.core.line_probe(pos,250,1).nodes_p[something]
     --if(tab)then
         local dd = luxgate.core.incip_dir(pos)
-        minetest.chat_send_all(dd)
-        local ves = luxgate.core.line_slfl(pos, 250, dd)
-        if(ves)then
-            minetest.chat_send_all(minetest.serialize(ves))
-        local pl = players[1]
-        pl:set_pos(ves[1])
-        else end
+        
     else end
 end
 

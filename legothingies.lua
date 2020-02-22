@@ -240,3 +240,30 @@ data = {
 	n1, n1, n1, n1, n1, n1, n1, 
 }
 }
+
+local ss = {
+    initial_properties = {
+        hp_max = 1,
+        physical = true,
+        collide_with_objects = false,
+        collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
+		visual = "wielditem",
+        visual_size = {x = 0.8, y = 1},
+        textures = {"nc_luxgate:crystal"},
+        spritediv = {x = 1, y = 1},
+		initial_sprite_basepos = {x = 0, y = 0},
+		
+		
+	},
+	on_punch = function(self, puncher)
+		local pdir = puncher:get_look_dir()
+		self.object:set_rotation(pdir)
+		minetest.chat_send_all(minetest.serialize(self.object:get_rotation()))
+		self.object:set_nametag_attributes({text = "WhenMeaningFallsInSplinters", color =  {a=250, r=250, g=250, b=255}})
+		
+		if(puncher:get_player_control().sneak == true)then
+			return self.object:remove()
+			 else end	
+	end,
+	}
+	minetest.register_entity("nc_luxgate:icelandspar", ss)

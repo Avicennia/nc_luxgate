@@ -1,42 +1,22 @@
-minetest.register_node("nc_luxgate:luxblende",{
+minetest.register_node("nc_luxgate:astrolabe",{
     description = "Box thing",
-    drawtype = "nodebox",
-    node_box = {
-        type = "fixed",
-        fixed = {
-            {-0.125, -0.5, -0.125, 0.125, -0.25, 0.125}
-        }
-    },
-    tiles = {"canvas2.png"},
+    drawtype = "mesh",
+    tiles = {"nc_lode_annealed.png"},
+    mesh = "director.b3d",
+    paramtype = "light",
+    paramtype2 = "facedir",
     light_source = 1,
     on_punch = function(pos,node,puncher)
         --minetest.chat_send_all(luxgate.core.whosthere(pos))
     
-        luxgate.core.line_slfl(pos, 250, 1)
-    
-        --minetest.remove_node(pos)
-        --POWERPULL TESTING STUFF
-        --[[local places = minetest.find_nodes_in_area({x=pos.x-2, y=pos.y-2,z=pos.z-2},{x=pos.x+2, y=pos.y+2,z=pos.z+2},"nc_luxgate:frame_ohm")
-        local vale = 0;
-        for n=1,#places,1 do
-            vale = vale + luxgate.core.powerpull(places[n])
-        end
-        minetest.chat_send_all(vale.." "..vale / 4)
-        --luxgate.core.tetris(pos, {5,5,6})]]
-
-        --[[local something = luxgate.core.conscription(luxgate.core.line_probe(pos,250, 3))
-        local tab = luxgate.core.line_probe(pos,250,3).nodes_p[something]
-        if(tab)then
-            minetest.chat_send_all(minetest.serialize(tab))
-            local ves = minetest.find_node_near(tab, 10, "nc_luxgate:vessicle", true)
-            if(ves and luxgate.core.whosthere(ves) == true)then
-            puncher:set_pos(ves)
-            luxgate.particles.seenoevil(puncher)
-            else end
-        else minetest.chat_send_all("nothing") end
-
-
-]]
+    if(puncher:get_player_control().sneak == true)then
+   return minetest.add_entity(pos, "nc_luxgate:icelandspar", nil)
+    elseif(puncher:get_player_control().RMB == true)then
+    return minetest.remove_node(pos)
+    end
+    minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
+    local prev = minetest.get_node(pos).param2 + 1
+    minetest.set_node(pos, {name = "nc_luxgate:astrolabe", param2 = prev})
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{
@@ -60,9 +40,9 @@ minetest.register_node("nc_luxgate:vessicle",{
     on_timer = function(pos)
         luxgate.particles.portalhole(pos)
 
-        minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
-
-        luxgate.core.trifecta(pos)
+        --minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
+        
+        luxgate.core.socialmediapost(pos)
 
         luxgate.core.portalwork(pos)
         --else minetest.chat_send_all(minetest.serialize("something")) end
@@ -72,8 +52,10 @@ minetest.register_node("nc_luxgate:vessicle",{
     end,
     on_punch = function(pos)
    -- minetest.chat_send_all(luxgate.core.knockknock(pos))
-    minetest.chat_send_all(minetest.serialize(luxgate.core.whosthere(pos)))
+    --minetest.chat_send_all(minetest.serialize(luxgate.core.whosthere(pos)))
     minetest.set_node(pos, {name = "nc_luxgate:vessicle"})
+    minetest.chat_send_all(minetest.serialize(luxgate.core.seekout(pos)))
+    --minetest.chat_send_all(minetest.serialize(luxgate.core.decode(luxgate.bill.gates[#luxgate.bill.gates])))
     end
 })
 --- Control nodes ---^^^
@@ -83,7 +65,6 @@ minetest.register_node("nc_luxgate:vessicle",{
 
 minetest.register_node("nc_luxgate:frame_ohm",{
     description = "-NULL-",
-    light_source = 4,
     tiles = {{name ="ohm_anim.png",
     animation = {
         type = "vertical_frames",
@@ -105,7 +86,6 @@ minetest.register_node("nc_luxgate:frame_ohm",{
 })
 minetest.register_node("nc_luxgate:frame_lam",{
     description = "-NULL-",
-    light_source = 4,
     tiles = {{name ="lam_anim.png",
     animation = {
         type = "vertical_frames",
@@ -126,34 +106,21 @@ minetest.register_node("nc_luxgate:frame_lam",{
     end
 })
 
-minetest.register_node("nc_luxgate:frame_b",{
-    description = "Gate frame Bottom",
-    drawtype = "nodebox",
+minetest.register_node("nc_luxgate:crystal",{
+    description = "Gate crystal",
+    drawtype = "mesh",
     paramtype = "light",
-    glow = 3,
-    paramtype2 = "facedir",
-    tiles = {"canvas2.png"},
+   -- paramtype2 = "facedir",
+    tiles = {"nc_optics_glass_frost.png"},
     groups = { luxg = 1,crumbly = 1},
-    node_box = {
-        type = "fixed",
-        fixed = {
-            {-0.25, -0.5, -0.25, 0.25, -0.4375, 0.25},
-			{-0.1875, -0.4375, -0.25, 0.1875, -0.375, 0.25},
-			{-0.125, -0.375, -0.25, 0.125, -0.3125, 0.25},
-			{0, -0.3125, -0.1875, 0.0625, 0.5, -0.0625},
-			{0, -0.3125, 0.0625, 0.0625, 0.5, 0.1875},
-        }
-    },
+    mesh = "dacrystal.b3d",
     on_punch = function(pos)
-        local ori = {x = pos.x, y= pos.y, z = pos.z}
-    minetest.set_node(ori,{name = "nc_terrain:stone"})
-    ori.y = ori.y + 4
-    minetest.set_node(pos,{name = "nc_terrain:sand"})
+   --     local prev = minetest.get_node(pos).param2 + 1
+   -- minetest.set_node(pos, {name = "nc_luxgate:crystal", param2 = prev})
     end
 })
 minetest.register_node("nc_luxgate:frame_e",{
     description = "Gate frame Extension",
-    light_source = 2,
     drawtype = "nodebox",
     paramtype = "light",
     paramtype2 = "facedir",
@@ -183,7 +150,6 @@ minetest.register_node("nc_luxgate:frame_e",{
 })
 minetest.register_node("nc_luxgate:frame_v",{
     description = "Gate frame Vane",
-    light_source = 2,
     drawtype = "nodebox",
     paramtype = "light",
     paramtype2 = "facedir",
