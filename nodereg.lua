@@ -1,24 +1,4 @@
-minetest.register_node("nc_luxgate:astrolabe",{
-    description = "Box thing",
-    drawtype = "mesh",
-    tiles = {"nc_lode_annealed.png"},
-    mesh = "director.b3d",
-    paramtype = "light",
-    paramtype2 = "facedir",
-    light_source = 1,
-    on_punch = function(pos,node,puncher)
-        --minetest.chat_send_all(luxgate.core.whosthere(pos))
-    
-    if(puncher:get_player_control().sneak == true)then
-   return minetest.add_entity(pos, "nc_luxgate:icelandspar", nil)
-    elseif(puncher:get_player_control().RMB == true)then
-    return minetest.remove_node(pos)
-    end
-    minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
-    local prev = minetest.get_node(pos).param2 + 1
-    minetest.set_node(pos, {name = "nc_luxgate:astrolabe", param2 = prev})
-    end
-})
+
 minetest.register_node("nc_luxgate:vessicle",{
     description = "-NULL-",
     drawtype = "glasslike",
@@ -39,13 +19,10 @@ minetest.register_node("nc_luxgate:vessicle",{
     end,
     on_timer = function(pos)
         luxgate.particles.portalhole(pos)
-
-        --minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
         
         luxgate.core.socialmediapost(pos)
 
         luxgate.core.portalwork(pos)
-        --else minetest.chat_send_all(minetest.serialize("something")) end
 
         local timer = minetest.get_node_timer(pos)
         timer:start(3)
@@ -54,7 +31,7 @@ minetest.register_node("nc_luxgate:vessicle",{
    -- minetest.chat_send_all(luxgate.core.knockknock(pos))
     --minetest.chat_send_all(minetest.serialize(luxgate.core.whosthere(pos)))
     minetest.set_node(pos, {name = "nc_luxgate:vessicle"})
-    minetest.chat_send_all(minetest.serialize(luxgate.core.seekout(pos)))
+    --minetest.chat_send_all(minetest.serialize(luxgate.core.seekout(pos)))
     --minetest.chat_send_all(minetest.serialize(luxgate.core.decode(luxgate.bill.gates[#luxgate.bill.gates])))
     end
 })
@@ -101,22 +78,61 @@ minetest.register_node("nc_luxgate:frame_lam",{
     }},
     groups = { luxg = 1,cracky =1},
     on_punch = function(pos)
-    minetest.chat_send_all(minetest.serialize(luxgate.core.whosthere(pos,{5,5,5})))
-    
+    self.object:set_nametag_attributes({text = "WhenMeaningFallsInSplinters", color =  {a=250, r=250, g=250, b=255}})
+
     end
 })
 
-minetest.register_node("nc_luxgate:crystal",{
+minetest.register_node("nc_luxgate:button",{
     description = "Gate crystal",
     drawtype = "mesh",
+    walkable = false,
     paramtype = "light",
-   -- paramtype2 = "facedir",
-    tiles = {"nc_optics_glass_frost.png"},
+    paramtype2 = "facedir",
+    tiles = {"nc_lode_annealed.png"},
+    selection_box = {
+        type = "fixed",
+        fixed = {
+            {-0.5, -0.1875, -0.1875, -0.4375, 0.1875, 0.1875},
+        },
+    },
     groups = { luxg = 1,crumbly = 1},
-    mesh = "dacrystal.b3d",
-    on_punch = function(pos)
-   --     local prev = minetest.get_node(pos).param2 + 1
-   -- minetest.set_node(pos, {name = "nc_luxgate:crystal", param2 = prev})
+    mesh = "button.b3d",
+    on_punch = function(pos, node, puncher)
+        local lam = minetest.find_node_near(pos,4,"nc_luxgate:frame_lam", false)
+        if(lam)then
+        minetest.add_entity(lam,"nc_luxgate:icelandspar",nil)
+        else end
+        if(puncher:get_player_control().sneak == true)then
+            local prev = minetest.get_node(pos).param2 + 1
+            minetest.set_node(pos, {name = "nc_luxgate:button", param2 = prev})
+        else end
+    end
+})
+minetest.register_node("nc_luxgate:geqbutton",{
+    description = "Gate powerbutton",
+    drawtype = "mesh",
+    walkable = false,
+    paramtype = "light",
+    paramtype2 = "facedir",
+    selection_box = {
+        type = "fixed",
+        fixed = {
+            {-0.1875, -0.1875, -0.5, 0.1875, 0.1875, -0.4375},
+        },
+    },
+    tiles = {"nc_lode_annealed.png"},
+    groups = { luxg = 1,crumbly = 1},
+    mesh = "geqbutton.b3d",
+    on_punch = function(pos, node, puncher)
+    local ves = minetest.find_node_near(pos,4,"nc_luxgate:vessicle",false)
+        if(ves)then
+        luxgate.core.xenithcore(ves)
+        else end
+        if(puncher:get_player_control().sneak == true)then
+            local prev = minetest.get_node(pos).param2 + 1
+    minetest.set_node(pos, {name = "nc_luxgate:geqbutton", param2 = prev})
+        else end
     end
 })
 minetest.register_node("nc_luxgate:frame_e",{
@@ -177,8 +193,7 @@ minetest.register_node("nc_luxgate:frame_v",{
         }
     },
     on_punch = function(pos)
-        local prev = minetest.get_node(pos).param2 + 1
-        minetest.set_node(pos, {name = "nc_luxgate:frame_v", param2 = prev})
+        
     end
 })
 

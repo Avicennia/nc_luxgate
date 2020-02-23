@@ -247,23 +247,73 @@ local ss = {
         physical = true,
         collide_with_objects = false,
         collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
-		visual = "wielditem",
+		visual = "",
         visual_size = {x = 0.8, y = 1},
-        textures = {"nc_luxgate:crystal"},
+        textures = {""},
         spritediv = {x = 1, y = 1},
 		initial_sprite_basepos = {x = 0, y = 0},
 		
 		
 	},
-	on_punch = function(self, puncher)
-		local pdir = puncher:get_look_dir()
-		self.object:set_rotation(pdir)
-		minetest.chat_send_all(minetest.serialize(self.object:get_rotation()))
-		self.object:set_nametag_attributes({text = "WhenMeaningFallsInSplinters", color =  {a=250, r=250, g=250, b=255}})
+	on_activate = function(self)
+		local pos = self.object:get_pos()
+		local ohm,ahm = minetest.find_node_near(pos,4,"nc_luxgate:button",true),minetest.find_node_near(pos,1,"air",true)
+		local dirval = vector.direction(ahm,ohm)
+		self.object:remove()
+		self.object:set_yaw(4.7)
+		self.object:set_pos(vector.add(pos,vector.divide(dirval,5.8)))
 		
+	end,
+	on_punch = function(self, puncher)
+		local pos = self.object:get_pos()
+		local lam = minetest.find_node_near(pos,3,"nc_luxgate:frame_lam",false)
+		if(lam)then
+			local meta = minetest.get_meta(lam)
+			local val;
+			meta:set_int("sindex", meta:get_int("sindex") + 1)
+			if(meta:get_int("sindex") <= #luxgate.bill.gates)then
+			
+			elseif(meta:get_int("sindex") > #luxgate.bill.gates)then
+				meta:set_int("sindex", 1)
+			else end
+			self.object:set_nametag_attributes({text = "Dest: "..luxgate.bill.gates[meta:get_int("sindex")], color ={a=250, r=20, g=150, b=255}})
+		else end
+			
 		if(puncher:get_player_control().sneak == true)then
 			return self.object:remove()
 			 else end	
 	end,
 	}
+
+
 	minetest.register_entity("nc_luxgate:icelandspar", ss)
+	
+	
+	local ss = {
+		initial_properties = {
+			hp_max = 1,
+			physical = true,
+			collide_with_objects = true,
+			collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
+			visual = "wielditem",
+			visual_size = {x = 0.1, y = 0.1},
+			textures = {"nc_luxgate:geqbutton"},
+			spritediv = {x = 1, y = 1},
+			initial_sprite_basepos = {x = 0, y = 0},
+			
+			
+		},
+		on_activate = function(self)
+			local pos = self.object:get_pos()
+			local ohm,ahm = minetest.find_node_near(pos,4,"nc_luxgate:frame_lam",true),minetest.find_node_near(pos,1,"air",true)
+			local dirval = vector.direction(ahm,ohm)
+			self.object:remove()
+			self.object:set_yaw(4.7)
+			--self.object:set_pos(vector.add(ohm,{x=-0.3,y = 0.32, z = 0.45}))
+			
+		end,
+		on_punch = function(self, puncher)
+			
+		end,
+		}
+		minetest.register_entity("nc_luxgate:geqbutton", ss)

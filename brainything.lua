@@ -209,6 +209,11 @@ end
 
 
 luxgate.core.decode = function(str)
+if(str:find(":"))then
+    str = str:sub(6)
+else end
+
+
 local x,y,z = string.find(str,"x"),string.find(str,"y"),string.find(str,"z")
 ix, iy, iz, it = tonumber(string.sub(str,1, x - 1)),tonumber(string.sub(str, x + 1, y - 1)),tonumber(string.sub(str, y + 1, z - 1)),tonumber(string.sub(str, z + 1))
 
@@ -225,22 +230,48 @@ luxgate.core.seekout = function(pos)
 end
 
 luxgate.core.portalwork = function(pos)
-    local objs = minetest.get_objects_inside_radius(pos, 1)
+    local objs = minetest.get_objects_inside_radius(pos, 3)
     if(objs and #objs > 1)then
         local players = {}
         local rabble = {}
+        local buttons = {}
         for n = 1, #objs, 1 do
             if(objs[n]:is_player() == true)then
                 table.insert(players, objs[n])
+            elseif(objs[n]:get_nametag_attributes().text:find(":") and objs[n]:is_player() == false)then
+                table.insert(buttons, objs[n])
             else table.insert(rabble, objs[n])
             end
         end
-        local num = luxgate.core.incip_dir(pos)
    --local tab = luxgate.core.line_probe(pos,250,1).nodes_p[something]
     --if(tab)then
-        local dd = luxgate.core.incip_dir(pos)
-        
+    if(buttons[1] and buttons[1]:get_nametag_attributes().text)then
+        minetest.chat_send_all(minetest.serialize(luxgate.core.decode(buttons[1]:get_nametag_attributes().text:sub(7))))
+    else end   
+
+    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
+    local powarr = 0
+
+    for n = 1, #ps, 1 do
+        powarr = powarr + luxgate.core.powerpull(ps[n])
+    end
+
+    if(powarr > 0)then
+        minetest.chat_send_all(powarr)
+        powarr = 0
     else end
+    else end
+    
+end
+
+luxgate.core.xenithcore = function(pos)
+    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
+    local powarr = 0
+
+    for n = 1, #ps, 1 do
+        powarr = powarr + luxgate.core.powerpull(ps[n])
+    end
+    return powarr
 end
 
 luxgate.core.tetris = function(pos, areaparams)
