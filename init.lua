@@ -9,7 +9,7 @@ luxgate = {
     schem = {},
     nodes = {
         ilmenite = {},
-        names = {"nc_lode:block_annealed","nc_lode:block_tempered","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle","nc_luxgate:block_ilmenite","nc_luxgate:block_ilmenite_inv"}},
+        names = {"nc_luxgate:ulvstone_i","nc_luxgate:ulvstone","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle","nc_luxgate:block_ilmenite","nc_terrain:stone"}},
     nodenumbers = {},
     dirs = {
         {x=1,y=0,z=0},  -- East
@@ -50,3 +50,13 @@ minetest.register_node("nc_luxgate:vn",{
         luxgate.particles.powah({x = pos.x + 0.55, y = pos.y - 0.40, z = pos.z - 0.49},{x = pos.x, y = pos.y - 0.40, z = pos.z + 0.51},"z")
     end
    })
+
+   minetest.register_abm({
+    nodenames = {"nc_luxgate:vessicle"},
+    neighbors = {"nc_luxgate:frame_lam"},
+    interval = 3,
+    chance = 100,
+    action = function(pos, node, active_object_count,active_object_count_wider)
+        luxgate.core.portalwork(pos)
+    end
+})

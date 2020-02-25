@@ -14,6 +14,12 @@ minetest.register_node("nc_luxgate:vessicle",{
     },
     groups = {crumbly = 1, luxg = 1},
     on_construct = function(pos)
+        local val = luxgate.core.whosthere(pos) 
+    if(val)then
+    local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
+    local meta = minetest.get_meta(pos)
+    meta:set_string("id",postring)
+    else end
         local timer = minetest.get_node_timer(pos)
         timer:start(3)
     end,
@@ -28,9 +34,12 @@ minetest.register_node("nc_luxgate:vessicle",{
         timer:start(3)
     end,
     on_punch = function(pos)
+        local meta = minetest.get_meta(pos)
    -- minetest.chat_send_all(luxgate.core.knockknock(pos))
     --minetest.chat_send_all(minetest.serialize(luxgate.core.whosthere(pos)))
     minetest.set_node(pos, {name = "nc_luxgate:vessicle"})
+    minetest.chat_send_all(meta:get_string("id"))
+    --minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
     --minetest.chat_send_all(minetest.serialize(luxgate.core.seekout(pos)))
     --minetest.chat_send_all(minetest.serialize(luxgate.core.decode(luxgate.bill.gates[#luxgate.bill.gates])))
     end
@@ -77,10 +86,6 @@ minetest.register_node("nc_luxgate:frame_lam",{
         }
     }},
     groups = { luxg = 1,cracky =1},
-    on_punch = function(pos)
-    self.object:set_nametag_attributes({text = "WhenMeaningFallsInSplinters", color =  {a=250, r=250, g=250, b=255}})
-
-    end
 })
 
 minetest.register_node("nc_luxgate:button",{
@@ -99,10 +104,14 @@ minetest.register_node("nc_luxgate:button",{
     groups = { luxg = 1,crumbly = 1},
     mesh = "button.b3d",
     on_punch = function(pos, node, puncher)
-        local lam = minetest.find_node_near(pos,4,"nc_luxgate:frame_lam", false)
-        if(lam)then
-        minetest.add_entity(lam,"nc_luxgate:icelandspar",nil)
+        local meta = minetest.get_meta(pos)
+        meta:set_int("gindex",meta:get_int("gindex")+1)
+        if(meta:get_int("gindex") > #luxgate.bill.gates)then
+            meta:set_int("gindex",1)
         else end
+        meta:set_string("infotext","Dest: "..luxgate.bill.gates[meta:get_int("gindex")])
+        minetest.chat_send_all(meta:get_int("gindex"))
+
         if(puncher:get_player_control().sneak == true)then
             local prev = minetest.get_node(pos).param2 + 1
             minetest.set_node(pos, {name = "nc_luxgate:button", param2 = prev})
@@ -126,9 +135,15 @@ minetest.register_node("nc_luxgate:geqbutton",{
     mesh = "geqbutton.b3d",
     on_punch = function(pos, node, puncher)
     local ves = minetest.find_node_near(pos,4,"nc_luxgate:vessicle",false)
+
+
         if(ves)then
-        luxgate.core.xenithcore(ves)
+        local meta = minetest.get_meta(ves)
+
+        meta:set_int("power",luxgate.core.xenithcore(ves))
         else end
+
+
         if(puncher:get_player_control().sneak == true)then
             local prev = minetest.get_node(pos).param2 + 1
     minetest.set_node(pos, {name = "nc_luxgate:geqbutton", param2 = prev})
@@ -213,27 +228,18 @@ minetest.register_node("nc_luxgate:frame_v",{
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     
    })
-   minetest.register_node("nc_luxgate:block_ilmenite_inv",{
-    description = "ilmenite block",
-    paramtype = "light",
-    tiles = {"block_ilmenite_shifted.png"},
-    groups = { luxg = 1,crumbly = 1,falling_node = 1, paramag_r = 1},
-    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
-    
-    
-   })
-   minetest.register_node("nc_luxgate:cobble_ilmenite_inv",{
-    description = "ilmenite block",
-    paramtype = "light",
-    tiles = {"block_ilmenite_shifted.png^nc_terrain_cobble.png"},
-    groups = { luxg = 1,crumbly = 1,falling_node = 1, paramag_r = 1},
-    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
-    
-   })
    minetest.register_node("nc_luxgate:ulvstone",{
     description = "Ulvstone",
     paramtype = "light",
     tiles = {"canvas2.png"},
+    groups = { luxg = 1,crumbly = 1,falling_node = 1, ulv = 1},
+    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    
+   })
+   minetest.register_node("nc_luxgate:ulvstone_i",{
+    description = "Ulvstone",
+    paramtype = "light",
+    tiles = {"canvas2t.png"},
     groups = { luxg = 1,crumbly = 1,falling_node = 1, ulv = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     

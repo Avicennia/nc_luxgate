@@ -13,7 +13,7 @@
 luxgate.numberframe = {
 	{1,2,10,2,1,2,9,9,9,2,10,9,10,9,10,2,9,9,9,2,1,2,10,2,1,0,0,0,0,0,0,0,0,0,0,0,5,4,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,8,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,5,0,5,3,0,0,0,0,0,0,0,0,0,0},
 	{1,2,10,2,1,2,9,9,9,2,10,9,10,9,10,2,9,9,9,2,1,2,10,2,1,0,0,0,0,0,0,0,5,0,0,0,0,4,0,0,0,0,5,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,3,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,3,0,0,0,0,5,0,0,0,0,0,0,0,0,0,5,0,0,0,0,3,0,0},
-	{1,1,1,1,4,1,1,1,1,0,0,0,0,8,0,0,0,0}
+	{2,2,2,2,4,2,2,2,2,0,0,0,0,8,0,0,0,0}
 }
 
 
@@ -29,7 +29,7 @@ nodecore.register_craft({
 	wield = {name = "nc_fire:lump_coal", count = 8},
 	consumewield = 8,
 	check = function(pos, data)
-		return minetest.get_node(data.pointed.under).name == "nc_luxgate:block_ilmenite_inv"
+		return minetest.get_node(data.pointed.under).name == "nc_luxgate:block_ilmenite"
 	end,
 	nodes = {{match = {walkable = true}}},
 	after = function(pos, data)
@@ -141,9 +141,9 @@ nodecore.register_craft({
 
 --			SCHEMATICS			--
 n1 = { name = "air", prob = 0 }
-n2 = { name = "nc_lode:block_annealed" }
-n3 = { name = "nc_lode:block_tempered" }
-n4 = { name = "nc_luxgate:block_ilmenite_inv" }
+n2 = { name = "nc_luxgate:ulvstone_i" }
+n3 = { name = "nc_luxgate:ulvstone" }
+n4 = { name = "nc_terrain:stone" }
 n5 = { name = "nc_luxgate:block_ilmenite" }
 n6 = { name = "nc_luxgate:frame_v", param2 = 18 }
 n7 = { name = "nc_luxgate:frame_lam" }
@@ -181,9 +181,9 @@ n1, n1, n1, n1, n1, n1, n1, n1,
 }
 
 n1 = { name = "air", prob = 0 }
-n2 = { name = "nc_lode:block_annealed" }
-n3 = { name = "nc_lode:block_tempered" }
-n4 = { name = "nc_luxgate:block_ilmenite_inv" }
+n2 = { name = "nc_luxgate:ulvstone_i" }
+n3 = { name = "nc_luxgate:ulvstone" }
+n4 = { name = "nc_terrain:stone" }
 n5 = { name = "nc_luxgate:frame_ohm" }
 n6 = { name = "nc_luxgate:frame_e", param2 = 2 }
 n7 = { name = "nc_luxgate:block_ilmenite" }
@@ -221,7 +221,7 @@ n1, n1, n1, n1, n1, n1, n1,
 }
 
 n1 = { name = "air", prob = 0 }
-n2 = { name = "nc_lode:block_annealed" }
+n2 = { name = "nc_luxgate:ulvstone" }
 n3 = { name = "nc_luxgate:frame_lam" }
 n4 = { name = "nc_luxgate:vessicle" }
 
@@ -240,80 +240,3 @@ data = {
 	n1, n1, n1, n1, n1, n1, n1, 
 }
 }
-
-local ss = {
-    initial_properties = {
-        hp_max = 1,
-        physical = true,
-        collide_with_objects = false,
-        collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
-		visual = "",
-        visual_size = {x = 0.8, y = 1},
-        textures = {""},
-        spritediv = {x = 1, y = 1},
-		initial_sprite_basepos = {x = 0, y = 0},
-		
-		
-	},
-	on_activate = function(self)
-		local pos = self.object:get_pos()
-		local ohm,ahm = minetest.find_node_near(pos,4,"nc_luxgate:button",true),minetest.find_node_near(pos,1,"air",true)
-		local dirval = vector.direction(ahm,ohm)
-		self.object:remove()
-		self.object:set_yaw(4.7)
-		self.object:set_pos(vector.add(pos,vector.divide(dirval,5.8)))
-		
-	end,
-	on_punch = function(self, puncher)
-		local pos = self.object:get_pos()
-		local lam = minetest.find_node_near(pos,3,"nc_luxgate:frame_lam",false)
-		if(lam)then
-			local meta = minetest.get_meta(lam)
-			local val;
-			meta:set_int("sindex", meta:get_int("sindex") + 1)
-			if(meta:get_int("sindex") <= #luxgate.bill.gates)then
-			
-			elseif(meta:get_int("sindex") > #luxgate.bill.gates)then
-				meta:set_int("sindex", 1)
-			else end
-			self.object:set_nametag_attributes({text = "Dest: "..luxgate.bill.gates[meta:get_int("sindex")], color ={a=250, r=20, g=150, b=255}})
-		else end
-			
-		if(puncher:get_player_control().sneak == true)then
-			return self.object:remove()
-			 else end	
-	end,
-	}
-
-
-	minetest.register_entity("nc_luxgate:icelandspar", ss)
-	
-	
-	local ss = {
-		initial_properties = {
-			hp_max = 1,
-			physical = true,
-			collide_with_objects = true,
-			collisionbox = {-0.3, -0.3, -0.3, 0.3, 0.3, 0.3},
-			visual = "wielditem",
-			visual_size = {x = 0.1, y = 0.1},
-			textures = {"nc_luxgate:geqbutton"},
-			spritediv = {x = 1, y = 1},
-			initial_sprite_basepos = {x = 0, y = 0},
-			
-			
-		},
-		on_activate = function(self)
-			local pos = self.object:get_pos()
-			local ohm,ahm = minetest.find_node_near(pos,4,"nc_luxgate:frame_lam",true),minetest.find_node_near(pos,1,"air",true)
-			local dirval = vector.direction(ahm,ohm)
-			self.object:remove()
-			self.object:set_yaw(4.7)
-			--self.object:set_pos(vector.add(ohm,{x=-0.3,y = 0.32, z = 0.45}))
-			
-		end,
-		on_punch = function(self, puncher)
-			
-		end,
-		}
-		minetest.register_entity("nc_luxgate:geqbutton", ss)

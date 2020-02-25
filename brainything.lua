@@ -122,7 +122,7 @@ luxgate.core.knockknock = function(pos) -- finds the node near the node below po
         dat.tipo = 1
     elseif(dat.sample == "air" and dat.sample2 == "nc_luxgate:frame_v")then
         dat.tipo = 2
-    elseif(dat.sample == "nc_lode:block_annealed")then
+    elseif(dat.sample == "nc_luxgate:ulvstone")then
         dat.tipo = 3
 else dat.tipo = 0 end
 return dat.tipo
@@ -195,9 +195,9 @@ luxgate.core.socialmediapost = function(pos) -- checks if the vessicle at pos is
     if(val)then
     local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
     local ind;
-    for n = 0, #luxgate.bill.gates, 1 do
-        if(luxgate.bill.gates[n] == postring)then
-            ind = n
+    for k,_ in pairs(luxgate.bill.gates) do 
+        if(luxgate.bill.gates[k] == postring)then
+            --ind = k
             return
         else end
     end
@@ -208,7 +208,7 @@ else end
 end
 
 
-luxgate.core.decode = function(str)
+luxgate.core.decode = function(str) 
 if(str:find(":"))then
     str = str:sub(6)
 else end
@@ -230,39 +230,38 @@ luxgate.core.seekout = function(pos)
 end
 
 luxgate.core.portalwork = function(pos)
-    local objs = minetest.get_objects_inside_radius(pos, 3)
-    if(objs and #objs > 1)then
+    local button = minetest.find_node_near(pos,5,"nc_luxgate:button",false)
+    
+    local objs = minetest.get_objects_inside_radius(pos, 1)
+    if(objs)then
         local players = {}
         local rabble = {}
-        local buttons = {}
+        
         for n = 1, #objs, 1 do
             if(objs[n]:is_player() == true)then
                 table.insert(players, objs[n])
-            elseif(objs[n]:get_nametag_attributes().text:find(":") and objs[n]:is_player() == false)then
-                table.insert(buttons, objs[n])
             else table.insert(rabble, objs[n])
             end
         end
-   --local tab = luxgate.core.line_probe(pos,250,1).nodes_p[something]
-    --if(tab)then
-    if(buttons[1] and buttons[1]:get_nametag_attributes().text)then
-        minetest.chat_send_all(minetest.serialize(luxgate.core.decode(buttons[1]:get_nametag_attributes().text:sub(7))))
+    if(players[1])then
+    if(button)then
+        local meta = minetest.get_meta(button)
+        destin = meta:get_string("infotext")
+
+        if(destin ~= "")then
+        else end
+        
+        minetest.chat_send_all(minetest.serialize(luxgate.core.decode(destin)))
+        --minetest.set_node({x = luxgate.core.decode(destin)[1][1],y = luxgate.core.decode(destin)[1][2],z = luxgate.core.decode(destin)[1][3]},{name = "nc_tree:staff"})
     else end   
-
-    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
-    local powarr = 0
-
-    for n = 1, #ps, 1 do
-        powarr = powarr + luxgate.core.powerpull(ps[n])
-    end
-
-    if(powarr > 0)then
-        minetest.chat_send_all(powarr)
-        powarr = 0
-    else end
+else end
+   
     else end
     
 end
+
+
+
 
 luxgate.core.xenithcore = function(pos)
     local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
@@ -348,19 +347,7 @@ end
 
 
 
-nodecore.register_craft({
-    label = "heat ilmenite and irreversibly reverse polarity",
-    action = "cook",
-    touchgroups = {flame = 2},
-    duration = 5,
-    cookfx = true,
-    nodes = {
-        {
-            match = {groups = {paramag = true}},
-            replace = "nc_luxgate:block_ilmenite_inv"
-        }
-    }
-})
+
 nodecore.register_craft({
     label = "heat ilmenite and irreversibly destroy polarity 1",
     action = "cook",
@@ -369,20 +356,7 @@ nodecore.register_craft({
     cookfx = true,
     nodes = {
         {
-            match = {groups = {paramag = true, paramag_r = true}},
-            replace = "nc_terrain:stone"
-        }
-    }
-})
-nodecore.register_craft({
-    label = "heat ilmenite and irreversibly destroy polarity 2",
-    action = "cook",
-    touchgroups = {flame = 1},
-    duration = 10,
-    cookfx = true,
-    nodes = {
-        {
-            match = {groups = {paramag_r = true}},
+            match = {groups = {paramag = true}},
             replace = "nc_terrain:stone"
         }
     }
