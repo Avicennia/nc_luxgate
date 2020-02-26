@@ -254,13 +254,15 @@ luxgate.core.portalwork = function(pos)
         destin = meta:get_string("infotext")
         ddestin = luxgate.core.decode(destin)[1]
         ddestin = {x = ddestin[1],y = ddestin[2], z = ddestin[3]}
-        if(minetest.get_node(ddestin).name == "nc_luxgate:vessicle")then
-        else end
         
-        minetest.chat_send_all(minetest.serialize(luxgate.core.decode(destin)))
-        minetest.chat_send_all(minetest.serialize(destin))
-        players[1]:move_to(ddestin)
-        minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})
+        
+        if(luxgate.core.destiny(pos, button) < minetest.get_meta(pos):get_int("power"))then
+            minetest.get_meta(pos):set_int("power",minetest.get_meta(pos):get_int("power") - luxgate.core.destiny(pos, button))
+            players[1]:move_to(ddestin)
+        elseif(luxgate.core.destiny(pos, button) == minetest.get_meta(pos):get_int("power"))then
+            players[1]:move_to(ddestin)
+            minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})
+    else return end
     else end   
 else end
    
@@ -269,7 +271,16 @@ else end
 end
 
 
-
+luxgate.core.destiny = function(pos,but)
+    if(but)then
+    des = tonumber(string.sub(minetest.get_meta(but):get_string("infotext"),minetest.get_meta(but):get_string("infotext"):find(";")+1))
+    return des
+    elseif(pos and not but)then
+        but = minetest.find_node_near(pos,4,"nc_luxgate:button",false)
+        des = tonumber(string.sub(minetest.get_meta(but):get_string("infotext"),minetest.get_meta(but):get_string("infotext"):find(";")+1))
+        return des
+    else end
+end
 
 luxgate.core.xenithcore = function(pos)
     local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")    

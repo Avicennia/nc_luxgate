@@ -113,18 +113,27 @@ minetest.register_node("nc_luxgate:button",{
     },
     groups = { luxg = 1,crumbly = 1},
     mesh = "button.b3d",
-    on_punch = function(pos, node, puncher)
+    on_punch = function(pos,_, puncher)
+        local ves = minetest.find_node_near(pos,4,"nc_luxgate:vessicle",false)
         local meta = minetest.get_meta(pos)
         meta:set_int("gindex",meta:get_int("gindex")+1)
+
         if(meta:get_int("gindex") > #luxgate.bill.gates)then
             meta:set_int("gindex",1)
         else end
-        meta:set_string("infotext","Dest: "..luxgate.bill.gates[meta:get_int("gindex")])
+
+
+        local pseu = luxgate.core.decode(luxgate.bill.gates[meta:get_int("gindex")])[1]
+        local dpos = {x = pseu[1], y = pseu[2], z = pseu[3]}
+        
+
+        meta:set_string("infotext","Dest: "..luxgate.bill.gates[meta:get_int("gindex")].." Dist; "..vector.distance(ves,dpos))
         minetest.chat_send_all(meta:get_int("gindex"))
 
         if(puncher:get_player_control().sneak == true)then
-            local prev = minetest.get_node(pos).param2 + 1
-            minetest.set_node(pos, {name = "nc_luxgate:button", param2 = prev})
+            minetest.chat_send_all(luxgate.core.destiny(ves))
+            --local prev = minetest.get_node(pos).param2 + 1
+            --minetest.set_node(pos, {name = "nc_luxgate:button", param2 = prev})
         else end
     end
 })
