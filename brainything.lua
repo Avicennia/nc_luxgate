@@ -183,6 +183,19 @@ luxgate.core.powerpull = function(pos) -- Function for doing crude "energy pull"
     return val
 end
 
+luxgate.core.powercalc = function(pos) 
+    local nod = {minetest.find_node_near(pos, 2, {"group:lux_emit"}, false)} -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
+    local val = 0;
+    if(nod[1])then
+        nod[2] = minetest.get_node(nod[1]).name
+        if(nod[1] and nod[2] and tonumber(string.sub(nod[2],14)) > 1 and  minetest.get_meta(nod):get_int("occ") ~= 2)then
+            minetest.get_meta(nod[1]):set_int("occ", 2)
+            val = string.sub(nod[2],14) * 8; 
+            minetest.get_meta(nod[1]):set_int("occ", 0)
+        else end 
+    else end
+    return val
+end
 --[[
 
             PORTAL CREATION STUFF
@@ -220,14 +233,6 @@ ix, iy, iz, it = tonumber(string.sub(str,1, x - 1)),tonumber(string.sub(str, x +
 return {{ix,iy,iz}, it}
 end  
 
-luxgate.core.seekout = function(pos)
-    local vd = {}
-    for _,v in pairs(luxgate.bill.gates)do
-        local dc = luxgate.core.decode(v)[1]
-        table.insert(vd, {luxgate.core.adiff(pos.x,dc[1]),luxgate.core.adiff(pos.y,dc[2]),luxgate.core.adiff(pos.z,dc[3])})
-    end
-    return vd
-end
 
 luxgate.core.portalwork = function(pos)
     local button = minetest.find_node_near(pos,5,"nc_luxgate:button",false)
@@ -247,12 +252,15 @@ luxgate.core.portalwork = function(pos)
     if(button)then
         local meta = minetest.get_meta(button)
         destin = meta:get_string("infotext")
-
-        if(destin ~= "")then
+        ddestin = luxgate.core.decode(destin)[1]
+        ddestin = {x = ddestin[1],y = ddestin[2], z = ddestin[3]}
+        if(minetest.get_node(ddestin).name == "nc_luxgate:vessicle")then
         else end
         
         minetest.chat_send_all(minetest.serialize(luxgate.core.decode(destin)))
-        --minetest.set_node({x = luxgate.core.decode(destin)[1][1],y = luxgate.core.decode(destin)[1][2],z = luxgate.core.decode(destin)[1][3]},{name = "nc_tree:staff"})
+        minetest.chat_send_all(minetest.serialize(destin))
+        players[1]:move_to(ddestin)
+        minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})
     else end   
 else end
    
@@ -264,7 +272,8 @@ end
 
 
 luxgate.core.xenithcore = function(pos)
-    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
+    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")    
+    
     local powarr = 0
 
     for n = 1, #ps, 1 do
@@ -273,19 +282,16 @@ luxgate.core.xenithcore = function(pos)
     return powarr
 end
 
-luxgate.core.tetris = function(pos, areaparams)
-    local structurekey = luxgate.core.whosthere(pos, areaparams);
-    local numnum = #luxgate.core.whosthere(pos, areaparams)
-    local areagrab = luxgate.core.area(pos,areaparams[1],areaparams[2],areaparams[3])
-    local num;
-    for ll = 1, #structurekey, 1 do
-       if(structurekey[ll] == "true")then
-        num = ll;
-       else end
-    end
-        minetest.chat_send_all(minetest.serialize(num))
-end
+luxgate.core.holdmycalc = function(pos)
+    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")    
+    
+    local powarr = 0
 
+    for n = 1, #ps, 1 do
+        powarr = powarr + luxgate.core.powercalc(ps[n])
+    end
+    return powarr
+end
 
 --[[
             LINE SEARCH FUNCTION STUFF

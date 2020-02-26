@@ -1,9 +1,25 @@
 
+
+minetest.register_node("nc_luxgate:vessicleNull",{
+    description = "-NULL-",
+    drawtype = "glasslike",
+    tiles = {"dev.png"},
+    light_source = 4,
+    walkable = false,
+    pointable = true,
+    node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.125, 0, 0.001, 0.125, 0.3125, 0},
+		}
+    },
+    groups = {crumbly = 1, luxg = 1},
+})
 minetest.register_node("nc_luxgate:vessicle",{
     description = "-NULL-",
     drawtype = "glasslike",
     tiles = {"dev.png"},
-    light_source = 7,
+    light_source = 9,
     walkable = false,
     pointable = true,
     node_box = {
@@ -34,14 +50,8 @@ minetest.register_node("nc_luxgate:vessicle",{
         timer:start(3)
     end,
     on_punch = function(pos)
-        local meta = minetest.get_meta(pos)
-   -- minetest.chat_send_all(luxgate.core.knockknock(pos))
-    --minetest.chat_send_all(minetest.serialize(luxgate.core.whosthere(pos)))
-    minetest.set_node(pos, {name = "nc_luxgate:vessicle"})
-    minetest.chat_send_all(meta:get_string("id"))
-    --minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
-    --minetest.chat_send_all(minetest.serialize(luxgate.core.seekout(pos)))
-    --minetest.chat_send_all(minetest.serialize(luxgate.core.decode(luxgate.bill.gates[#luxgate.bill.gates])))
+    local meta = minetest.get_meta(pos)
+    minetest.chat_send_all(meta:get_string("id").." ||| "..meta:get_int("power"))
     end
 })
 --- Control nodes ---^^^
@@ -66,7 +76,7 @@ minetest.register_node("nc_luxgate:frame_ohm",{
     }},
     groups = { luxg = 1,cracky =1},
     on_punch = function(pos)
-        luxgate.core.powerpull(pos)
+        minetest.chat_send_all(luxgate.core.holdmycalc(pos))
     end
     
 })
@@ -135,13 +145,22 @@ minetest.register_node("nc_luxgate:geqbutton",{
     mesh = "geqbutton.b3d",
     on_punch = function(pos, node, puncher)
     local ves = minetest.find_node_near(pos,4,"nc_luxgate:vessicle",false)
+    local nves = minetest.find_node_near(pos,4,"nc_luxgate:vessicleNull",false)
+    
+
+        if(ves and luxgate.core.holdmycalc(ves) >= 16)then
+
+            local meta = minetest.get_meta(ves)
+            meta:set_int("power",(meta:get_int("power") + luxgate.core.xenithcore(ves)))
 
 
-        if(ves)then
-        local meta = minetest.get_meta(ves)
+        elseif(nves and luxgate.core.holdmycalc(nves) >= 40)then
 
-        meta:set_int("power",luxgate.core.xenithcore(ves))
-        else end
+            minetest.set_node(nves,{name = "nc_luxgate:vessicle"})
+
+            local meta = minetest.get_meta(nves)
+            meta:set_int("power",luxgate.core.xenithcore(nves) - 40)
+        else minetest.chat_send_all(luxgate.core.holdmycalc(pos)) end
 
 
         if(puncher:get_player_control().sneak == true)then
