@@ -4,6 +4,7 @@ tm = thismod..":"
 
 
 luxgate = {
+    box = minetest.get_mod_storage(),
     core = {},
     particles = {},
     schem = {},
@@ -25,6 +26,9 @@ luxgate = {
     },
     bill = {gates = {}}
 }
+
+luxgate.box:set_string("vref","AUG")
+luxgate.box:set_int("qref",string.len(luxgate.box:get_string("vref")))
 
 dofile(modpath .. "/smokenmirrors.lua")
 dofile(modpath .. "/legothingies.lua")

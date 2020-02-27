@@ -169,7 +169,7 @@ luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed
 ]]
 
 luxgate.core.powerpull = function(pos) -- Function for doing crude "energy pull" particle effect by ohmic or power trans frame nodes.
-    local nod = {minetest.find_node_near(pos, 2, {"group:lux_emit"}, false)} -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
+    local nod = {minetest.find_node_near(pos, 2, {"group:lux_cobble"}, false)} -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
     local val = 0;
     if(nod[1])then
         nod[2] = minetest.get_node(nod[1]).name
@@ -184,7 +184,7 @@ luxgate.core.powerpull = function(pos) -- Function for doing crude "energy pull"
 end
 
 luxgate.core.powercalc = function(pos) 
-    local nod = {minetest.find_node_near(pos, 2, {"group:lux_emit"}, false)} -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
+    local nod = {minetest.find_node_near(pos, 2, {"group:lux_cobble"}, false)} -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
     local val = 0;
     if(nod[1])then
         nod[2] = minetest.get_node(nod[1]).name
@@ -258,10 +258,10 @@ luxgate.core.portalwork = function(pos)
         
         if(luxgate.core.destiny(pos, button) < minetest.get_meta(pos):get_int("power"))then
             minetest.get_meta(pos):set_int("power",minetest.get_meta(pos):get_int("power") - luxgate.core.destiny(pos, button))
-            players[1]:move_to(ddestin)
+            luxgate.core.geriatrics(players[1],ddestin)
         elseif(luxgate.core.destiny(pos, button) == minetest.get_meta(pos):get_int("power"))then
-            players[1]:move_to(ddestin)
-            minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})
+            luxgate.core.geriatrics(players[1],ddestin)
+            --minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})  MAKE PARTICLE EFFECT HERE.
     else return end
     else end   
 else end
@@ -271,7 +271,7 @@ else end
 end
 
 
-luxgate.core.destiny = function(pos,but)
+luxgate.core.destiny = function(pos,but) -- Calculates rough distance between pos and destination derived from button metadata.
     if(but)then
     des = tonumber(string.sub(minetest.get_meta(but):get_string("infotext"),minetest.get_meta(but):get_string("infotext"):find(";")+1))
     return des
@@ -280,6 +280,24 @@ luxgate.core.destiny = function(pos,but)
         des = tonumber(string.sub(minetest.get_meta(but):get_string("infotext"),minetest.get_meta(but):get_string("infotext"):find(";")+1))
         return des
     else end
+end
+
+luxgate.core.geriatrics = function(user,dest)
+local nam = minetest.get_node(dest).name
+local st = user:get_pos()
+user:set_pos(dest)
+minetest.after(1, function()
+        luxgate.core.followup(st,user)
+         end) 
+end
+
+luxgate.core.followup = function(pos, user)
+local ves = minetest.find_node_near(user:get_pos(),6,"nc_luxgate:vessicle",true)
+if(ves)then
+     minetest.chat_send_all("ves")
+elseif(not ves)then
+    user:set_pos(pos) 
+else end
 end
 
 luxgate.core.xenithcore = function(pos)

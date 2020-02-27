@@ -2,24 +2,9 @@
 
 minetest.register_node("nc_luxgate:vessicleNull",{
     description = "-NULL-",
-    drawtype = "glasslike",
-    tiles = {"dev.png"},
+    drawtype = "nodebox",
+    tiles = {"portalhole.png"},
     light_source = 4,
-    walkable = false,
-    pointable = true,
-    node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.125, 0, 0.001, 0.125, 0.3125, 0},
-		}
-    },
-    groups = {crumbly = 1, luxg = 1},
-})
-minetest.register_node("nc_luxgate:vessicle",{
-    description = "-NULL-",
-    drawtype = "glasslike",
-    tiles = {"dev.png"},
-    light_source = 9,
     walkable = false,
     pointable = true,
     node_box = {
@@ -31,14 +16,54 @@ minetest.register_node("nc_luxgate:vessicle",{
     groups = {crumbly = 1, luxg = 1},
     on_construct = function(pos)
         local val = luxgate.core.whosthere(pos) 
-    if(val)then
-    local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
-    local meta = minetest.get_meta(pos)
-    meta:set_string("id",postring)
-    else end
+        local idx = math.random(1,9)
+        if(val)then
+        local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
+        local meta = minetest.get_meta(pos)
+
+    
+        luxgate.box:set_string("vref",luxgate.box:get_string("vref")..idx)
+        luxgate.box:set_int("qref",luxgate.box:get_int("qref") + 1)
+
+        meta:set_string("vrf",idx.."|"..string.len(luxgate.box:get_string("vref")))
+        meta:set_string("id",postring)
+        
+        else end
+    end,
+    on_destruct = function(pos)
+        luxgate.box:set_int("qref",luxgate.box:get_int("qref") - 1)
+
+    end,
+    on_punch = function()
+    minetest.chat_send_all(luxgate.box:get_string("vref"))
+    minetest.chat_send_all(luxgate.box:get_int("qref"))
+    end
+})
+minetest.register_node("nc_luxgate:vessicle",{
+    description = "-NULL-",
+    drawtype = "nodebox",
+    tiles = {"portalhole.png^[makealpha:250,255,201"},
+    light_source = 9,
+    walkable = false,
+    pointable = true,
+    node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.125, 0, 0.001, 0.125, 0.3125, 0},
+		}
+    },
+    groups = {crumbly = 1, luxg = 1},
+    on_construct = function(pos)
+    
+    local val = luxgate.core.whosthere(pos) 
+    local idx = math.random(1,26)
+    if(val and val > 0)then
+    
         local timer = minetest.get_node_timer(pos)
         timer:start(3)
+    else end
     end,
+
     on_timer = function(pos)
         luxgate.particles.portalhole(pos)
         
@@ -49,7 +74,9 @@ minetest.register_node("nc_luxgate:vessicle",{
         local timer = minetest.get_node_timer(pos)
         timer:start(3)
     end,
+
     on_punch = function(pos)
+
     local meta = minetest.get_meta(pos)
     minetest.chat_send_all(meta:get_string("id").." ||| "..meta:get_int("power"))
     end
@@ -125,7 +152,7 @@ minetest.register_node("nc_luxgate:button",{
 
         local pseu = luxgate.core.decode(luxgate.bill.gates[meta:get_int("gindex")])[1]
         local dpos = {x = pseu[1], y = pseu[2], z = pseu[3]}
-        
+        minetest.chat_send_all(minetest.get_node(dpos).name)
 
         meta:set_string("infotext","Dest: "..luxgate.bill.gates[meta:get_int("gindex")].." Dist; "..vector.distance(ves,dpos))
         minetest.chat_send_all(meta:get_int("gindex"))
@@ -163,7 +190,7 @@ minetest.register_node("nc_luxgate:geqbutton",{
             meta:set_int("power",(meta:get_int("power") + luxgate.core.xenithcore(ves)))
 
 
-        elseif(nves and luxgate.core.holdmycalc(nves) >= 40)then
+        elseif(nves and luxgate.core.holdmycalc(nves) >= 10)then
 
             minetest.set_node(nves,{name = "nc_luxgate:vessicle"})
 
