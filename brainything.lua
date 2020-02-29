@@ -1,16 +1,4 @@
 
--- UTIL
-luxgate.core.adiff = function(num1, num2)
-    if(num1 <= 0 and num2 >= 0)then
-        return math.abs(num1 - num2)
-    elseif(num1 >= 0 and num2 <= 0)then
-        return math.abs(num1 - num2)
-    elseif(num1 <= 0 and num2 <= 0)then
-        return math.abs(math.abs(num1) - math.abs(num2))
-    else return math.abs(num1 - num2)
-    end
-end
-
 
 -- AREA FETCHING THINGY
 
@@ -203,22 +191,52 @@ end
 ]]
 
 
-luxgate.core.socialmediapost = function(pos) -- checks if the vessicle at pos is registered. If not, assigns it to active.
+luxgate.core.shitpost = function(pos) -- checks if the vessicle at pos is registered. If not, assigns it to active.
     local val = luxgate.core.whosthere(pos) 
     if(val)then
     local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
     local ind;
     for k,_ in pairs(luxgate.bill.gates) do 
         if(luxgate.bill.gates[k] == postring)then
-            --ind = k
+            minetest.chat_send_all("!!!!!!!!")
             return
         else end
     end
     if(ind == nil)then
         table.insert(luxgate.bill.gates,postring)
+        luxgate.core.backupquery(true)
     else end
 else end
 end
+
+luxgate.core.shitunpost = function(pos) -- Removes self from table repository.
+    local val = luxgate.core.whosthere(pos) 
+    if(val)then
+    local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
+    local ind;
+    for k,_ in pairs(luxgate.bill.gates) do 
+        if(luxgate.bill.gates[k] == postring)then
+            local rem = table.remove(luxgate.bill.gates,k)
+            return minetest.chat_send_all("Removed vessicle with data  "..rem.."  !"),luxgate.core.backupquery(true)
+
+        else end
+    end
+    if(ind == nil)then
+        minetest.chat_send_all("I am an undocumented, illegal Vessicle, please fix the vessicle census functions!")
+    else end
+else end
+end
+
+
+luxgate.core.backupquery = function(req)
+    if(req == true)then
+        luxgate.box:set_string("vref",minetest.serialize(luxgate.bill.gates))
+        --minetest.chat_send_all(luxgate.box:get_string("vref"))
+    else luxgate.bill.gates = minetest.deserialize(luxgate.box:get_string("vref"))
+    end
+end
+
+
 
 
 luxgate.core.decode = function(str) 
@@ -323,13 +341,10 @@ luxgate.core.holdmycalc = function(pos)
 end
 
 --
-luxgate.core.PMS = function() -- reverse this
+luxgate.core.queryb = function() -- reverse this
 
-    
     luxgate.box:set_string("vref",minetest.serialize(luxgate.bill.gates))
-    minetest.chat_send_all(luxgate.box:get_string("vref"))
     
-
     return
 end
 --

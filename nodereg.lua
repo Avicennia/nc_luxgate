@@ -64,24 +64,26 @@ minetest.register_node("nc_luxgate:vessicle",{
     },
     groups = {crumbly = 1, luxg = 1},
     on_construct = function(pos)
-    
-    local val = luxgate.core.whosthere(pos) 
-    local idx = math.random(1,26)
-    if(val and val > 0)then
+
+    luxgate.core.shitpost(pos) -- Register self to table.
+
+    local val = luxgate.core.whosthere(pos) -- Determine own gender.
+
+    if(val and  type(val) == "number" and val > 0)then -- Check yourself for gender, if you like, then set timer for cooking your brand new turkey.
     
         local timer = minetest.get_node_timer(pos)
         timer:start(3)
     else end
     end,
 
-    on_timer = function(pos)
-        luxgate.particles.portalhole(pos)
+    on_timer = function(pos) -- When turkey is done
+
+        luxgate.particles.portalhole(pos) -- Open oven and let nice smelling turkeywater steam particles waft out.
         
-        luxgate.core.socialmediapost(pos)
+        
+        luxgate.core.portalwork(pos) -- Check for turkey doneness with lua_toothpick, If done, grab turkey and fling to location determined by nearby button.
 
-        luxgate.core.portalwork(pos)
-
-        local timer = minetest.get_node_timer(pos)
+        local timer = minetest.get_node_timer(pos) -- Put new turkey in oven and start timer again.
         timer:start(3)
     end,
 
@@ -89,7 +91,11 @@ minetest.register_node("nc_luxgate:vessicle",{
 
     local meta = minetest.get_meta(pos)
     --minetest.chat_send_all(meta:get_int("power"))
-    minetest.chat_send_all(meta:get_string("vrf"))
+    minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
+    minetest.chat_send_all(luxgate.box:get_string("vref").."!!!!")
+    end,
+    on_destruct = function(pos)
+        luxgate.core.shitunpost(pos)
     end
 })
 --- Control nodes ---^^^
@@ -306,6 +312,9 @@ minetest.register_node("nc_luxgate:frame_v",{
     tiles = {"canvas2.png"},
     groups = { luxg = 1,crumbly = 1,falling_node = 1, ulv = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    on_punch = function()
+        minetest.chat_send_all(luxgate.box:get_string("vref"))
+    end
     
    })
    minetest.register_node("nc_luxgate:ulvstone_i",{

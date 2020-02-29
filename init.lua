@@ -30,8 +30,7 @@ luxgate = {
     bill = {gates = {}}
 }
 
-luxgate.box:set_string("vref","AUG")
-luxgate.box:set_int("qref",string.len(luxgate.box:get_string("vref")))
+
 
 dofile(modpath .. "/smokenmirrors.lua")
 dofile(modpath .. "/legothingies.lua")
@@ -39,7 +38,9 @@ dofile(modpath .. "/brainything.lua")
 dofile(modpath .. "/paramag.lua")
 dofile(modpath .. "/nodereg.lua")
 
-   minetest.register_abm({
+luxgate.core.backupquery(false)
+
+minetest.register_abm({
     nodenames = {"nc_luxgate:vessicle"},
     neighbors = {"nc_luxgate:frame_lam"},
     interval = 3,
@@ -53,20 +54,15 @@ dofile(modpath .. "/nodereg.lua")
 
 minetest.register_globalstep(function(dtime)
     luxgate.ticker = luxgate.ticker + 0.1
-    
+   
 end)
 
 minetest.register_globalstep(function(dtime)
     if(luxgate.ticker >= 10)then
-
-        luxgate.core.palpitate()
-
+        minetest.chat_send_all("vref is: ")
+        minetest.chat_send_all(luxgate.box:get_string("vref"))
+        minetest.chat_send_all("Gates Is: ")
+        minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
         luxgate.ticker = 0
     else end
 end)
-
-luxgate.core.palpitate = function()
-    
-    luxgate.core.PMS()
-
-end
