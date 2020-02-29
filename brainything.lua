@@ -322,59 +322,16 @@ luxgate.core.holdmycalc = function(pos)
     return powarr
 end
 
---[[
-            LINE SEARCH FUNCTION STUFF
-]]
-
-
-
-
-luxgate.core.incip_dir = function(pos)
--- Scans area, after a verification, searches for specific positions of annealed lode bars to determine which of the 2d primary and secondary cardinal directions to return. if false then reject.
-    local data = {
-        poses = {{x = pos.x + 2, y = pos.y - 1, z = pos.z + 2},{x = pos.x - 2, y = pos.y - 1, z = pos.z - 2},{x = pos.x + 2, y = pos.y - 1, z = pos.z - 2},{x = pos.x - 2, y = pos.y - 1, z = pos.z + 2}},
-        region = {nodes = {}, rods = {}}
-    }
-    data.region.nodes[1],data.region.nodes[2] = minetest.find_node_near(pos,5,"nc_lode:block_annealed", false), minetest.find_node_near(pos,5,"nc_luxgate:vessicle", false);
-
-    for n = 1, #data.poses, 1 do
-        if(minetest.get_node(data.poses[n]).name == "nc_lode:rod_annealed")then
-            data.region.rods[n] = "1";
-        else data.region.rods[n] = "0";
-        end
-    end
-    for n = 2, #data.region.rods, 1 do
-        data.region.rods[1] = data.region.rods[1]..data.region.rods[n];
-    end
-    --minetest.chat_send_all(minetest.serialize(data.region.rods))
-    data.region.rods = unpack(data.region.rods);
-    if(data.region.rods == "1111")then
-        data.region.rods = {9,"none"};
-    elseif(data.region.rods == "0000")then
-        data.region.rods = {10, "any"};
-    elseif(data.region.rods == "0101")then
-        data.region.rods = {1, "east"};
-    elseif(data.region.rods == "1001")then
-        data.region.rods = {2, "south"};
-    elseif(data.region.rods == "1010")then
-        data.region.rods = {3, "west"};
-    elseif(data.region.rods == "0110")then
-        data.region.rods = {4, "north"};
-    elseif(data.region.rods == "0111")then
-        data.region.rods = {5, "northeast"};
-    elseif(data.region.rods == "1101")then
-        data.region.rods = {6, "southeast"};
-    elseif(data.region.rods == "1011")then
-        data.region.rods = {7, "southwest"};
-    elseif(data.region.rods == "1110")then
-        data.region.rods = {8, "northwest"};
-    else data.region.rods = false;
-    end
-    data.region.rods = data.region.rods or {1}
-    return data.region.rods[1]
-end
 --
+luxgate.core.PMS = function() -- reverse this
 
+    
+    luxgate.box:set_string("vref",minetest.serialize(luxgate.bill.gates))
+    minetest.chat_send_all(luxgate.box:get_string("vref"))
+    
+
+    return
+end
 --
 
 

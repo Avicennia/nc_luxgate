@@ -4,6 +4,9 @@ tm = thismod..":"
 
 
 luxgate = {
+    ticker = 0,
+    tick = false,
+    pons = {},
     box = minetest.get_mod_storage(),
     core = {},
     particles = {},
@@ -36,25 +39,6 @@ dofile(modpath .. "/brainything.lua")
 dofile(modpath .. "/paramag.lua")
 dofile(modpath .. "/nodereg.lua")
 
-minetest.register_node("nc_luxgate:vn",{
-    description = "Picture Perfect Veneer",
-    paramtype = "light",
-    tiles = {"veneer.png"},
-    groups = { luxg = 1,crumbly = 1,falling_node = 1,},
-    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
-    on_punch = function(pos)
-        luxgate.particles.powah({x = pos.x - 0.49, y = pos.y + 0.40, z = pos.z - 0.55},{x = pos.x + 0.51, y = pos.y + 0.40, z = pos.z},"x")
-        luxgate.particles.powah({x = pos.x + 0.49, y = pos.y + 0.40, z = pos.z + 0.55},{x = pos.x - 0.51, y = pos.y + 0.40, z = pos.z},"x")
-        luxgate.particles.powah({x = pos.x - 0.49, y = pos.y - 0.40, z = pos.z + 0.55},{x = pos.x + 0.51, y = pos.y - 0.40, z = pos.z},"x")
-        luxgate.particles.powah({x = pos.x + 0.49, y = pos.y - 0.40, z = pos.z - 0.55},{x = pos.x - 0.51, y = pos.y - 0.40, z = pos.z},"x")
-    
-        luxgate.particles.powah({x = pos.x - 0.55, y = pos.y + 0.40, z = pos.z - 0.49},{x = pos.x, y = pos.y + 0.40, z = pos.z + 0.51},"z")
-        luxgate.particles.powah({x = pos.x + 0.55, y = pos.y + 0.40, z = pos.z + 0.49},{x = pos.x, y = pos.y + 0.40, z = pos.z - 0.51},"z")
-        luxgate.particles.powah({x = pos.x - 0.55, y = pos.y - 0.40, z = pos.z + 0.49},{x = pos.x, y = pos.y - 0.40, z = pos.z - 0.51},"z")
-        luxgate.particles.powah({x = pos.x + 0.55, y = pos.y - 0.40, z = pos.z - 0.49},{x = pos.x, y = pos.y - 0.40, z = pos.z + 0.51},"z")
-    end
-   })
-
    minetest.register_abm({
     nodenames = {"nc_luxgate:vessicle"},
     neighbors = {"nc_luxgate:frame_lam"},
@@ -64,3 +48,25 @@ minetest.register_node("nc_luxgate:vn",{
         luxgate.core.portalwork(pos)
     end
 })
+
+
+
+minetest.register_globalstep(function(dtime)
+    luxgate.ticker = luxgate.ticker + 0.1
+    
+end)
+
+minetest.register_globalstep(function(dtime)
+    if(luxgate.ticker >= 10)then
+
+        luxgate.core.palpitate()
+
+        luxgate.ticker = 0
+    else end
+end)
+
+luxgate.core.palpitate = function()
+    
+    luxgate.core.PMS()
+
+end

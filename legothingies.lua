@@ -46,7 +46,7 @@ nodecore.register_craft({
 		maxsize = 0.8,
 		forcetexture = "nc_writing_geq.png"
 	},
-	duration = 5,
+	duration = 2,
 	wield = {name = "nc_luxgate:shard_ilmenite", count = 1},
 	consumewield = 1,
 	check = function(pos,data)

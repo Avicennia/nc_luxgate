@@ -31,12 +31,22 @@ minetest.register_node("nc_luxgate:vessicleNull",{
         else end
     end,
     on_destruct = function(pos)
+        local meta = minetest.get_meta(pos)
+        local mtab = {meta:get_string("vrf")}
         luxgate.box:set_int("qref",luxgate.box:get_int("qref") - 1)
 
+        minetest.after(1, function()
+        if(minetest.get_node(pos).name == "nc_luxgate:vessicle")then
+            local meta = minetest.get_meta(pos)
+            meta:set_string("vrf",mtab[1])
+        else end end)
+
     end,
-    on_punch = function()
+    on_punch = function(pos)
     minetest.chat_send_all(luxgate.box:get_string("vref"))
     minetest.chat_send_all(luxgate.box:get_int("qref"))
+    local meta = minetest.get_meta(pos)
+    minetest.chat_send_all(meta:get_string("vrf"))
     end
 })
 minetest.register_node("nc_luxgate:vessicle",{
@@ -78,7 +88,8 @@ minetest.register_node("nc_luxgate:vessicle",{
     on_punch = function(pos)
 
     local meta = minetest.get_meta(pos)
-    minetest.chat_send_all(meta:get_string("id").." ||| "..meta:get_int("power"))
+    --minetest.chat_send_all(meta:get_int("power"))
+    minetest.chat_send_all(meta:get_string("vrf"))
     end
 })
 --- Control nodes ---^^^
@@ -152,9 +163,15 @@ minetest.register_node("nc_luxgate:button",{
 
         local pseu = luxgate.core.decode(luxgate.bill.gates[meta:get_int("gindex")])[1]
         local dpos = {x = pseu[1], y = pseu[2], z = pseu[3]}
-        minetest.chat_send_all(minetest.get_node(dpos).name)
-
-        meta:set_string("infotext","Dest: "..luxgate.bill.gates[meta:get_int("gindex")].." Dist; "..vector.distance(ves,dpos))
+        local nam;
+        if(minetest.get_node(dpos).name == "ignore")then
+            nam = "ignore"
+        elseif(minetest.get_node(dpos).name == "nc_luxgate:vessicle")then
+            nam = "vessicle"
+        elseif(minetest.get_node(dpos).name == "nc_luxgate:vessicleNull")then
+            nam = "Depl Vessicle"
+        else end
+        meta:set_string("infotext","Dest: "..luxgate.bill.gates[meta:get_int("gindex")].." | Node:".. nam .. " | ".." Dist; "..vector.distance(ves,dpos))
         minetest.chat_send_all(meta:get_int("gindex"))
 
         if(puncher:get_player_control().sneak == true)then
@@ -195,8 +212,8 @@ minetest.register_node("nc_luxgate:geqbutton",{
             minetest.set_node(nves,{name = "nc_luxgate:vessicle"})
 
             local meta = minetest.get_meta(nves)
-            meta:set_int("power",luxgate.core.xenithcore(nves) - 40)
-        else minetest.chat_send_all(luxgate.core.holdmycalc(pos)) end
+            meta:set_int("power",luxgate.core.xenithcore(nves) - 10)
+        else  end
 
 
         if(puncher:get_player_control().sneak == true)then
@@ -263,7 +280,7 @@ minetest.register_node("nc_luxgate:frame_v",{
         }
     },
     on_punch = function(pos)
-        
+        minetest.chat_send_all(luxgate.box:get_string("vref"))
     end
 })
 
