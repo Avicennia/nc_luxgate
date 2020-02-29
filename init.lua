@@ -13,7 +13,7 @@ luxgate = {
     schem = {},
     nodes = {
         ilmenite = {},
-        names = {"nc_luxgate:ulvstone_i","nc_luxgate:ulvstone","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle","nc_luxgate:block_ilmenite","nc_terrain:stone"}},
+        names = {[0] = "air","nc_luxgate:ulvstone_i","nc_luxgate:ulvstone","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle","nc_luxgate:block_ilmenite","nc_terrain:stone"}},
     nodenumbers = {},
     dirs = {
         {x=1,y=0,z=0},  -- East
@@ -31,14 +31,20 @@ luxgate = {
 }
 
 
-
 dofile(modpath .. "/smokenmirrors.lua")
+
 dofile(modpath .. "/legothingies.lua")
+
 dofile(modpath .. "/brainything.lua")
+
 dofile(modpath .. "/paramag.lua")
+
 dofile(modpath .. "/nodereg.lua")
 
-luxgate.core.backupquery(false)
+
+
+luxgate.core.backupquery(false) -- Pull any existing mod storage data for vessicle locations.
+
 
 minetest.register_abm({
     nodenames = {"nc_luxgate:vessicle"},
@@ -49,20 +55,3 @@ minetest.register_abm({
         luxgate.core.portalwork(pos)
     end
 })
-
-
-
-minetest.register_globalstep(function(dtime)
-    luxgate.ticker = luxgate.ticker + 0.1
-   
-end)
-
-minetest.register_globalstep(function(dtime)
-    if(luxgate.ticker >= 10)then
-        minetest.chat_send_all("vref is: ")
-        minetest.chat_send_all(luxgate.box:get_string("vref"))
-        minetest.chat_send_all("Gates Is: ")
-        minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
-        luxgate.ticker = 0
-    else end
-end)

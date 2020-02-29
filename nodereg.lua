@@ -90,7 +90,6 @@ minetest.register_node("nc_luxgate:vessicle",{
     on_punch = function(pos)
 
     local meta = minetest.get_meta(pos)
-    --minetest.chat_send_all(meta:get_int("power"))
     minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
     minetest.chat_send_all(luxgate.box:get_string("vref").."!!!!")
     end,
@@ -313,7 +312,6 @@ minetest.register_node("nc_luxgate:frame_v",{
     groups = { luxg = 1,crumbly = 1,falling_node = 1, ulv = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     on_punch = function()
-        minetest.chat_send_all(luxgate.box:get_string("vref"))
     end
     
    })

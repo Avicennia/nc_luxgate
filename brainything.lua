@@ -26,51 +26,38 @@ end
             IDENTIFICATION  and ASSIGNMENT STUFF
 
 ]]
-luxgate.core.area_decode = function(table) -- Converts certain table values into numbers for interpretation.
-    local output = {};
-    for n = 1, #table, 1 do
-        if(table[n] == "air")then
-            output[n] = 0;
-        elseif(table[n] == luxgate.nodes.names[1])then
-            output[n] = 1;
-        elseif(table[n] == luxgate.nodes.names[2])then
-            output[n] = 2;
-        elseif(table[n] == luxgate.nodes.names[3])then
-            output[n] = 3;
-        elseif(table[n] == luxgate.nodes.names[4])then
-            output[n] = 4;
-        elseif(table[n] == luxgate.nodes.names[5])then
-            output[n] = 5;
-        elseif(table[n] == luxgate.nodes.names[6])then
-            output[n] = 6;
-        elseif(table[n] == luxgate.nodes.names[7])then
-            output[n] = 7;
-        elseif(table[n] == luxgate.nodes.names[8])then
-            output[n] = 8;
-        elseif(table[n] == luxgate.nodes.names[9])then
-            output[n] = 9;
-        elseif(table[n] == luxgate.nodes.names[10])then
-            output[n] = 10;
-        else output[n] = "x" end
+
+
+luxgate.core.transcribe = function(mesa) -- Returns a table containing numerical index values for every name in table <mesa>.
+    local out = {};
+
+    for n = 1, #mesa, 1 do
+        
+        for o = 0, #luxgate.nodes.names, 1 do
+        
+            if(mesa[n] == luxgate.nodes.names[o])then
+                out[n] = o
+            else end
+
+        end
+
     end
-    return output
+
+    return out
 end
 
 luxgate.core.unquestionablejudgement = function(table, guess) -- Give table, and template table (guess), and outputs true or false accordingly.
     local output = {}
     local rv = 0;
-        if(table and guess)then
-
-            if(#table == #guess)then -- checks if both tables line up for same values.
-                for n = 1, #table, 1 do
-                    if(table[n] == guess[n])then
-                    output[n] = true
-                    else output[n] = false
-                    end
+        if(table and guess and #table == #guess)then
+            for n = 1, #table, 1 do
+                if(table[n] == guess[n])then
+                output[n] = true
+                else output[n] = false
                 end
-            else output = {"wrong size", #table, #guess}
             end
-        else end
+        else return "UNQJ-tablemismatch ERROR" 
+        end
 
 
         for n = 1, #output, 1 do -- Create a numerical record of how many trues in output.
@@ -78,7 +65,6 @@ luxgate.core.unquestionablejudgement = function(table, guess) -- Give table, and
                 rv = rv + 1;
             else end
         end
-
 
         if(rv == #table)then
             output = nil;
@@ -91,19 +77,16 @@ end
 
 
 luxgate.core.knockknock = function(pos) -- finds the node near the node below pos to determine which of the three structures it should be.
+    local bel = {x = pos.x, y= pos.y -1, z = pos.z}
     local dat = {
-        below = {x = pos.x, y= pos.y -1, z = pos.z},
-        lamb = false,
+        lamb = (minetest.get_node(bel).name == luxgate.nodes.names[4]),
         sample = nil,
         tipo = nil
     };
-    if(minetest.get_node(dat.below).name == luxgate.nodes.names[4])then
-    dat.lamb = true;
-    else end
     
-    if(dat.lamb == true)then
-        dat.sample = minetest.get_node({x = dat.below.x - 1, y = dat.below.y, z = dat.below.z}).name
-        dat.sample2 = minetest.get_node({x = dat.below.x, y = dat.below.y, z = dat.below.z - 1}).name
+    if(dat.lamb)then
+        dat.sample = minetest.get_node({x = bel.x - 1, y = bel.y, z = bel.z}).name
+        dat.sample2 = minetest.get_node({x = bel.x, y = bel.y, z = bel.z - 1}).name
     else end
 
     if(dat.sample == "nc_luxgate:frame_v" and dat.sample2 == "air")then
@@ -112,7 +95,8 @@ luxgate.core.knockknock = function(pos) -- finds the node near the node below po
         dat.tipo = 2
     elseif(dat.sample == "nc_luxgate:ulvstone")then
         dat.tipo = 3
-else dat.tipo = 0 end
+    else dat.tipo = 0 end
+
 return dat.tipo
 end
 
@@ -120,33 +104,40 @@ luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed
     local areaparams;
     local ori = {x = pos.x, y = pos.y, z = pos.z}
     local num = luxgate.core.knockknock(pos)
-   if(num == 3)then
-    areaparams = {3,3,2}
+
+    if(num == 3)then
+        areaparams = {3,3,2}
         ori.y = ori.y - 1
         ori.x = ori.x - 2
         ori.z = ori.z - 1
     elseif(num == 1 or num == 2)then
-    areaparams = {5,5,5}
+        areaparams = {5,5,5}
         ori.y = ori.y - 2
         ori.x = ori.x - 3
         ori.z = ori.z - 2
     else end
 
     if(type(areaparams) == "table" )then
-    local gather = luxgate.core.area(ori, areaparams[1], areaparams[2], areaparams[3])
-    local digitize = luxgate.core.area_decode(gather)
-    local antoninscalia = {}
-     --minetest.chat_send_all("batty "..num)
-        if(luxgate.core.unquestionablejudgement(digitize,luxgate.numberframe[num]) == "true")then
-            antoninscalia = num;
-        else antoninscalia = 0; 
-            minetest.chat_send_all(minetest.serialize(digitize))
-            minetest.chat_send_all(minetest.serialize(luxgate.numberframe[num]))end
 
+    local gat = luxgate.core.area(ori, areaparams[1], areaparams[2], areaparams[3])
+    local dig = luxgate.core.transcribe(gat)
+    local anton = {}
 
-        return antoninscalia
+        if(luxgate.core.unquestionablejudgement(dig,luxgate.numberframe[num]) == "true")then
+            
+            anton = num;
+        
+        else anton = 0; 
+            
+            minetest.chat_send_all(minetest.serialize(dig))
+            minetest.chat_send_all(minetest.serialize(luxgate.numberframe[num]))
+        
+        end
+
+        return anton
     else end
-    end
+
+end
     
 
 
@@ -157,31 +148,52 @@ luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed
 ]]
 
 luxgate.core.powerpull = function(pos) -- Function for doing crude "energy pull" particle effect by ohmic or power trans frame nodes.
+
     local nod = {minetest.find_node_near(pos, 2, {"group:lux_cobble"}, false)} -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
     local val = 0;
+
     if(nod[1])then
+
         nod[2] = minetest.get_node(nod[1]).name
+
         if(nod[1] and nod[2] and tonumber(string.sub(nod[2],14)) > 1 and  minetest.get_meta(nod):get_int("occ") ~= 2)then
+            
             minetest.get_meta(nod[1]):set_int("occ", 2)
+
             luxgate.particles.suffusion(pos,nod[1])
+
             val = string.sub(nod[2],14) * 8; 
+
             minetest.set_node(nod[1],{name = "nc_lux:cobble1"})
+
         else end 
+    
     else end
+
     return val
 end
 
 luxgate.core.powercalc = function(pos) 
+
     local nod = {minetest.find_node_near(pos, 2, {"group:lux_cobble"}, false)} -- Check for lux emit nodes, specifically the stone variants, and refusing flux.
     local val = 0;
+    
     if(nod[1])then
+
         nod[2] = minetest.get_node(nod[1]).name
+
         if(nod[1] and nod[2] and tonumber(string.sub(nod[2],14)) > 1 and  minetest.get_meta(nod):get_int("occ") ~= 2)then
+            
             minetest.get_meta(nod[1]):set_int("occ", 2)
+            
             val = string.sub(nod[2],14) * 8; 
+            
             minetest.get_meta(nod[1]):set_int("occ", 0)
+        
         else end 
+    
     else end
+    
     return val
 end
 --[[
@@ -193,7 +205,7 @@ end
 
 luxgate.core.shitpost = function(pos) -- checks if the vessicle at pos is registered. If not, assigns it to active.
     local val = luxgate.core.whosthere(pos) 
-    if(val)then
+    if(val and val > 0)then
     local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
     local ind;
     for k,_ in pairs(luxgate.bill.gates) do 
@@ -210,43 +222,60 @@ else end
 end
 
 luxgate.core.shitunpost = function(pos) -- Removes self from table repository.
+    
     local val = luxgate.core.whosthere(pos) 
+    
     if(val)then
+    
     local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
     local ind;
-    for k,_ in pairs(luxgate.bill.gates) do 
-        if(luxgate.bill.gates[k] == postring)then
-            local rem = table.remove(luxgate.bill.gates,k)
-            return minetest.chat_send_all("Removed vessicle with data  "..rem.."  !"),luxgate.core.backupquery(true)
+    
+        for k,_ in pairs(luxgate.bill.gates) do 
+        
+            if(luxgate.bill.gates[k] == postring)then
+                
+                local rem = table.remove(luxgate.bill.gates,k)
+                return minetest.chat_send_all("Removed vessicle with data  "..rem.."  !"),luxgate.core.backupquery(true)
 
+            else end
+    
+        end
+    
+        if(ind == nil)then
+        
+            minetest.chat_send_all("I am an undocumented, illegal Vessicle, please fix the vessicle census functions!")
+    
         else end
-    end
-    if(ind == nil)then
-        minetest.chat_send_all("I am an undocumented, illegal Vessicle, please fix the vessicle census functions!")
+
     else end
-else end
+
 end
 
 
 luxgate.core.backupquery = function(req)
+
     if(req == true)then
+
         luxgate.box:set_string("vref",minetest.serialize(luxgate.bill.gates))
-        --minetest.chat_send_all(luxgate.box:get_string("vref"))
+    
     else luxgate.bill.gates = minetest.deserialize(luxgate.box:get_string("vref"))
     end
+
 end
 
 
 
 
 luxgate.core.decode = function(str) 
-if(str:find(":"))then
-    str = str:sub(6)
-else end
+
+    if(str:find(":"))then
+        str = str:sub(6)
+    else end
 
 
-local x,y,z = string.find(str,"x"),string.find(str,"y"),string.find(str,"z")
-ix, iy, iz, it = tonumber(string.sub(str,1, x - 1)),tonumber(string.sub(str, x + 1, y - 1)),tonumber(string.sub(str, y + 1, z - 1)),tonumber(string.sub(str, z + 1))
+    local x,y,z = string.find(str,"x"),string.find(str,"y"),string.find(str,"z")
+
+    ix, iy, iz, it = tonumber(string.sub(str,1, x - 1)),tonumber(string.sub(str, x + 1, y - 1)),tonumber(string.sub(str, y + 1, z - 1)),tonumber(string.sub(str, z + 1))
 
 return {{ix,iy,iz}, it}
 end  
@@ -256,7 +285,9 @@ luxgate.core.portalwork = function(pos)
     local button = minetest.find_node_near(pos,5,"nc_luxgate:button",false)
     
     local objs = minetest.get_objects_inside_radius(pos, 1)
+    
     if(objs)then
+
         local players = {}
         local rabble = {}
         
@@ -265,24 +296,34 @@ luxgate.core.portalwork = function(pos)
                 table.insert(players, objs[n])
             else table.insert(rabble, objs[n])
             end
+        
         end
-    if(players[1])then
-    if(button)then
-        local meta = minetest.get_meta(button)
-        destin = meta:get_string("infotext")
-        ddestin = luxgate.core.decode(destin)[1]
-        ddestin = {x = ddestin[1],y = ddestin[2], z = ddestin[3]}
+
+        if(players[1])then
+    
+            if(button)then
+        
+                local meta = minetest.get_meta(button)
+                destin = meta:get_string("infotext")
+                ddestin = luxgate.core.decode(destin)[1]
+                ddestin = {x = ddestin[1],y = ddestin[2], z = ddestin[3]}
         
         
-        if(luxgate.core.destiny(pos, button) < minetest.get_meta(pos):get_int("power"))then
-            minetest.get_meta(pos):set_int("power",minetest.get_meta(pos):get_int("power") - luxgate.core.destiny(pos, button))
-            luxgate.core.geriatrics(players[1],ddestin)
-        elseif(luxgate.core.destiny(pos, button) == minetest.get_meta(pos):get_int("power"))then
-            luxgate.core.geriatrics(players[1],ddestin)
-            --minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})  MAKE PARTICLE EFFECT HERE.
-    else return end
-    else end   
-else end
+                if(luxgate.core.destiny(pos, button) < minetest.get_meta(pos):get_int("power"))then
+
+                    minetest.get_meta(pos):set_int("power",minetest.get_meta(pos):get_int("power") - luxgate.core.destiny(pos, button))
+                    luxgate.core.geriatrics(players[1],ddestin)
+                
+                elseif(luxgate.core.destiny(pos, button) == minetest.get_meta(pos):get_int("power"))then
+                
+                    luxgate.core.geriatrics(players[1],ddestin)
+                
+                    --minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})  MAKE PARTICLE EFFECT HERE.
+                else return end
+    
+            else end   
+
+        else end
    
     else end
     
@@ -290,69 +331,70 @@ end
 
 
 luxgate.core.destiny = function(pos,but) -- Calculates rough distance between pos and destination derived from button metadata.
+    
     if(but)then
-    des = tonumber(string.sub(minetest.get_meta(but):get_string("infotext"),minetest.get_meta(but):get_string("infotext"):find(";")+1))
-    return des
+        
+        des = tonumber(string.sub(minetest.get_meta(but):get_string("infotext"),minetest.get_meta(but):get_string("infotext"):find(";")+1))
+    
+        return des
+    
     elseif(pos and not but)then
+        
         but = minetest.find_node_near(pos,4,"nc_luxgate:button",false)
         des = tonumber(string.sub(minetest.get_meta(but):get_string("infotext"),minetest.get_meta(but):get_string("infotext"):find(";")+1))
+        
         return des
+    
     else end
+
 end
 
 luxgate.core.geriatrics = function(user,dest)
-local nam = minetest.get_node(dest).name
-local st = user:get_pos()
-user:set_pos(dest)
-minetest.after(1, function()
+    
+    local nam = minetest.get_node(dest).name
+    local st = user:get_pos()
+
+    user:set_pos(dest)
+
+    minetest.after(1, function()
         luxgate.core.followup(st,user)
-         end) 
+    end) 
+
 end
 
 luxgate.core.followup = function(pos, user)
-local ves = minetest.find_node_near(user:get_pos(),6,"nc_luxgate:vessicle",true)
-if(ves)then
-     minetest.chat_send_all("ves")
-elseif(not ves)then
-    user:set_pos(pos) 
-else end
+    local ves = minetest.find_node_near(user:get_pos(),6,"nc_luxgate:vessicle",true)
+    
+    if(not ves)then
+
+        user:set_pos(pos) 
+
+    else end
+
 end
 
 luxgate.core.xenithcore = function(pos)
-    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")    
-    
+
+    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
     local powarr = 0
 
     for n = 1, #ps, 1 do
         powarr = powarr + luxgate.core.powerpull(ps[n])
     end
+    
     return powarr
 end
 
 luxgate.core.holdmycalc = function(pos)
-    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")    
-    
+    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
     local powarr = 0
 
     for n = 1, #ps, 1 do
         powarr = powarr + luxgate.core.powercalc(ps[n])
     end
+    
     return powarr
 end
-
---
-luxgate.core.queryb = function() -- reverse this
-
-    luxgate.box:set_string("vref",minetest.serialize(luxgate.bill.gates))
-    
-    return
-end
---
-
-
-
-
-
 
 
 nodecore.register_craft({

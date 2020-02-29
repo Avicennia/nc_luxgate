@@ -10,9 +10,12 @@
 2 = max_alt
 3 = ranvier_pad
 ]]
+
 luxgate.numberframe = {
 	{1,2,10,2,1,2,9,9,9,2,10,9,10,9,10,2,9,9,9,2,1,2,10,2,1,0,0,0,0,0,0,0,0,0,0,0,5,4,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,8,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,5,0,5,3,0,0,0,0,0,0,0,0,0,0},
+	
 	{1,2,10,2,1,2,9,9,9,2,10,9,10,9,10,2,9,9,9,2,1,2,10,2,1,0,0,0,0,0,0,0,5,0,0,0,0,4,0,0,0,0,5,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,3,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,3,0,0,0,0,5,0,0,0,0,0,0,0,0,0,5,0,0,0,0,3,0,0},
+	
 	{2,2,2,2,4,2,2,2,2,0,0,0,0,8,0,0,0,0}
 }
 
@@ -29,12 +32,14 @@ nodecore.register_craft({
 	wield = {name = "nc_fire:lump_coal", count = 8},
 	consumewield = 8,
 	check = function(pos, data)
+
 		return minetest.get_node(data.pointed.under).name == "nc_luxgate:block_ilmenite"
+	
 	end,
 	nodes = {{match = {walkable = true}}},
 	after = function(pos, data)
-			return minetest.set_node(data.pointed.under, {
-			name = "nc_luxgate:ulvstone"})
+			
+			return minetest.set_node(data.pointed.under, {name = "nc_luxgate:ulvstone"})
 	end
 })
 
@@ -50,6 +55,7 @@ nodecore.register_craft({
 	wield = {name = "nc_luxgate:shard_ilmenite", count = 1},
 	consumewield = 1,
 	check = function(pos,data)
+		
 		return minetest.get_node(data.pointed.under).name == "nc_luxgate:block_ilmenite"
 	end,
 	nodes = {{match = {name = "nc_luxgate:block_ilmenite"}}},
@@ -58,6 +64,7 @@ nodecore.register_craft({
 		local pos = data.pointed.under
 		local tab = "";
 		local chainpairs;
+		
 		if(pos)then
 
 			local structure = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y - 1, z = pos.z - 1},{x = pos.x + 1, y = pos.y + 1, z = pos.z + 1},"group:ulv")
@@ -73,11 +80,11 @@ nodecore.register_craft({
                             {{x = pos.x + 2, y = pos.y + 1, z = pos.z},{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2}},
                             {{x = pos.x + 1, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 1, y = pos.y + 1, z = pos.z + 2}},
                             {{x = pos.x - 1, y = pos.y + 1, z = pos.z + 2},{x = pos.x - 2, y = pos.y + 1, z = pos.z}},
-                            }
-                      
+                        }       
 		else end
 
 	if(tab == "1350")then
+
 			minetest.chat_send_all(tab)
 			
         	for n=1, #chainpairs, 1 do
@@ -93,46 +100,58 @@ nodecore.register_craft({
 			minetest.place_schematic({x = pos.x - 2, y = pos.y - 1, z = pos.z - 2}, luxgate.schem.pad, _,_,true)
 			
 			local lam = minetest.find_node_near(pos,2,"nc_luxgate:frame_lam", true)	
+			
 			if(lam.y)then
 				lam.y = lam.y + 1
 			else end
-		return minetest.set_node(lam,{name = "nc_luxgate:vessicle"})
-		elseif(tab == "1332")then
-			minetest.chat_send_all(tab)
+		
+			return minetest.set_node(lam,{name = "nc_luxgate:vessicle"})
+	elseif(tab == "1332")then
 			
-        	for n=1, #chainpairs, 1 do
-        	luxgate.particles.darkchain(chainpairs[n][1],chainpairs[n][2])
-			end
+		minetest.chat_send_all(tab)
+			
+		for n=1, #chainpairs, 1 do
+			
+			luxgate.particles.darkchain(chainpairs[n][1],chainpairs[n][2])
+			
+		end
 
 			
-			minetest.after(5, function()
+		minetest.after(5, function()
 
-				local structure = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y, z = pos.z - 1},{x = pos.x + 1, y = pos.y, z = pos.z + 1},"group:luxg")
-				local luxy = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y - 1, z = pos.z - 1},{x = pos.x + 1, y = pos.y + 1, z = pos.z + 1},"group:lux_emit")
-				local dir = vector.direction(luxy[1],luxy[2])
-				minetest.chat_send_all(minetest.serialize(dir))
+			local structure = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y, z = pos.z - 1},{x = pos.x + 1, y = pos.y, z = pos.z + 1},"group:luxg")
+			local luxy = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y - 1, z = pos.z - 1},{x = pos.x + 1, y = pos.y + 1, z = pos.z + 1},"group:lux_emit")
+			local dir = vector.direction(luxy[1],luxy[2])
+
+			minetest.chat_send_all(minetest.serialize(dir))
+
 				if(dir and dir.x ~= 0)then
 					dir = true
 				elseif(dir and dir.z ~= 0)then
 					dir = false
 				else end
-				for n = 1, #structure, 1 do
-					minetest.remove_node(structure[n])
-				end
+
+			for n = 1, #structure, 1 do
+				minetest.remove_node(structure[n])
+			end
+
 				if(dir == true)then
-				minetest.place_schematic({x = pos.x - 3, y = pos.y - 1, z = pos.z - 3}, luxgate.schem.gate1, _,_,true)
+					minetest.place_schematic({x = pos.x - 3, y = pos.y - 1, z = pos.z - 3}, luxgate.schem.gate1, _,_,true)
 				elseif(dir == false)then
 					minetest.place_schematic({x = pos.x - 3, y = pos.y - 1, z = pos.z - 3}, luxgate.schem.gate2, _,_,true)
-				else minetest.chat_send_all("WRONG") 
-				end
+				else end
 			
 			local lam = minetest.find_node_near(pos,2,"nc_luxgate:frame_lam", true)	
-			if(lam.y)then
-				lam.y = lam.y + 1
-			else end
+				if(lam.y)then
+					lam.y = lam.y + 1
+				else end
+		
 		return minetest.set_node(lam,{name = "nc_luxgate:vessicle"})end)
-	else minetest.chat_send_all(tab) end
+	
+	else minetest.chat_send_all(tab) 
 	end
+
+end
 })
 
 
