@@ -27,7 +27,7 @@ luxgate = {
         {x=1,y=0,z=0},
         {x=1,y=0,z=0}
     },
-    bill = {gates = {}}
+    vests = {"AUG"}
 }
 
 

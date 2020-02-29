@@ -207,15 +207,8 @@ luxgate.core.shitpost = function(pos) -- checks if the vessicle at pos is regist
     local val = luxgate.core.whosthere(pos) 
     if(val and val > 0)then
     local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
-    local ind;
-    for k,_ in pairs(luxgate.bill.gates) do 
-        if(luxgate.bill.gates[k] == postring)then
-            minetest.chat_send_all("!!!!!!!!")
-            return
-        else end
-    end
-    if(ind == nil)then
-        table.insert(luxgate.bill.gates,postring)
+    if(luxgate.vests)then
+        table.insert(luxgate.vests,postring)
         luxgate.core.backupquery(true)
     else end
 else end
@@ -230,11 +223,11 @@ luxgate.core.shitunpost = function(pos) -- Removes self from table repository.
     local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
     local ind;
     
-        for k,_ in pairs(luxgate.bill.gates) do 
+        for k,_ in pairs(luxgate.vests) do 
         
-            if(luxgate.bill.gates[k] == postring)then
+            if(luxgate.vests[k] == postring)then
                 
-                local rem = table.remove(luxgate.bill.gates,k)
+                local rem = table.remove(luxgate.vests,k)
                 return minetest.chat_send_all("Removed vessicle with data  "..rem.."  !"),luxgate.core.backupquery(true)
 
             else end
@@ -256,9 +249,9 @@ luxgate.core.backupquery = function(req)
 
     if(req == true)then
 
-        luxgate.box:set_string("vref",minetest.serialize(luxgate.bill.gates))
+        luxgate.box:set_string("vref",minetest.serialize(luxgate.vests))
     
-    else luxgate.bill.gates = minetest.deserialize(luxgate.box:get_string("vref"))
+    else luxgate.vests = minetest.deserialize(luxgate.box:get_string("vref")) or luxgate.vests
     end
 
 end

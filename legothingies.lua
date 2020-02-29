@@ -19,6 +19,33 @@ luxgate.numberframe = {
 	{2,2,2,2,4,2,2,2,2,0,0,0,0,8,0,0,0,0}
 }
 
+nodecore.register_craft({
+    label = "heat ilmenite and irreversibly destroy polarity 1",
+    action = "cook",
+    touchgroups = {flame = 1},
+    duration = 10,
+    cookfx = true,
+    nodes = {
+        {
+            match = {groups = {paramag = true}},
+            replace = "nc_terrain:stone"
+        }
+    }
+})
+nodecore.register_craft({
+    label = "forge ilmenite block",
+    action = "pummel",
+    toolgroups = {thumpy = 1},
+    nodes = {
+        {
+            match = {name = "nc_luxgate:shard_ilmenite", count = 8},
+            replace = "air"
+        }
+    },
+    items = {
+        "nc_luxgate:block_ilmenite"
+    }
+})
 
 nodecore.register_craft({
 	label = "carbonize node",
@@ -28,9 +55,9 @@ nodecore.register_craft({
 		maxsize = 1,
 		forcetexture = "nc_writing_del.png"
 	},
-	duration = 6,
-	wield = {name = "nc_fire:lump_coal", count = 8},
-	consumewield = 8,
+	duration = 0.5,
+	wield = {name = "nc_fire:lump_coal", count = 6},
+	consumewield = 6,
 	check = function(pos, data)
 
 		return minetest.get_node(data.pointed.under).name == "nc_luxgate:block_ilmenite"
@@ -51,8 +78,8 @@ nodecore.register_craft({
 		maxsize = 0.8,
 		forcetexture = "nc_writing_geq.png"
 	},
-	duration = 2,
-	wield = {name = "nc_luxgate:shard_ilmenite", count = 1},
+	duration = 4,
+	wield = {name = "nc_luxgate:shard_ilmenite"},
 	consumewield = 1,
 	check = function(pos,data)
 		

@@ -90,11 +90,8 @@ minetest.register_node("nc_luxgate:vessicle",{
     on_punch = function(pos)
 
     local meta = minetest.get_meta(pos)
-    minetest.chat_send_all(minetest.serialize(luxgate.bill.gates))
+    minetest.chat_send_all(minetest.serialize(luxgate.vests))
     minetest.chat_send_all(luxgate.box:get_string("vref").."!!!!")
-    end,
-    on_destruct = function(pos)
-        luxgate.core.shitunpost(pos)
     end
 })
 --- Control nodes ---^^^
@@ -161,12 +158,12 @@ minetest.register_node("nc_luxgate:button",{
         local meta = minetest.get_meta(pos)
         meta:set_int("gindex",meta:get_int("gindex")+1)
 
-        if(meta:get_int("gindex") > #luxgate.bill.gates)then
+        if(meta:get_int("gindex") > #luxgate.vests)then
             meta:set_int("gindex",1)
         else end
 
 
-        local pseu = luxgate.core.decode(luxgate.bill.gates[meta:get_int("gindex")])[1]
+        local pseu = luxgate.core.decode(luxgate.vests[meta:get_int("gindex")])[1]
         local dpos = {x = pseu[1], y = pseu[2], z = pseu[3]}
         local nam;
         if(minetest.get_node(dpos).name == "ignore")then
@@ -176,7 +173,7 @@ minetest.register_node("nc_luxgate:button",{
         elseif(minetest.get_node(dpos).name == "nc_luxgate:vessicleNull")then
             nam = "Depl Vessicle"
         else end
-        meta:set_string("infotext","Dest: "..luxgate.bill.gates[meta:get_int("gindex")].." | Node:".. nam .. " | ".." Dist; "..vector.distance(ves,dpos))
+        meta:set_string("infotext","Dest: "..luxgate.vests[meta:get_int("gindex")].." | Node:".. nam .. " | ".." Dist; "..vector.distance(ves,dpos))
         minetest.chat_send_all(meta:get_int("gindex"))
 
         if(puncher:get_player_control().sneak == true)then
