@@ -309,11 +309,16 @@ luxgate.core.portalwork = function(pos)
                 if(luxgate.core.destiny(pos, button) < minetest.get_meta(pos):get_int("power"))then
 
                     minetest.get_meta(pos):set_int("power",minetest.get_meta(pos):get_int("power") - luxgate.core.destiny(pos, button))
-                    luxgate.core.geriatrics(players[1],ddestin)
+                    
+                    luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 4)
+
+                    minetest.after(5, function() luxgate.core.geriatrics(players[1],ddestin) end)
                 
                 elseif(luxgate.core.destiny(pos, button) == minetest.get_meta(pos):get_int("power") and minetest.get_meta(pos):get_int("power") ~= 0)then
                 
-                    luxgate.core.geriatrics(players[1],ddestin)
+                    luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 4)
+
+                    minetest.after(5, function() luxgate.core.geriatrics(players[1],ddestin) end)
                 
                     --minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})  MAKE PARTICLE EFFECT HERE.
                 else return end
@@ -347,16 +352,18 @@ luxgate.core.destiny = function(pos,but) -- Calculates rough distance between po
 end
 
 luxgate.core.geriatrics = function(user,dest) -- sends player to destination and checks if area is satisfactory for teleport.
-    
-    local nam = minetest.get_node(dest).name
-    local st = user:get_pos()
+    if(user and dest)then
+        local nam = minetest.find_node_near(dest,2,"nc_terrain:stone",false)
+        local st = user:get_pos()
+        if(nam)then
+            nam.y = nam.y + 1
+                user:set_pos(nam)
 
-    user:set_pos(dest)
-
-    minetest.after(1, function()
-        luxgate.core.followup(st,user)
-    end) 
-
+                minetest.after(1, function()
+                luxgate.core.followup(st,user)
+            end) 
+        else end
+    else end
 end
 
 luxgate.core.followup = function(pos, user)
@@ -421,13 +428,13 @@ luxgate.core.tumb = function(pos)
 end
 
 luxgate.core.tvot = function(p1,p2)
-local p11 = luxgate.core.tumb(p1);
-local p22 = luxgate.core.tumb(p2);
-
+    local p11 = luxgate.core.tumb(p1);
+    local p22 = luxgate.core.tumb(p2);
+    if(p22 == "" or p22 == nil)then
+        p22 = p11
+    end
     
     local t = (p11 == p22)
-    minetest.chat_send_all(p11)
-    minetest.chat_send_all(p22)
     minetest.chat_send_all(tostring(t))
    return t
 end

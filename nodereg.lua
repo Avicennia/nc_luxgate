@@ -15,20 +15,8 @@ minetest.register_node("nc_luxgate:vessicleNull",{
     },
     groups = {crumbly = 1, luxg = 1},
     on_construct = function(pos)
-        local val = luxgate.core.whosthere(pos) 
-        local idx = math.random(1,9)
-        if(val)then
-        local postring = pos.x.."x"..pos.y.."y"..pos.z.."z"..val
-        local meta = minetest.get_meta(pos)
-
-    
-        luxgate.box:set_string("vref",luxgate.box:get_string("vref")..idx)
-        luxgate.box:set_int("qref",luxgate.box:get_int("qref") + 1)
-
-        meta:set_string("vrf",idx.."|"..string.len(luxgate.box:get_string("vref")))
-        meta:set_string("id",postring)
-        
-        else end
+        local val = luxgate.core.whosthere(pos)
+        return (val > 0) or minetest.remove_node(pos)
     end,
     on_destruct = function(pos)
         local meta = minetest.get_meta(pos)
@@ -57,7 +45,6 @@ minetest.register_node("nc_luxgate:vessicle",{
     tiles = {"portalhole.png^[makealpha:250,255,201"},
     light_source = 9,
     walkable = false,
-    pointable = true,
     node_box = {
 		type = "fixed",
 		fixed = {
@@ -252,7 +239,10 @@ minetest.register_node("nc_luxgate:frame_v",{
     tiles = {"block_ilmenite.png^nc_terrain_cobble.png"},
     groups = { luxg = 1,crumbly = 1, paramag = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    on_punch = function(pos)
     
+        luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 4)
+    end
    })
    minetest.register_node("nc_luxgate:ulvstone",{
     description = "Ulvstone",

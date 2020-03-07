@@ -40,8 +40,6 @@ dofile(modpath .. "/legothingies.lua")
 
 dofile(modpath .. "/brainything.lua")
 
-dofile(modpath .. "/paramag.lua")
-
 dofile(modpath .. "/nodereg.lua")
 
 luxgate.core.backupquery(false) -- Pull any existing mod storage data for vessicle locations.
@@ -62,3 +60,13 @@ minetest.register_abm({
         else end
     end
 })
+
+minetest.register_on_dignode(
+    function(pos, oldnode, digger)
+        if(oldnode.name == "nc_lode:ore")then
+            if(math.random(100) >= 63)then
+            local space = minetest.find_node_near(pos,1,"air",false)
+        minetest.item_drop(ItemStack("nc_luxgate:shard_ilmenite 1"),digger,space or pos)
+            else end
+        else end
+    end)
