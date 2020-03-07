@@ -27,9 +27,12 @@ luxgate = {
         {x=1,y=0,z=0},
         {x=1,y=0,z=0}
     },
-    vests = {"AUG"}
+    vests = {}
 }
 
+luxgate.log = function(thing)
+    return minetest.chat_send_all(thing)
+end
 
 dofile(modpath .. "/smokenmirrors.lua")
 
@@ -41,8 +44,6 @@ dofile(modpath .. "/paramag.lua")
 
 dofile(modpath .. "/nodereg.lua")
 
-
-
 luxgate.core.backupquery(false) -- Pull any existing mod storage data for vessicle locations.
 
 
@@ -50,8 +51,14 @@ minetest.register_abm({
     nodenames = {"nc_luxgate:vessicle"},
     neighbors = {"nc_luxgate:frame_lam"},
     interval = 3,
-    chance = 100,
-    action = function(pos, node, active_object_count,active_object_count_wider)
-        luxgate.core.portalwork(pos)
+    chance = 1,
+    action = function(pos)
+        local val = luxgate.core.whosthere(pos) -- Determine own gender.
+
+    if(val and  type(val) == "number" and val > 0)then -- Check yourself for gender, if you like, then set timer for cooking your brand new turkey.
+        luxgate.particles.portalhole(pos) -- Open oven and let nice smelling turkeywater steam particles waft out.
+        
+        luxgate.core.portalwork(pos) -- Check for turkey doneness with lua_toothpick, If done, grab turkey and fling to location determined by nearby button.        
+        else end
     end
 })

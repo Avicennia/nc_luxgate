@@ -130,9 +130,12 @@ nodecore.register_craft({
 			
 			if(lam.y)then
 				lam.y = lam.y + 1
+				minetest.set_node(lam,{name = "nc_luxgate:vessicle"})
+				lam.y = lam.y - 1
+				minetest.set_node(lam,{name = "nc_luxgate:frame_lam"})
 			else end
 		
-			return minetest.set_node(lam,{name = "nc_luxgate:vessicle"})
+			return 
 	elseif(tab == "1332")then
 			
 		minetest.chat_send_all(tab)
