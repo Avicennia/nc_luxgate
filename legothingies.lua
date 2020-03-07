@@ -130,7 +130,7 @@ nodecore.register_craft({
 			
 			if(lam.y)then
 				lam.y = lam.y + 1
-				minetest.set_node(lam,{name = "nc_luxgate:vessicle"})
+				minetest.set_node(lam,{name = "nc_luxgate:vessicleNull"})
 				lam.y = lam.y - 1
 				minetest.set_node(lam,{name = "nc_luxgate:frame_lam"})
 			else end
@@ -170,13 +170,8 @@ nodecore.register_craft({
 				elseif(dir == false)then
 					minetest.place_schematic({x = pos.x - 3, y = pos.y - 1, z = pos.z - 3}, luxgate.schem.gate2, _,_,true)
 				else end
-			
-			local lam = minetest.find_node_near(pos,2,"nc_luxgate:frame_lam", true)	
-				if(lam.y)then
-					lam.y = lam.y + 1
-				else end
 		
-		return minetest.set_node(lam,{name = "nc_luxgate:vessicle"})end)
+		return end)
 	
 	else minetest.chat_send_all(tab) 
 	end
@@ -198,7 +193,7 @@ n6 = { name = "nc_luxgate:frame_v", param2 = 18 }
 n7 = { name = "nc_luxgate:frame_lam" }
 n8 = { name = "nc_luxgate:frame_v", param2 = 12 }
 n9 = { name = "nc_luxgate:frame_ohm" }
-n10 = { name = "nc_luxgate:vessicle" }
+n10 = { name = "nc_luxgate:vessicleNull" }
 n11 = { name = "nc_luxgate:frame_e", param2 = 3 }
 n12 = { name = "nc_luxgate:frame_e", param2 = 1 }
 
@@ -239,7 +234,7 @@ n7 = { name = "nc_luxgate:block_ilmenite" }
 n8 = { name = "nc_luxgate:frame_v", param2 = 9 }
 n9 = { name = "nc_luxgate:frame_v", param2 = 7 }
 n10 = { name = "nc_luxgate:frame_lam" }
-n11 = { name = "nc_luxgate:vessicle" }
+n11 = { name = "nc_luxgate:vessicleNull" }
 n12 = { name = "nc_luxgate:frame_e" }
 
 luxgate.schem.gate2 = {
@@ -272,7 +267,7 @@ n1, n1, n1, n1, n1, n1, n1,
 n1 = { name = "air", prob = 0 }
 n2 = { name = "nc_luxgate:ulvstone" }
 n3 = { name = "nc_luxgate:frame_lam" }
-n4 = { name = "nc_luxgate:vessicle" }
+n4 = { name = "nc_luxgate:vessicleNull" }
 
 luxgate.schem.pad = {
 	size = {

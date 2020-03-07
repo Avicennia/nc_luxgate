@@ -193,25 +193,25 @@ function luxgate.particles.seenoevil(player)
     else end
 end
 
-luxgate.particles.cyclicAMP = function(pos,tex,r, dur)
+luxgate.particles.cyclicAMP = function(pos,tex,r)
     local x, z = pos.x, pos.z
     for i = 1, 360, 1 do
         local ang = i * math.pi / 180
         local ptx, ptz = x + r * math.cos(ang), z + r * math.sin(ang)
   
     minetest.add_particlespawner({
-        amount = 14,
-        time = dur,
+        amount = 12,
+        time = 0.5,
         minpos = {x=ptx, y=pos.y, z=ptz},
         maxpos = {x=ptx, y=pos.y, z=ptz},
-        minvel = {x=0, y=1, z=0},
-        maxvel = {x=0, y=2, z=0},
-        minacc = {x=0, y=0.3, z=0},
+        minvel = {x = 0, y = 5, z = 0},
+        maxvel = {x = 0, y=10, z= 0},
+        minacc = {x = 0, y = 0.3, z = 0},
         maxacc = {x=0, y=0, z=0},
-        minexptime = 1.0,
-        maxexptime = 3.1,
-        minsize = 0.5,
-        maxsize = 1.2,
+        minexptime = 0.3,
+        maxexptime = 0.5,
+        minsize = 0.4,
+        maxsize = 0.8,
         animation = {
             type = "vertical_frames",
             aspect_w = 16,

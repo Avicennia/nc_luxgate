@@ -300,7 +300,7 @@ luxgate.core.portalwork = function(pos)
             if(minetest.get_node(button).name == "nc_luxgate:frame_lam")then
         
                 local meta = minetest.get_meta(button)
-                destin = tonumber(meta:get_string("gindex"))
+                destin = tonumber(meta:get_int("gindex"))
                 if(destin ~= "")then
                 local des = luxgate.vests[destin]
                 ddestin = {x = des.x, y = des.y, z = des.z}
@@ -310,17 +310,18 @@ luxgate.core.portalwork = function(pos)
 
                     minetest.get_meta(pos):set_int("power",minetest.get_meta(pos):get_int("power") - luxgate.core.destiny(pos, button))
                     
-                    luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 4)
+                    luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 2)
 
-                    minetest.after(5, function() luxgate.core.geriatrics(players[1],ddestin) end)
+                    return minetest.after(0.5, function() luxgate.core.geriatrics(players[1],ddestin) end)
                 
                 elseif(luxgate.core.destiny(pos, button) == minetest.get_meta(pos):get_int("power") and minetest.get_meta(pos):get_int("power") ~= 0)then
                 
-                    luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 4)
+                    luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 2)
 
-                    minetest.after(5, function() luxgate.core.geriatrics(players[1],ddestin) end)
+                    minetest.after(0.5, function() luxgate.core.geriatrics(players[1],ddestin) end)
                 
-                    --minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})  MAKE PARTICLE EFFECT HERE.
+                    return minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})--  MAKE PARTICLE EFFECT HERE.
+
                 else return end
             else end
             else end   
@@ -333,20 +334,13 @@ end
 
 
 luxgate.core.destiny = function(pos,but) -- Calculates rough distance between pos and destination derived from button metadata.
-    
+    local des;
     if(but)then
         
-        des = tonumber(string.sub(minetest.get_meta(but):get_string("infotext"),minetest.get_meta(but):get_string("infotext"):find(";")+1))
-    
-        return des
-    
-    elseif(pos and not but)then
-        
-        but = minetest.find_node_near(pos,1,"nc_luxgate:frame_lam",false)
-        des = tonumber(string.sub(minetest.get_meta(but):get_string("infotext"),minetest.get_meta(but):get_string("infotext"):find(";")+1))
-        
-        return des
-    
+        des = luxgate.vests[minetest.get_meta(but):get_int("gindex")]
+        des = {x = des.x, y = des.y, z = des.z}
+
+        return vector.distance(pos,des)
     else end
 
 end
@@ -359,7 +353,7 @@ luxgate.core.geriatrics = function(user,dest) -- sends player to destination and
             nam.y = nam.y + 1
                 user:set_pos(nam)
 
-                minetest.after(1, function()
+                minetest.after(0.5, function()
                 luxgate.core.followup(st,user)
             end) 
         else end
@@ -367,17 +361,22 @@ luxgate.core.geriatrics = function(user,dest) -- sends player to destination and
 end
 
 luxgate.core.followup = function(pos, user)
-    local ves = minetest.find_node_near(user:get_pos(),3,"nc_luxgate:vessicle",true)
+    local ves = minetest.find_node_near(user:get_pos(),3,"group:luxv",true)
     
-    if(not ves)then
 
-        user:set_pos(pos) 
+    if(ves and luxgate.core.tvot(pos,ves))then
+        minetest.chat_send_all(minetest.serialize(luxgate.core.tvot(pos,ves)))
+    return
 
-    elseif(ves and luxgate.core.tvot(pos,ves) == false)then
+    elseif(not ves)then
 
-        user:set_pos(pos)
+        return user:set_pos(pos) 
 
-    end
+    elseif(ves and not luxgate.core.tvot(pos,ves))then
+
+        return user:set_pos(pos)
+
+    else end
 
 end
 
@@ -412,7 +411,7 @@ end
 ]]
 luxgate.core.tumb = function(pos)
     -- West -> South -> North -> East is the order that find_nodes_in_area() seems to select preferentially.
-    local pos = minetest.find_node_near(pos,2,"nc_luxgate:frame_lam",true)
+    local pos = minetest.find_node_near(pos,6,"nc_luxgate:frame_lam",true)
     local tumblers = minetest.find_nodes_in_area({x = pos.x - 3, y = pos.y - 1, z = pos.z - 3},{x = pos.x + 3, y = pos.y + 1, z = pos.z + 3},"group:alpha_glyph")
     
     if(tumblers and #tumblers >= 1)then
@@ -434,8 +433,12 @@ luxgate.core.tvot = function(p1,p2)
         p22 = p11
     end
     
+    if(not p22 and not p11)then
+        return true
+    else end
+
     local t = (p11 == p22)
-    minetest.chat_send_all(tostring(t))
+    minetest.chat_send_all(minetest.serialize({p11,p22}))
    return t
 end
 

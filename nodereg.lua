@@ -13,34 +13,35 @@ minetest.register_node("nc_luxgate:vessicleNull",{
 			{-0.125, 0, 0.001, 0.125, 0.3125, 0},
 		}
     },
-    groups = {crumbly = 1, luxg = 1},
+    groups = {crumbly = 1, luxg = 1, luxv = 1},
     on_construct = function(pos)
         local val = luxgate.core.whosthere(pos)
         return (val > 0) or minetest.remove_node(pos)
     end,
     on_destruct = function(pos)
-        local meta = minetest.get_meta(pos)
-        local mtab = {meta:get_string("vrf")}
-        luxgate.box:set_int("qref",luxgate.box:get_int("qref") - 1)
 
         minetest.after(1, function()
         if(minetest.get_node(pos).name == "nc_luxgate:vessicle")then
-            local meta = minetest.get_meta(pos)
-            meta:set_string("vrf",mtab[1])
-        else end end)
+            local pos2 = minetest.find_node_near(pos,1,"nc_luxgate:frame_lam",false)
+            local meta = minetest.get_meta(pos2)
+            local srcs = {x = pos.x, y = pos.y, z = pos.z, v = luxgate.core.whosthere(pos)}
+            for n = 1, #luxgate.vests, 1 do
+                if(minetest.serialize(luxgate.vests[n]) == minetest.serialize(srcs))then
+                    return meta:set_string("gindex",n)
+                elseif(n == #luxgate.vests and minetest.serialize(luxgate.vests[n]) ~= minetest.serialize(srcs))then
+                    return meta:set_string("gindex",n+1), table.insert(luxgate.vests, srcs)
+                else end
+            end
+            
+        end
 
-    end,
-    on_punch = function(pos)
-    minetest.chat_send_all(luxgate.box:get_string("vref"))
-    minetest.chat_send_all(luxgate.box:get_int("qref"))
-    local meta = minetest.get_meta(pos)
-    minetest.chat_send_all(meta:get_string("vrf"))
-    end
+    end)
+end
 })
 minetest.register_node("nc_luxgate:vessicle",{
     description = "-NULL-",
-    diggable = false,
-    pointable = false,
+    --diggable = false,
+    --pointable = false,
     drawtype = "nodebox",
     tiles = {"portalhole.png^[makealpha:250,255,201"},
     light_source = 9,
@@ -51,7 +52,7 @@ minetest.register_node("nc_luxgate:vessicle",{
 			{-0.125, 0, 0.001, 0.125, 0.3125, 0},
 		}
     },
-    groups = {crumbly = 1, luxg = 1},
+    groups = {crumbly = 1, luxg = 1, luxv = 1},
     on_construct = function(pos)
 
     luxgate.core.shitpost(pos) -- Register self to table.
@@ -241,7 +242,7 @@ minetest.register_node("nc_luxgate:frame_v",{
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     on_punch = function(pos)
     
-        luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 4)
+        luxgate.particles.cyclicAMP(pos,"shard_anim.png",1.2, 4)
     end
    })
    minetest.register_node("nc_luxgate:ulvstone",{

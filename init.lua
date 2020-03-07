@@ -13,7 +13,7 @@ luxgate = {
     schem = {},
     nodes = {
         ilmenite = {},
-        names = {[0] = "air","nc_luxgate:ulvstone_i","nc_luxgate:ulvstone","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle","nc_luxgate:block_ilmenite","nc_terrain:stone"}},
+        names = {[0] = "air","nc_luxgate:ulvstone_i","nc_luxgate:ulvstone","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle" or "nc_luxgate:vessicleNull","nc_luxgate:block_ilmenite","nc_terrain:stone"}},
     nodenumbers = {},
     dirs = {
         {x=1,y=0,z=0},  -- East
@@ -48,7 +48,7 @@ luxgate.core.backupquery(false) -- Pull any existing mod storage data for vessic
 minetest.register_abm({
     nodenames = {"nc_luxgate:vessicle"},
     neighbors = {"nc_luxgate:frame_lam"},
-    interval = 3,
+    interval = 1,
     chance = 1,
     action = function(pos)
         local val = luxgate.core.whosthere(pos) -- Determine own gender.
@@ -60,7 +60,15 @@ minetest.register_abm({
         else end
     end
 })
-
+minetest.register_abm({
+    nodenames = {"nc_luxgate:vessicle"},
+    neighbors = {"nc_luxgate:frame_lam"},
+    interval = 2,
+    chance = 1,
+    action = function(pos)
+        minetest.sound_play({name = "gatewave"}, {pos = pos, max_hear_distance = 18})
+    end
+})
 minetest.register_on_dignode(
     function(pos, oldnode, digger)
         if(oldnode.name == "nc_lode:ore")then
