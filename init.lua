@@ -67,7 +67,7 @@ minetest.register_abm({
     interval = 2,
     chance = 1,
     action = function(pos)
-        minetest.sound_play({name = "gatewave"}, {pos = pos, max_hear_distance = 18})
+        minetest.sound_play({name = "gatewaveecho2"}, {pos = pos, max_hear_distance = 18})
     end
 })
 minetest.register_on_dignode(
