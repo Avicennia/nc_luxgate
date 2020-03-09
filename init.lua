@@ -64,7 +64,7 @@ minetest.register_abm({
 minetest.register_abm({
     nodenames = {"nc_luxgate:vessicle"},
     neighbors = {"nc_luxgate:frame_lam"},
-    interval = 2,
+    interval = 6.5,
     chance = 1,
     action = function(pos)
         minetest.sound_play({name = "gatewaveecho2"}, {pos = pos, max_hear_distance = 18})
