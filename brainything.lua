@@ -391,24 +391,20 @@ luxgate.core.followup = function(pos, user)
         return na
     end
 
-    local namer = function(indie)
-        return minetest.after(3, function() table.remove(luxgate.chests,indie) end)
-    end
-
     if(ves and luxgate.core.tvot(pos,ves))then
         minetest.chat_send_all(minetest.serialize(luxgate.core.tvot(pos,ves)))
-    return namef(user:get_player_name())
+    return minetest.after(5, function() namef(user:get_player_name()) end)
 
     elseif(not ves)then
         
-        return user:set_pos(pos), namef(user:get_player_name())
+        return user:set_pos(pos), minetest.after(5, function() namef(user:get_player_name()) end)
 
     elseif(ves and not luxgate.core.tvot(pos,ves))then
 
-        return user:set_pos(pos), namef(user:get_player_name())
+        return user:set_pos(pos), minetest.after(5, function() namef(user:get_player_name()) end)
 
     else end
-    return namef(user:get_player_name())
+    return minetest.after(5, function() namef(user:get_player_name()) end)
 end
 
 luxgate.core.xenithcore = function(pos)

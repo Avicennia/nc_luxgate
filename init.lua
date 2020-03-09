@@ -31,8 +31,16 @@ luxgate = {
     vests = {}
 }
 
-luxgate.log = function(thing)
-    return minetest.chat_send_all(thing)
+luxgate.log = function(thing, t)
+    local thing = ((type(thing) == "string") and thing or minetest.serialize(thing))
+    t = t or "action"
+    return minetest.chat_send_all(thing), minetest.log(t,thing)
+end
+
+luxgate.plog = function(pl,th)
+    pl = ((type(pl) == "string" and pl) or pl:get_player_name())
+    th = ((type(th) == "string" and th) or minetest.serialize(th))
+    return minetest.chat_send_player(pl,th)
 end
 
 dofile(modpath .. "/smokenmirrors.lua")

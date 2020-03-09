@@ -62,9 +62,9 @@ minetest.register_node("nc_luxgate:vessicle",{
     on_punch = function(pos)
 
     local meta = minetest.get_meta(pos)
-    minetest.chat_send_all(meta:get_int("power"))
-    minetest.chat_send_all(minetest.serialize(luxgate.chests))
-    --minetest.chat_send_all(luxgate.box:get_string("vref").."!!!!")
+    luxgate.log(meta:get_int("power"))
+    luxgate.log(minetest.serialize(luxgate.chests))
+    --luxgate.log(luxgate.box:get_string("vref").."!!!!")
     --luxgate.box:set_string("vref","")
     end
 })
@@ -154,7 +154,7 @@ minetest.register_node("nc_luxgate:frame_lam",{
                     nam = "Depl Vessicle"
                 else end
                 meta:set_string("infotext","Node:".. nam .. " | ".." Dist; "..vector.distance(ves,dpos))
-                minetest.chat_send_all(meta:get_int("gindex"))
+                luxgate.log(meta:get_int("gindex"))
         
                 else end
             end
@@ -223,7 +223,7 @@ minetest.register_node("nc_luxgate:frame_v",{
         }
     },
     on_punch = function(pos)
-        minetest.chat_send_all(luxgate.box:get_string("vref"))
+        luxgate.log(luxgate.box:get_string("vref"))
     end
 })
 
@@ -265,7 +265,7 @@ minetest.register_node("nc_luxgate:frame_v",{
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     on_punch = function(pos)
         local lam = minetest.find_node_near(pos,3,"nc_luxgate:frame_lam", false)
-        minetest.chat_send_all(luxgate.core.tumb(lam) or "//")
+        luxgate.log(luxgate.core.tumb(lam) or "//")
     end
    })
 --  --  --  --  --  --  --  --  --  --  --  --  
