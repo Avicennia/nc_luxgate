@@ -62,8 +62,9 @@ minetest.register_node("nc_luxgate:vessicle",{
     on_punch = function(pos)
 
     local meta = minetest.get_meta(pos)
-    minetest.chat_send_all(minetest.serialize(luxgate.vests))
-    minetest.chat_send_all(luxgate.box:get_string("vref").."!!!!")
+    minetest.chat_send_all(meta:get_int("power"))
+    minetest.chat_send_all(minetest.serialize(luxgate.chests))
+    --minetest.chat_send_all(luxgate.box:get_string("vref").."!!!!")
     --luxgate.box:set_string("vref","")
     end
 })

@@ -302,28 +302,42 @@ luxgate.core.portalwork = function(pos)
                 local meta = minetest.get_meta(button)
                 destin = tonumber(meta:get_int("gindex"))
                 if(destin ~= "")then
-                local des = luxgate.vests[destin]
-                ddestin = {x = des.x, y = des.y, z = des.z}
-                --local dt = des.v
+                    local des = luxgate.vests[destin]
+                    ddestin = {x = des.x, y = des.y, z = des.z}
+                    --local dt = des.v
 
-                if(luxgate.core.destiny(pos, button) < minetest.get_meta(pos):get_int("power"))then
+                    local namesrc = function(name)
+                        local name;
+                        for n = 1, #luxgate.chests, 1 do
+                            if(luxgate.chests[n] == players[1]:get_player_name())then
+                                minetest.chat_send_all(minetest.serialize(luxgate.chests))
+                                return true
+                            else minetest.chat_send_all("noname") end
+                        end
+                    end
 
-                    minetest.get_meta(pos):set_int("power",minetest.get_meta(pos):get_int("power") - luxgate.core.destiny(pos, button))
+                    if(namesrc(players[1]) == true)then
+                        return
+                    else
+                    if(luxgate.core.destiny(pos, button) < minetest.get_meta(pos):get_int("power"))then
+
+                        minetest.get_meta(pos):set_int("power",minetest.get_meta(pos):get_int("power") - luxgate.core.destiny(pos, button))
                     
-                    luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 2)
+                        luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 2)
 
-                    return minetest.after(0.5, function() luxgate.core.geriatrics(players[1],ddestin) end)
+                        return minetest.after(0.5, function() luxgate.core.geriatrics(players[1],ddestin) end)
                 
-                elseif(luxgate.core.destiny(pos, button) == minetest.get_meta(pos):get_int("power") and minetest.get_meta(pos):get_int("power") ~= 0)then
+                    elseif(luxgate.core.destiny(pos, button) == minetest.get_meta(pos):get_int("power") and minetest.get_meta(pos):get_int("power") ~= 0)then
                 
-                    luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 2)
+                        luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 2)
 
-                    minetest.after(0.5, function() luxgate.core.geriatrics(players[1],ddestin) end)
+                        minetest.after(0.5, function() luxgate.core.geriatrics(players[1],ddestin) end)
                 
-                    return minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})--  MAKE PARTICLE EFFECT HERE.
+                        return minetest.set_node(pos, {name = "nc_luxgate:vessicleNull"})--  MAKE PARTICLE EFFECT HERE.
 
-                else return end
-            else end
+                    else return end
+                end
+                else end
             else end   
 
         else end
@@ -347,16 +361,18 @@ end
 
 luxgate.core.geriatrics = function(user,dest) -- sends player to destination and checks if area is satisfactory for teleport.
     if(user and dest)then
-        local nam = minetest.find_node_near(dest,2,"nc_terrain:stone",false)
+        --local nam = minetest.find_node_near(dest,2,"air",false)
         local st = user:get_pos()
-        if(nam)then
-            nam.y = nam.y + 1
-                user:set_pos(nam)
-
+        --if(nam)then
+            dest.y = dest.y + 1
+        
+                user:set_pos({x = dest.x - 2, y = dest.y +1, z = dest.z - 2})
+                table.insert(luxgate.chests,user:get_player_name())
                 minetest.after(0.5, function()
                 luxgate.core.followup(st,user)
-            end) 
-        else end
+            end)
+        
+        --else end
     else end
 end
 
@@ -364,20 +380,35 @@ luxgate.core.followup = function(pos, user)
     local ves = minetest.find_node_near(user:get_pos(),3,"group:luxv",true)
     
 
+    local namef = function(name)
+        local na;
+        for n = 0, #luxgate.chests, 1 do
+            if(luxgate.chests[n] == name)then
+                luxgate.chests[n] = nil;
+                return
+            else end
+        end
+        return na
+    end
+
+    local namer = function(indie)
+        return minetest.after(3, function() table.remove(luxgate.chests,indie) end)
+    end
+
     if(ves and luxgate.core.tvot(pos,ves))then
         minetest.chat_send_all(minetest.serialize(luxgate.core.tvot(pos,ves)))
-    return
+    return namef(user:get_player_name())
 
     elseif(not ves)then
-
-        return user:set_pos(pos) 
+        
+        return user:set_pos(pos), namef(user:get_player_name())
 
     elseif(ves and not luxgate.core.tvot(pos,ves))then
 
-        return user:set_pos(pos)
+        return user:set_pos(pos), namef(user:get_player_name())
 
     else end
-
+    return namef(user:get_player_name())
 end
 
 luxgate.core.xenithcore = function(pos)
