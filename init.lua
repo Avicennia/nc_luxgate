@@ -31,59 +31,12 @@ luxgate = {
     vests = {}
 }
 
-luxgate.log = function(thing, t)
-    local thing = ((type(thing) == "string") and thing or minetest.serialize(thing))
-    t = t or "action"
-    return minetest.chat_send_all(thing), minetest.log(t,thing)
-end
+dofile(modpath .. "/chromatophore.lua")
 
-luxgate.plog = function(pl,th)
-    pl = ((type(pl) == "string" and pl) or pl:get_player_name())
-    th = ((type(th) == "string" and th) or minetest.serialize(th))
-    return minetest.chat_send_player(pl,th)
-end
+dofile(modpath .. "/centrosome.lua")
 
-dofile(modpath .. "/smokenmirrors.lua")
-
-dofile(modpath .. "/legothingies.lua")
-
-dofile(modpath .. "/brainything.lua")
+dofile(modpath .. "/ganglion.lua")
 
 dofile(modpath .. "/nodereg.lua")
 
 luxgate.core.backupquery(false) -- Pull any existing mod storage data for vessicle locations.
-
-
-minetest.register_abm({
-    nodenames = {"nc_luxgate:vessicle"},
-    neighbors = {"nc_luxgate:frame_lam"},
-    interval = 1,
-    chance = 1,
-    action = function(pos)
-        local val = luxgate.core.whosthere(pos) -- Determine own gender.
-
-    if(val and  type(val) == "number" and val > 0)then -- Check yourself for gender, if you like, then set timer for cooking your brand new turkey.
-        luxgate.particles.portalhole(pos) -- Open oven and let nice smelling turkeywater steam particles waft out.
-        
-        luxgate.core.portalwork(pos) -- Check for turkey doneness with lua_toothpick, If done, grab turkey and fling to location determined by nearby button.        
-        else end
-    end
-})
-minetest.register_abm({
-    nodenames = {"nc_luxgate:vessicle"},
-    neighbors = {"nc_luxgate:frame_lam"},
-    interval = 6.5,
-    chance = 1,
-    action = function(pos)
-        minetest.sound_play({name = "gatewaveecho2"}, {pos = pos, max_hear_distance = 18})
-    end
-})
-minetest.register_on_dignode(
-    function(pos, oldnode, digger)
-        if(oldnode.name == "nc_lode:ore")then
-            if(math.random(100) >= 63)then
-            local space = minetest.find_node_near(pos,1,"air",false)
-        minetest.item_drop(ItemStack("nc_luxgate:shard_ilmenite 1"),digger,space or pos)
-            else end
-        else end
-    end)

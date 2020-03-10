@@ -76,7 +76,7 @@ minetest.register_node("nc_luxgate:vessicle",{
 minetest.register_node("nc_luxgate:frame_ohm",{
     description = "Omega Gate Frame",
     diggable = false,
-    pointable = false,
+    --pointable = false,
     tiles = {{name ="ohm_anim.png",
     animation = {
         type = "vertical_frames",
@@ -91,6 +91,10 @@ minetest.register_node("nc_luxgate:frame_ohm",{
         }
     }},
     groups = {luxg = 1},
+    on_punch = function()
+    minetest.chat_send_all(minetest.serialize(luxgate.vests))
+    luxgate.vests = {}
+    end
 })
 minetest.register_node("nc_luxgate:frame_lam",{
     description = "Lambda Gate Frame",

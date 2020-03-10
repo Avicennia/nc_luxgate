@@ -112,7 +112,7 @@ nodecore.register_craft({
 
 	if(tab == "1350")then
 
-			minetest.chat_send_all(tab)
+			luxgate.log(tab)
 			
         	for n=1, #chainpairs, 1 do
         	luxgate.particles.darkchain(chainpairs[n][1],chainpairs[n][2])
@@ -130,15 +130,17 @@ nodecore.register_craft({
 			
 			if(lam.y)then
 				lam.y = lam.y + 1
-				minetest.set_node(lam,{name = "nc_luxgate:vessicleNull"})
+				minetest.remove.node(lam)
+				minetest.set_node(lam,{name = "nc_luxgate:vessicle"})
 				lam.y = lam.y - 1
+				minetest.remove.node(lam)
 				minetest.set_node(lam,{name = "nc_luxgate:frame_lam"})
 			else end
 		
 			return 
 	elseif(tab == "1332")then
 			
-		minetest.chat_send_all(tab)
+		luxgate.log(tab)
 			
 		for n=1, #chainpairs, 1 do
 			
@@ -153,7 +155,7 @@ nodecore.register_craft({
 			local luxy = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y - 1, z = pos.z - 1},{x = pos.x + 1, y = pos.y + 1, z = pos.z + 1},"group:lux_emit")
 			local dir = vector.direction(luxy[1],luxy[2])
 
-			minetest.chat_send_all(minetest.serialize(dir))
+			luxgate.log(minetest.serialize(dir))
 
 				if(dir and dir.x ~= 0)then
 					dir = true
@@ -173,7 +175,7 @@ nodecore.register_craft({
 		
 		return end)
 	
-	else minetest.chat_send_all(tab) 
+	else luxgate.log(tab) 
 	end
 
 end

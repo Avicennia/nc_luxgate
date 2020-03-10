@@ -1,5 +1,29 @@
 
 
+
+--[[
+
+    Utility Functions
+
+]]
+
+luxgate.log = function(thing, t)
+    local thing = ((type(thing) == "string") and thing or minetest.serialize(thing))
+    t = t or "action"
+    return minetest.chat_send_all(thing), minetest.log(t,thing)
+end
+
+luxgate.plog = function(pl,th)
+    pl = ((type(pl) == "string" and pl) or pl:get_player_name())
+    th = ((type(th) == "string" and th) or minetest.serialize(th))
+    return minetest.chat_send_player(pl,th)
+end
+
+
+
+
+
+
 -- AREA FETCHING THINGY
 
 luxgate.core.area = function(pos,len,wid,hei) -- Grabs a len x wid x hei area of nodes and outputs them as a large table.
@@ -21,6 +45,9 @@ luxgate.core.area = function(pos,len,wid,hei) -- Grabs a len x wid x hei area of
     end
     return output
 end
+
+
+
 --[[
 
             IDENTIFICATION  and ASSIGNMENT STUFF
@@ -121,20 +148,17 @@ luxgate.core.whosthere = function(pos) -- Confirms whether structure true passed
 
     local gat = luxgate.core.area(ori, areaparams[1], areaparams[2], areaparams[3])
     local dig = luxgate.core.transcribe(gat)
-    local anton = {}
+    local ans = {}
 
         if(luxgate.core.unquestionablejudgement(dig,luxgate.numberframe[num]) == "true")then
             
-            anton = num;
+            ans = num;
         
-        else anton = 0; 
-            
-            minetest.chat_send_all(minetest.serialize(dig))
-            minetest.chat_send_all(minetest.serialize(luxgate.numberframe[num]))
-        
+        else ans = 0; 
+            --luxgate.log(minetest.serialize(dig))        
         end
 
-        return anton
+        return ans
     else end
 
 end
@@ -143,7 +167,7 @@ end
 
 --[[
 
-            LUX POWER STUFF
+            Gate Powering Functions
 
 ]]
 
@@ -196,9 +220,34 @@ luxgate.core.powercalc = function(pos)
     
     return val
 end
+
+luxgate.core.xenithcore = function(pos)
+
+    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
+    local powarr = 0
+
+    for n = 1, #ps, 1 do
+        powarr = powarr + luxgate.core.powerpull(ps[n])
+    end
+    
+    return powarr
+end
+
+luxgate.core.holdmycalc = function(pos)
+    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
+    local powarr = 0
+
+    for n = 1, #ps, 1 do
+        powarr = powarr + luxgate.core.powercalc(ps[n])
+    end
+    
+    return powarr
+end
+
+
 --[[
 
-            PORTAL CREATION STUFF
+            Gate Vessicle Registering Functions
 
 ]]
 
@@ -235,16 +284,14 @@ luxgate.core.shitunpost = function(pos) -- Removes self from table repository.
             if(luxgate.vests[k] == postring)then
                 
                 local rem = table.remove(luxgate.vests,k)
-                return minetest.chat_send_all("Removed vessicle with data  "..rem.."  !"),luxgate.core.backupquery(true)
+                return luxgate.log("Removed vessicle with data  "..rem.."  !"),luxgate.core.backupquery(true)
 
             else end
     
         end
     
         if(ind == nil)then
-        
-            minetest.chat_send_all("I am an undocumented, illegal Vessicle, please fix the vessicle census functions!")
-    
+            luxgate.log("something is wrong here")
         else end
 
     else end
@@ -276,6 +323,11 @@ else end
 
 end  
 
+--[[
+
+            Gate Warping Functions
+
+]]
 
 luxgate.core.portalwork = function(pos)
     local button = {x = pos.x, y= pos.y - 1, z = pos.z}
@@ -310,9 +362,9 @@ luxgate.core.portalwork = function(pos)
                         local name;
                         for n = 1, #luxgate.chests, 1 do
                             if(luxgate.chests[n] == players[1]:get_player_name())then
-                                minetest.chat_send_all(minetest.serialize(luxgate.chests))
+                                luxgate.log(minetest.serialize(luxgate.chests))
                                 return true
-                            else minetest.chat_send_all("noname") end
+                            else luxgate.log("noname") end
                         end
                     end
 
@@ -392,7 +444,7 @@ luxgate.core.followup = function(pos, user)
     end
 
     if(ves and luxgate.core.tvot(pos,ves))then
-        minetest.chat_send_all(minetest.serialize(luxgate.core.tvot(pos,ves)))
+        luxgate.log(minetest.serialize(luxgate.core.tvot(pos,ves)))
     return minetest.after(5, function() namef(user:get_player_name()) end)
 
     elseif(not ves)then
@@ -407,35 +459,14 @@ luxgate.core.followup = function(pos, user)
     return minetest.after(5, function() namef(user:get_player_name()) end)
 end
 
-luxgate.core.xenithcore = function(pos)
-
-    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
-    local powarr = 0
-
-    for n = 1, #ps, 1 do
-        powarr = powarr + luxgate.core.powerpull(ps[n])
-    end
-    
-    return powarr
-end
-
-luxgate.core.holdmycalc = function(pos)
-    local ps = minetest.find_nodes_in_area({x = pos.x -2, y = pos.y - 2, z = pos.z - 2},{x = pos.x + 2, y = pos.y + 2, z = pos.z + 2},"nc_luxgate:frame_ohm")
-    local powarr = 0
-
-    for n = 1, #ps, 1 do
-        powarr = powarr + luxgate.core.powercalc(ps[n])
-    end
-    
-    return powarr
-end
 
 
 --[[
 
-    SECURITY STUFF
+    CCTP-related Functions
 
 ]]
+
 luxgate.core.tumb = function(pos)
     -- West -> South -> North -> East is the order that find_nodes_in_area() seems to select preferentially.
     local pos = minetest.find_node_near(pos,6,"nc_luxgate:frame_lam",true)
@@ -465,10 +496,16 @@ luxgate.core.tvot = function(p1,p2)
     else end
 
     local t = (p11 == p22)
-    minetest.chat_send_all(minetest.serialize({p11,p22}))
+    luxgate.log(minetest.serialize({p11,p22}))
    return t
 end
 
+
+--[[
+
+            Crafting Recipes
+
+]]
 
 nodecore.register_craft({
     label = "heat ilmenite and irreversibly destroy polarity 1",
@@ -497,3 +534,43 @@ nodecore.register_craft({
         "nc_luxgate:block_ilmenite"
     }
 })
+
+
+-- ABM Functions
+
+minetest.register_abm({
+    nodenames = {"nc_luxgate:vessicle"},
+    neighbors = {"nc_luxgate:frame_lam"},
+    interval = 1,
+    chance = 1,
+    action = function(pos)
+        local val = luxgate.core.whosthere(pos) -- Determine own gender.
+
+    if(val and  type(val) == "number" and val > 0)then -- Check yourself for gender, if you like, then set timer for cooking your brand new turkey.
+        luxgate.particles.portalhole(pos) -- Open oven and let nice smelling turkeywater steam particles waft out.
+        
+        luxgate.core.portalwork(pos) -- Check for turkey doneness with lua_toothpick, If done, grab turkey and fling to location determined by nearby button.        
+        else end
+    end
+})
+minetest.register_abm({
+    nodenames = {"nc_luxgate:vessicle"},
+    neighbors = {"nc_luxgate:frame_lam"},
+    interval = 6.5,
+    chance = 1,
+    action = function(pos)
+        minetest.sound_play({name = "gatewaveecho2"}, {pos = pos, max_hear_distance = 18})
+    end
+})
+
+
+-- Ore registering function
+minetest.register_on_dignode(
+    function(pos, oldnode, digger)
+        if(oldnode.name == "nc_lode:ore")then
+            if(math.random(100) >= 63)then
+            local space = minetest.find_node_near(pos,1,"air",false)
+        minetest.item_drop(ItemStack("nc_luxgate:shard_ilmenite 1"),digger,space or pos)
+            else end
+        else end
+    end)
