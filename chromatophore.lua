@@ -200,18 +200,18 @@ luxgate.particles.cyclicAMP = function(pos,tex,r)
         local ptx, ptz = x + r * math.cos(ang), z + r * math.sin(ang)
   
     minetest.add_particlespawner({
-        amount = 12,
-        time = 0.5,
+        amount = 8,
+        time = 1.5,
         minpos = {x=ptx, y=pos.y, z=ptz},
         maxpos = {x=ptx, y=pos.y, z=ptz},
-        minvel = {x = 0, y = 5, z = 0},
-        maxvel = {x = 0, y=10, z= 0},
+        minvel = {x = 0, y =3, z = 0},
+        maxvel = {x = 0, y=5, z= 0},
         minacc = {x = 0, y = 0.3, z = 0},
         maxacc = {x=0, y=0, z=0},
-        minexptime = 0.3,
-        maxexptime = 0.5,
-        minsize = 0.4,
-        maxsize = 0.8,
+        minexptime = 0.8,
+        maxexptime = 1,
+        minsize = 1.2,
+        maxsize = 1.8,
         animation = {
             type = "vertical_frames",
             aspect_w = 16,
@@ -223,8 +223,47 @@ luxgate.particles.cyclicAMP = function(pos,tex,r)
                 frames_h = 6,
                 frame_length = 0.1,
             },
-        collisiondetection = false,
-        collision_removal = false,
+        collisiondetection = true,
+        collision_removal = true,
+        vertical = true,
+        texture = tex,
+        glow = 4
+    })
+end
+end
+
+luxgate.particles.cyclicAMP2 = function(pos,tex,r)
+    local x, z = pos.x, pos.z
+    for i = 1, 360, 1 do
+        local ang = i * math.pi / 180
+        local ptx, ptz = x + r * math.cos(ang), z + r * math.sin(ang)
+        
+    minetest.add_particlespawner({
+        amount = 2,
+        time = 10,
+        minpos = {x=ptx, y=pos.y, z=ptz},
+        maxpos = {x=ptx, y=pos.y, z=ptz},
+        minvel = {x = 0, y =0.05, z = 0},
+        maxvel = {x = 0, y=0.08, z= 0},
+        minacc = {x = 0, y = 0, z = 0},
+        maxacc = {x=0, y=0.01, z=0},
+        minexptime = 1,
+        maxexptime = 3,
+        minsize = 1.2,
+        maxsize = 1.8,
+        animation = {
+            type = "vertical_frames",
+            aspect_w = 16,
+            aspect_h = 16,
+            length = 0.8},
+            {
+                type = "sheet_2d",
+                frames_w = 1,
+                frames_h = 6,
+                frame_length = 0.1,
+            },
+        collisiondetection = true,
+        collision_removal = true,
         vertical = true,
         texture = tex,
         glow = 4

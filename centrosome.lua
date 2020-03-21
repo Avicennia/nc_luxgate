@@ -12,9 +12,9 @@
 ]]
 
 luxgate.numberframe = {
-	{1,2,10,2,1,2,9,9,9,2,10,9,10,9,10,2,9,9,9,2,1,2,10,2,1,0,0,0,0,0,0,0,0,0,0,0,5,4,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,8,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,5,0,5,3,0,0,0,0,0,0,0,0,0,0},
+	{1,2,2,2,1,2,9,9,9,2,2,9,2,9,2,2,9,9,9,2,1,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,5,4,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,8,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,5,0,5,3,0,0,0,0,0,0,0,0,0,0},
 	
-	{1,2,10,2,1,2,9,9,9,2,10,9,10,9,10,2,9,9,9,2,1,2,10,2,1,0,0,0,0,0,0,0,5,0,0,0,0,4,0,0,0,0,5,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,3,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,3,0,0,0,0,5,0,0,0,0,0,0,0,0,0,5,0,0,0,0,3,0,0},
+	{1,2,2,2,1,2,9,9,9,2,2,9,2,9,2,2,9,9,9,2,1,2,2,2,1,0,0,0,0,0,0,0,5,0,0,0,0,4,0,0,0,0,5,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,3,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,3,0,0,0,0,5,0,0,0,0,0,0,0,0,0,5,0,0,0,0,3,0,0},
 	
 	{2,2,2,2,4,2,2,2,2,0,0,0,0,8,0,0,0,0}
 }
@@ -111,8 +111,6 @@ nodecore.register_craft({
 		else end
 
 	if(tab == "1350")then
-
-			luxgate.log(tab)
 			
         	for n=1, #chainpairs, 1 do
         	luxgate.particles.darkchain(chainpairs[n][1],chainpairs[n][2])
@@ -140,7 +138,6 @@ nodecore.register_craft({
 			return 
 	elseif(tab == "1332")then
 			
-		luxgate.log(tab)
 			
 		for n=1, #chainpairs, 1 do
 			
@@ -186,20 +183,73 @@ end
 
 
 --			SCHEMATICS			--
-n1 = { name = "air", prob = 0 }
-n2 = { name = "nc_luxgate:ulvstone_i" }
-n3 = { name = "nc_luxgate:ulvstone" }
-n4 = { name = "nc_terrain:stone" }
-n5 = { name = "nc_luxgate:block_ilmenite" }
-n6 = { name = "nc_luxgate:frame_v", param2 = 18 }
-n7 = { name = "nc_luxgate:frame_lam" }
-n8 = { name = "nc_luxgate:frame_v", param2 = 12 }
-n9 = { name = "nc_luxgate:frame_ohm" }
-n10 = { name = "nc_luxgate:vessicleNull" }
-n11 = { name = "nc_luxgate:frame_e", param2 = 3 }
-n12 = { name = "nc_luxgate:frame_e", param2 = 1 }
+local n1 = { name = "air", prob = 0 }
+local n2 = { name = "nc_luxgate:ulvstone_i" }
+local n3 = { name = "nc_luxgate:ulvstone" }
+local n5 = { name = "nc_luxgate:frame_ohm" }
+local n6 = { name = "nc_luxgate:frame_e", param2 = 2 }
+local n7 = { name = "nc_luxgate:ulvstone_c", param2 = 24 }
+local n8 = { name = "nc_luxgate:ulvstone_c", param2 = 23 }
+local n9 = { name = "nc_luxgate:ulvstone_c", param2 = 27 }
+local n10 = { name = "nc_luxgate:frame_v", param2 = 9 }
+local n11 = { name = "nc_luxgate:frame_v", param2 = 7 }
+local n12 = { name = "nc_luxgate:ulvstone_c", param2 = 22 }
+local n13 = { name = "nc_luxgate:ulvstone_c", param2 = 84 }
+local n14 = { name = "nc_luxgate:frame_lam" }
+local n15 = { name = "nc_luxgate:vessicleNull" }
+local n16 = { name = "nc_luxgate:ulvstone_c", param2 = 25 }
+local n17 = { name = "nc_luxgate:ulvstone_c", param2 = 21 }
+local n18 = { name = "nc_luxgate:ulvstone_c", param2 = 26 }
+local n19 = { name = "nc_luxgate:frame_e" }
+
+luxgate.schem.gate2 =	{
+	size = {
+		y = 5,
+		x = 7,
+		z = 7
+	}
+,
+	data = {
+n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
+n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
+n1, n1, n2, n3, n3, n3, n2, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
+n1, n5, n1, n1, n1, n1, n1, n1, n6, n1, n1, n1, n1, n1, n1, n5, n1, 
+n1, n1, n1, n3, n7, n8, n9, n3, n1, n1, n1, n1, n10, n1, n1, n1, n1, 
+n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n11, 
+n1, n1, n1, n1, n3, n12, n3, n13, n3, n1, n1, n1, n1, n14, n1, n1, 
+n1, n1, n1, n1, n15, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
+n1, n1, n1, n1, n1, n1, n3, n16, n17, n18, n3, n1, n1, n1, n1, n11, 
+n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
+n1, n1, n1, n10, n1, n1, n1, n1, n2, n3, n3, n3, n2, n1, n1, n1, n1, 
+n1, n1, n1, n1, n1, n1, n1, n5, n1, n1, n1, n1, n1, n1, n19, n1, n1, 
+n1, n1, n1, n1, n5, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
+n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
+n1, n1, n1, n1, n1, n1, n1, n1, n1, 
+
+}
+}
+
+local n1 = { name = "air", prob = 0 }
+local n2 = { name = "nc_luxgate:ulvstone_i" }
+local n3 = { name = "nc_luxgate:ulvstone" }
+local n5 = { name = "nc_luxgate:ulvstone_c", param2 = 24 }
+local n6 = { name = "nc_luxgate:ulvstone_c", param2 = 23 }
+local n7 = { name = "nc_luxgate:ulvstone_c", param2 = 27 }
+local n8 = { name = "nc_luxgate:ulvstone_c", param2 = 22 }
+local n9 = { name = "nc_luxgate:ulvstone_c", param2 = 52 }
+local n10 = { name = "nc_luxgate:frame_v", param2 = 18 }
+local n11 = { name = "nc_luxgate:frame_lam" }
+local n12 = { name = "nc_luxgate:frame_v", param2 = 12 }
+local n13 = { name = "nc_luxgate:frame_ohm" }
+local n14 = { name = "nc_luxgate:vessicleNull" }
+local n15 = { name = "nc_luxgate:frame_e", param2 = 3 }
+local n16 = { name = "nc_luxgate:frame_e", param2 = 1 }
+local n17 = { name = "nc_luxgate:ulvstone_c", param2 = 25 }
+local n18 = { name = "nc_luxgate:ulvstone_c", param2 = 21 }
+local n19 = { name = "nc_luxgate:ulvstone_c", param2 = 26 }
 
 luxgate.schem.gate1 = {
+
 	size = {
 		y = 5,
 		x = 7,
@@ -209,80 +259,20 @@ luxgate.schem.gate1 = {
 	data = {
 n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
 n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n1, n2, n3, n4, n3, n2, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
+n1, n1, n2, n3, n3, n3, n2, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
 n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n1, n1, n3, n5, n5, n5, n3, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
+n1, n1, n1, n3, n5, n6, n7, n3, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
 n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n1, n1, n1, n4, n5, n4, n5, n4, n1, n1, n1, n6, n7, n8, n1, n1, 
-n1, n9, n1, n10, n1, n9, n1, n1, n11, n1, n1, n1, n12, n1, n1, n9, 
-n8, n1, n6, n9, n1, n1, n3, n5, n5, n5, n3, n1, n1, n1, n1, n1, n1, 
+n1, n1, n1, n1, n3, n8, n3, n9, n3, n1, n1, n1, n10, n11, n12, n1, 
+n1, n1, n13, n1, n14, n1, n13, n1, n1, n15, n1, n1, n1, n16, n1, n1, 
+n13, n12, n1, n10, n13, n1, n1, n3, n17, n18, n19, n3, n1, n1, n1, 
 n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n1, n1, n1, n1, n1, n1, n2, n3, n4, n3, n2, n1, n1, n1, n1, n1, 
+n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n2, n3, n3, n3, n2, n1, n1, 
 n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
 n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
 n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n1, n1, n1, n1, n1, n1, n1, 
+n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
 
 }
 }
 
-n1 = { name = "air", prob = 0 }
-n2 = { name = "nc_luxgate:ulvstone_i" }
-n3 = { name = "nc_luxgate:ulvstone" }
-n4 = { name = "nc_terrain:stone" }
-n5 = { name = "nc_luxgate:frame_ohm" }
-n6 = { name = "nc_luxgate:frame_e", param2 = 2 }
-n7 = { name = "nc_luxgate:block_ilmenite" }
-n8 = { name = "nc_luxgate:frame_v", param2 = 9 }
-n9 = { name = "nc_luxgate:frame_v", param2 = 7 }
-n10 = { name = "nc_luxgate:frame_lam" }
-n11 = { name = "nc_luxgate:vessicleNull" }
-n12 = { name = "nc_luxgate:frame_e" }
-
-luxgate.schem.gate2 = {
-	size = {
-		y = 5,
-		x = 7,
-		z = 7
-	}
-,
-	data = {
-n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n1, n2, n3, n4, n3, n2, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n5, n1, n1, n1, n1, n1, n1, n6, n1, n1, n1, n1, n1, n1, n5, n1, 
-n1, n1, n1, n3, n7, n7, n7, n3, n1, n1, n1, n1, n8, n1, n1, n1, n1, 
-n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n9, 
-n1, n1, n1, n1, n4, n7, n4, n7, n4, n1, n1, n1, n1, n10, n1, n1, n1, 
-n1, n1, n1, n11, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n1, n1, n1, n1, n3, n7, n7, n7, n3, n1, n1, n1, n1, n9, n1, n1, 
-n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n8, n1, n1, n1, n1, n2, n3, n4, n3, n2, n1, n1, n1, n1, n1, n1, 
-n1, n1, n1, n1, n1, n5, n1, n1, n1, n1, n1, n1, n12, n1, n1, n1, n1, 
-n1, n1, n5, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-n1, n1, n1, n1, n1, n1, n1, 
-
-}
-}
-
-n1 = { name = "air", prob = 0 }
-n2 = { name = "nc_luxgate:ulvstone" }
-n3 = { name = "nc_luxgate:frame_lam" }
-n4 = { name = "nc_luxgate:vessicleNull" }
-
-luxgate.schem.pad = {
-	size = {
-		y = 3,
-		x = 5,
-		z = 5
-	}
-,
-data = {
-	n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n2, 
-	n2, n2, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n2, n3, n2, 
-	n1, n1, n1, n4, n1, n1, n1, n1, n1, n1, n1, n1, n2, n2, n2, n1, n1, 
-	n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, n1, 
-	n1, n1, n1, n1, n1, n1, n1, 
-}
-}

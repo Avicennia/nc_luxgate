@@ -13,7 +13,7 @@ luxgate = {
     schem = {},
     nodes = {
         ilmenite = {},
-        names = {[0] = "air","nc_luxgate:ulvstone_i","nc_luxgate:ulvstone","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle" or "nc_luxgate:vessicleNull","nc_luxgate:block_ilmenite","nc_terrain:stone"}},
+        names = {[0] = "air","nc_luxgate:ulvstone_i","nc_luxgate:ulvstone","nc_luxgate:frame_ohm","nc_luxgate:frame_lam","nc_luxgate:frame_v","nc_luxgate:frame_e","nc_lode:rod_annealed","nc_luxgate:vessicle" or "nc_luxgate:vessicleNull","nc_luxgate:ulvstone_c","nc_terrain:stone"}},
     nodenumbers = {},
     dirs = {
         {x=1,y=0,z=0},  -- East

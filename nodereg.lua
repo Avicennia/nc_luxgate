@@ -113,30 +113,32 @@ minetest.register_node("nc_luxgate:frame_lam",{
         }
     }},
     groups = { luxg = 1,cracky =1},
-    on_construct = function(pos, node)
-    minetest.get_meta(pos):set_string("infotext","Node:".. node.name .. " | ".." Dist; "..0)
+    on_construct = function(pos)
+        local node = minetest.get_node(pos).name
+    minetest.get_meta(pos):set_string("infotext","Node:".. node .. " | ".." Dist; "..0)
     end,
     on_punch = function(pos, node, puncher)
-            local ves = minetest.find_node_near(pos,4,"nc_luxgate:vessicle",false)
-            local nves = minetest.find_node_near(pos,4,"nc_luxgate:vessicleNull",false)
+        if(puncher:get_player_control().sneak == false)then
+        local ves = minetest.find_node_near(pos,4,"nc_luxgate:vessicle",false)
+        local nves = minetest.find_node_near(pos,4,"nc_luxgate:vessicleNull",false)
             
+
+            if(ves and luxgate.core.holdmycalc(ves) >= 16)then
         
-                if(ves and luxgate.core.holdmycalc(ves) >= 16)then
-        
-                    local meta = minetest.get_meta(ves)
-                    meta:set_int("power",(meta:get_int("power") + luxgate.core.xenithcore(ves)))
+                local meta = minetest.get_meta(ves)
+                meta:set_int("power",(meta:get_int("power") + luxgate.core.xenithcore(ves)))
         
         
                 elseif(nves and luxgate.core.holdmycalc(nves) >= 10)then
         
-                    minetest.set_node(nves,{name = "nc_luxgate:vessicle"})
+                minetest.set_node(nves,{name = "nc_luxgate:vessicle"})
         
-                    local meta = minetest.get_meta(nves)
-                    meta:set_int("power",luxgate.core.xenithcore(nves) - 10)
-                else  end
+                local meta = minetest.get_meta(nves)
+                meta:set_int("power",luxgate.core.xenithcore(nves) - 10)
+            else  end
         
         
-                if(puncher:get_player_control().sneak == true)then
+        elseif(puncher:get_player_control().sneak == true)then
                     
                 local ves = minetest.find_node_near(pos,4,"nc_luxgate:vessicle",false)
                 local meta = minetest.get_meta(pos)
@@ -146,7 +148,7 @@ minetest.register_node("nc_luxgate:frame_lam",{
                     meta:set_int("gindex",1)
                 else end
         
-        
+                if(type(luxgate.vests[meta:get_int("gindex")]) == "table")then
                 local ps = luxgate.core.decode(luxgate.vests[meta:get_int("gindex")])[1]
                 local dpos = {x = ps[1], y = ps[2], z = ps[3]}
                 local nam;
@@ -156,12 +158,12 @@ minetest.register_node("nc_luxgate:frame_lam",{
                     nam = "vessicle"
                 elseif(minetest.get_node(dpos).name == "nc_luxgate:vessicleNull")then
                     nam = "Depl Vessicle"
-                else end
+                else nam = "ERROR" end
                 meta:set_string("infotext","Node:".. nam .. " | ".." Dist; "..vector.distance(ves,dpos))
                 luxgate.log(meta:get_int("gindex"))
-        
-                else end
-            end
+            else meta:set_string("infotext","Node: REDACTED") end
+            else end
+    end
 })
 
 
@@ -262,7 +264,7 @@ minetest.register_node("nc_luxgate:frame_v",{
    })
    minetest.register_node("nc_luxgate:ulvstone_i",{
     description = "Ulvstone",
-    diggable = false,
+    --diggable = false,
     paramtype = "light",
     tiles = {"canvas2t.png"},
     groups = { luxg = 1,crumbly = 1, ulv = 1},
@@ -272,6 +274,37 @@ minetest.register_node("nc_luxgate:frame_v",{
         luxgate.log(luxgate.core.tumb(lam) or "//")
     end
    })
+   minetest.register_node("nc_luxgate:ulvstone_c",{
+    description = "Ulvstone",
+    paramtype = "light",
+    tiles = 
+    {"canvas2.png",
+     "canvasvertex2.png",
+     "canvas2.png",
+     "canvas2.png",
+     "canvas2.png",
+     "canvas2.png",},
+    paramtype2 = "facedir",
+    groups = { luxg = 1,crumbly = 1, ulv = 1},
+    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    on_punch = function(pos)
+        local pos = minetest.find_node_near(pos, 1, "nc_luxgate:frame_lam", false)
+    luxgate.particles.cyclicAMP2({x = pos.x, y =  pos.y + 4, z  = pos.z}, "darkcurl.png" , 0.5)
+    
+    end
+})
+minetest.register_node("nc_luxgate:ulvstone_v",{
+    description = "Ulvstone",
+    paramtype = "light",
+    tiles = {"canvasvertex.png"},
+    paramtype2 = "facedir",
+    groups = { luxg = 1,crumbly = 1, ulv = 1},
+    sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
+    on_punch = function(pos)
+        
+        minetest.set_node(pos, {name = "nc_luxgate:ulvstone_v", param2 = minetest.get_node(pos).param2 + 1})
+    end
+})
 --  --  --  --  --  --  --  --  --  --  --  --  
 minetest.register_craftitem("nc_luxgate:shard_ilmenite", {
     description = "ilmenite shard",
