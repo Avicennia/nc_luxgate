@@ -2,13 +2,13 @@
 -- STRUCTURE NUMERIC SCHEMATICS
 
 
--- portal frame dimensions are 5x5, ranvier_pads are 3x3
+-- portal frame dimensions are 5x5, dash_pads are 3x3
 
 --[[
 	values for luxgate.numberframe table structure encoding
 1 = max
 2 = max_alt
-3 = ranvier_pad
+3 = dash_pad
 ]]
 
 luxgate.numberframe = {
@@ -20,7 +20,7 @@ luxgate.numberframe = {
 }
 
 nodecore.register_craft({
-    label = "heat ilmenite and irreversibly destroy polarity 1",
+    label = "heat ilmenite and irreversibly destroy polarity",
     action = "cook",
     touchgroups = {flame = 1},
     duration = 10,
@@ -152,7 +152,7 @@ nodecore.register_craft({
 			local luxy = minetest.find_nodes_in_area({x = pos.x - 1, y = pos.y - 1, z = pos.z - 1},{x = pos.x + 1, y = pos.y + 1, z = pos.z + 1},"group:lux_emit")
 			local dir = vector.direction(luxy[1],luxy[2])
 
-			luxgate.log(minetest.serialize(dir))
+			--luxgate.log(minetest.serialize(dir))
 
 				if(dir and dir.x ~= 0)then
 					dir = true
@@ -172,8 +172,7 @@ nodecore.register_craft({
 		
 		return end)
 	
-	else luxgate.log(tab) 
-	end
+	else end
 
 end
 })

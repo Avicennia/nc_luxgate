@@ -86,7 +86,7 @@ function luxgate.particles.darkchain(pos1, pos2)
     
     minetest.add_particlespawner({
         amount = 100,
-        time = 10,
+        time = 20,
         minpos = {x=pos1.x, y=pos1.y + 0.5, z=pos1.z},
         maxpos = {x=pos1.x, y=pos1.y + 0.5, z=pos1.z},
         minvel = {x=dirp.x, y=dirp.y, z=dirp.z},
@@ -101,7 +101,7 @@ function luxgate.particles.darkchain(pos1, pos2)
         collisiondetection = false,
         collision_removal = false,
         vertical = false,
-        texture = "darkcurl.png",
+        texture = "glyphanim.png",
         animation = {
             type = "vertical_frames",
             aspect_w = 16,
@@ -110,7 +110,7 @@ function luxgate.particles.darkchain(pos1, pos2)
             {
                 type = "sheet_2d",
                 frames_w = 1,
-                frames_h = 4,
+                frames_h = 8,
                 frame_length = 0.1,
             },
         glow = 4
@@ -162,55 +162,24 @@ function luxgate.particles.powah(pos1, pos2, dir)
 
 end
 
-function luxgate.particles.seenoevil(player)
-    if(player)then
-        local pos = player:get_pos()
-        player:set_look_vertical(1)
-        pos.y = pos.y
-        for n = 1, 8, 1 do
-        minetest.add_particlespawner({
-            amount = 10,
-            time = 2,
-            minpos = vector.add(pos,vector.divide(luxgate.dirs[n])),
-            maxpos = vector.add(pos,vector.divide(luxgate.dirs[n])),
-            minvel = {x=0, y=1, z=0},
-            maxvel = {x=0, y=2, z=0},
-            minacc = {x=0, y=0.3, z=0},
-            maxacc = {x=0, y=0, z=0},
-            minexptime = 3.0,
-            maxexptime = 3.1,
-            minsize = 8,
-            maxsize = 8,
-        
-            collisiondetection = false,
-            collision_removal = false,
-            vertical = true,
-            texture = "canvas2.png",
-            glow = 4
-        })
-    end
-    
-    else end
-end
-
 luxgate.particles.cyclicAMP = function(pos,tex,r)
     local x, z = pos.x, pos.z
-    for i = 1, 360, 1 do
+    for i = 1, 360, 4 do
         local ang = i * math.pi / 180
         local ptx, ptz = x + r * math.cos(ang), z + r * math.sin(ang)
   
     minetest.add_particlespawner({
-        amount = 8,
-        time = 1.5,
+        amount = 3,
+        time = 2.2,
         minpos = {x=ptx, y=pos.y, z=ptz},
         maxpos = {x=ptx, y=pos.y, z=ptz},
-        minvel = {x = 0, y =3, z = 0},
-        maxvel = {x = 0, y=5, z= 0},
-        minacc = {x = 0, y = 0.3, z = 0},
+        minvel = {x = 0, y =0.6, z = 0},
+        maxvel = {x = 0, y=1.0, z= 0},
+        minacc = {x = 0, y = 0.7, z = 0},
         maxacc = {x=0, y=0, z=0},
-        minexptime = 0.8,
-        maxexptime = 1,
-        minsize = 1.2,
+        minexptime = 5,
+        maxexptime = 6,
+        minsize = 0.8,
         maxsize = 1.8,
         animation = {
             type = "vertical_frames",
@@ -220,53 +189,16 @@ luxgate.particles.cyclicAMP = function(pos,tex,r)
             {
                 type = "sheet_2d",
                 frames_w = 1,
-                frames_h = 6,
-                frame_length = 0.1,
+                frames_h = 8,
+                frame_length = 0.8,
             },
         collisiondetection = true,
         collision_removal = true,
         vertical = true,
         texture = tex,
-        glow = 4
+        glow = 8
     })
 end
 end
 
-luxgate.particles.cyclicAMP2 = function(pos,tex,r)
-    local x, z = pos.x, pos.z
-    for i = 1, 360, 1 do
-        local ang = i * math.pi / 180
-        local ptx, ptz = x + r * math.cos(ang), z + r * math.sin(ang)
-        
-    minetest.add_particlespawner({
-        amount = 2,
-        time = 10,
-        minpos = {x=ptx, y=pos.y, z=ptz},
-        maxpos = {x=ptx, y=pos.y, z=ptz},
-        minvel = {x = 0, y =0.05, z = 0},
-        maxvel = {x = 0, y=0.08, z= 0},
-        minacc = {x = 0, y = 0, z = 0},
-        maxacc = {x=0, y=0.01, z=0},
-        minexptime = 1,
-        maxexptime = 3,
-        minsize = 1.2,
-        maxsize = 1.8,
-        animation = {
-            type = "vertical_frames",
-            aspect_w = 16,
-            aspect_h = 16,
-            length = 0.8},
-            {
-                type = "sheet_2d",
-                frames_w = 1,
-                frames_h = 6,
-                frame_length = 0.1,
-            },
-        collisiondetection = true,
-        collision_removal = true,
-        vertical = true,
-        texture = tex,
-        glow = 4
-    })
-end
-end
+

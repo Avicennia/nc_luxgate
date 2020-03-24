@@ -3,7 +3,9 @@
 minetest.register_node("nc_luxgate:vessicleNull",{
     description = "-NULL-",
     drawtype = "nodebox",
-    tiles = {"portalhole.png"},
+    pointable = false,
+    diggable = false,
+    tiles = {"portalhole.png^[makealpha:250,255,201"},
     light_source = 4,
     walkable = false,
     pointable = true,
@@ -40,8 +42,8 @@ end
 })
 minetest.register_node("nc_luxgate:vessicle",{
     description = "-NULL-",
-    --diggable = false,
-    --pointable = false,
+    diggable = false,
+    pointable = false,
     drawtype = "nodebox",
     tiles = {"portalhole.png^[makealpha:250,255,201"},
     light_source = 9,
@@ -52,21 +54,12 @@ minetest.register_node("nc_luxgate:vessicle",{
 			{-0.125, 0, 0.001, 0.125, 0.3125, 0},
 		}
     },
-    groups = {crumbly = 1, luxg = 1, luxv = 1},
+    groups = {crumbly = 1, luxv = 1},
     on_construct = function(pos)
 
     luxgate.core.shitpost(pos) -- Register self to table.
 
     end,
-
-    on_punch = function(pos)
-
-    local meta = minetest.get_meta(pos)
-    luxgate.log(meta:get_int("power"))
-    luxgate.log(minetest.serialize(luxgate.chests))
-    --luxgate.log(luxgate.box:get_string("vref").."!!!!")
-    --luxgate.box:set_string("vref","")
-    end
 })
 
 
@@ -76,26 +69,11 @@ minetest.register_node("nc_luxgate:vessicle",{
 minetest.register_node("nc_luxgate:frame_ohm",{
     description = "Omega Gate Frame",
     diggable = false,
-    --pointable = false,
-    tiles = {{name ="ohm_anim.png",
-    animation = {
-        type = "vertical_frames",
-        aspect_w = 16,
-        aspect_h = 16,
-        length = 1},
-        {
-            type = "sheet_2d",
-            frames_w = 1,
-            frames_h = 7,
-            frame_length = 0.1,
-        }
-    }},
+    pointable = false,
+    tiles = {"canvas2.png", "ohm_anim.png", "ohm_anim.png", "ohm_anim.png", "ohm_anim.png", "ohm_anim.png"},
     groups = {luxg = 1},
-    on_punch = function()
-    minetest.chat_send_all(minetest.serialize(luxgate.vests))
-    luxgate.vests = {}
-    end
 })
+
 minetest.register_node("nc_luxgate:frame_lam",{
     description = "Lambda Gate Frame",
     diggable = false,
@@ -159,8 +137,10 @@ minetest.register_node("nc_luxgate:frame_lam",{
                 elseif(minetest.get_node(dpos).name == "nc_luxgate:vessicleNull")then
                     nam = "Depl Vessicle"
                 else nam = "ERROR" end
+                if(ves)then
                 meta:set_string("infotext","Node:".. nam .. " | ".." Dist; "..vector.distance(ves,dpos))
-                luxgate.log(meta:get_int("gindex"))
+                --luxgate.log(meta:get_int("gindex"))
+                else end
             else meta:set_string("infotext","Node: REDACTED") end
             else end
     end
@@ -181,23 +161,12 @@ minetest.register_node("nc_luxgate:frame_e",{
             {-0.375, -0.5, -0.375, 0.375, 0.5, 0.375},
         }
     },
-    tiles = {{name ="e_anim.png",
-    animation = {
-        type = "vertical_frames",
-        aspect_w = 12,
-        aspect_h = 16,
-        length = 1},
-        {
-            type = "sheet_2d",
-            frames_w = 1,
-            frames_h = 7,
-            frame_length = 0.1,
-        }
-    }},
+    tiles = {"canvas2.png"},
     on_punch = function(pos)
         luxgate.particles.suffusion(pos)
     end
 })
+
 minetest.register_node("nc_luxgate:frame_v",{
     description = "Gate frame Vane",
     diggable = false,
@@ -227,21 +196,19 @@ minetest.register_node("nc_luxgate:frame_v",{
 			{-1.25, 0.375, -0.375, -0.5, 0.4375, 0.375},
 			{-1.3125, 0.4375, -0.375, -0.5625, 0.5, 0.375},
         }
-    },
-    on_punch = function(pos)
-        luxgate.log(luxgate.box:get_string("vref"))
-    end
+    }
 })
 
-   minetest.register_node("nc_luxgate:block_ilmenite",{
+minetest.register_node("nc_luxgate:block_ilmenite",{
     description = "ilmenite block",
     paramtype = "light",
     tiles = {"block_ilmenite.png"},
     groups = { luxg = 1,crumbly = 1, paramag = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
     
-   })
-   minetest.register_node("nc_luxgate:cobble_ilmenite",{
+})
+
+minetest.register_node("nc_luxgate:cobble_ilmenite",{
     description = "ilmenite block",
     paramtype = "light",
     tiles = {"block_ilmenite.png^nc_terrain_cobble.png"},
@@ -251,31 +218,30 @@ minetest.register_node("nc_luxgate:frame_v",{
     
         luxgate.particles.cyclicAMP(pos,"shard_anim.png",1.2, 4)
     end
-   })
-   minetest.register_node("nc_luxgate:ulvstone",{
+})
+
+minetest.register_node("nc_luxgate:ulvstone",{
     description = "Ulvstone",
-    paramtype = "light",
     tiles = {"canvas2.png"},
-    groups = { luxg = 1,crumbly = 1, ulv = 1},
+    groups = { luxg = 1,crumbly = 2, ulv = 1, writable = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
-    on_punch = function()
-    end
     
-   })
-   minetest.register_node("nc_luxgate:ulvstone_i",{
+})
+
+minetest.register_node("nc_luxgate:ulvstone_i",{
     description = "Ulvstone",
-    --diggable = false,
+    pointable = false,
+    diggable = false,
     paramtype = "light",
     tiles = {"canvas2t.png"},
     groups = { luxg = 1,crumbly = 1, ulv = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
-    on_punch = function(pos)
-        local lam = minetest.find_node_near(pos,3,"nc_luxgate:frame_lam", false)
-        luxgate.log(luxgate.core.tumb(lam) or "//")
-    end
-   })
-   minetest.register_node("nc_luxgate:ulvstone_c",{
+})
+
+minetest.register_node("nc_luxgate:ulvstone_c",{
     description = "Ulvstone",
+    pointable = false,
+    diggable = false,
     paramtype = "light",
     tiles = 
     {"canvas2.png",
@@ -287,25 +253,19 @@ minetest.register_node("nc_luxgate:frame_v",{
     paramtype2 = "facedir",
     groups = { luxg = 1,crumbly = 1, ulv = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
-    on_punch = function(pos)
-        local pos = minetest.find_node_near(pos, 1, "nc_luxgate:frame_lam", false)
-    luxgate.particles.cyclicAMP2({x = pos.x, y =  pos.y + 4, z  = pos.z}, "darkcurl.png" , 0.5)
-    
-    end
 })
+
 minetest.register_node("nc_luxgate:ulvstone_v",{
     description = "Ulvstone",
+    pointable = false,
+    diggable = false,
     paramtype = "light",
     tiles = {"canvasvertex.png"},
     paramtype2 = "facedir",
     groups = { luxg = 1,crumbly = 1, ulv = 1},
     sounds = nodecore.sounds("nc_luxgate_ilmenite2"),
-    on_punch = function(pos)
-        
-        minetest.set_node(pos, {name = "nc_luxgate:ulvstone_v", param2 = minetest.get_node(pos).param2 + 1})
-    end
 })
---  --  --  --  --  --  --  --  --  --  --  --  
+
 minetest.register_craftitem("nc_luxgate:shard_ilmenite", {
     description = "ilmenite shard",
     inventory_image = "shard_ilmenite.png",
@@ -324,6 +284,7 @@ nodecore.register_craft({
     toolgroups = { luxg = 1,cracky = 2},
 
 })
+
 nodecore.register_craft({
     label = "pound ilmenite cobble into a solid node",
     action = "pummel",

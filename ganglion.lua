@@ -315,15 +315,11 @@ luxgate.core.shitunpost = function(pos) -- Removes self from table repository.
             if(luxgate.vests[k] == postring)then
                 
                 local rem = table.remove(luxgate.vests,k)
-                return luxgate.log("Removed vessicle with data  "..rem.."  !"),luxgate.core.backupquery(true)
+                return "",luxgate.core.backupquery(true)
 
             else end
     
         end
-    
-        if(ind == nil)then
-            luxgate.log("something is wrong here")
-        else end
 
     else end
 
@@ -367,7 +363,7 @@ luxgate.core.vestRemove = function(pos)
         luxgate.vests[n] = "R";
         luxgate.core.backupquery(true)
         
-            minetest.chat_send_all(n)
+            --minetest.chat_send_all(n)
         else end
     end
 
@@ -422,9 +418,9 @@ luxgate.core.portalwork = function(pos)
                         local name;
                         for n = 1, #luxgate.chests, 1 do
                             if(luxgate.chests[n] == players[1]:get_player_name())then
-                                luxgate.log(minetest.serialize(luxgate.chests))
+                                --luxgate.log(minetest.serialize(luxgate.chests))
                                 return true
-                            else luxgate.log("noname") end
+                            else end
                         end
                     end
 
@@ -435,7 +431,7 @@ luxgate.core.portalwork = function(pos)
 
                         minetest.get_meta(pos):set_int("power",minetest.get_meta(pos):get_int("power") - luxgate.core.destiny(pos, button))
                     
-                        luxgate.particles.cyclicAMP(pos,"luxion_anim.png",1.2, 2)
+                        luxgate.particles.cyclicAMP(pos,"glyphanim.png",1.2, 2)
 
                         return minetest.after(0.5, function() luxgate.core.geriatrics(players[1],ddestin) end)
                 
@@ -501,7 +497,7 @@ luxgate.core.followup = function(pos, user)
     end
 
     if(ves and luxgate.core.tvot(pos,ves))then
-        luxgate.log(minetest.serialize(luxgate.core.tvot(pos,ves)))
+        --luxgate.log(minetest.serialize(luxgate.core.tvot(pos,ves)))
     return minetest.after(5, function() namef(user:get_player_name()) end)
 
     elseif(not ves)then
@@ -553,7 +549,7 @@ luxgate.core.tvot = function(p1,p2)
     else end
 
     local t = (p11 == p22)
-    luxgate.log(minetest.serialize({p11,p22}))
+    --luxgate.log(minetest.serialize({p11,p22}))
    return t
 end
 
@@ -603,12 +599,14 @@ minetest.register_abm({
     action = function(pos)
         local val = luxgate.core.whosthere(pos) -- Determine own gender.
 
-    if(val and  type(val) == "number" and val > 0)then -- Check yourself for gender, if you like, then set timer for cooking your brand new turkey.
+        if(val and  type(val) == "number" and val > 0)then -- Check yourself for gender, if you like, then set timer for cooking your brand new turkey.
         luxgate.particles.portalhole(pos) -- Open oven and let nice smelling turkeywater steam particles waft out.
         
         luxgate.core.portalwork(pos) -- Check for turkey doneness with lua_toothpick, If done, grab turkey and fling to location determined by nearby button.        
         else end
     end
+
+    
 })
 minetest.register_abm({
     nodenames = {"nc_luxgate:vessicle"},
@@ -633,41 +631,35 @@ minetest.register_on_dignode(
     end)
 
 -- Chat command functions
-minetest.register_chatcommand("lgclear:chest",
+
+minetest.register_chatcommand("lgremove",
 {
     params = "<name> <privilege>",
     description = "Remove privilege from player",
     privs = {privs=true},
     func = function(name, param)
-       for n = 0, #luxgate.chests, 1 do
-
-        if(name == luxgate.chests[n])then
         
-            return (luxgate.chests[n] == name and table.remove(luxgate.chests,n)) or minetest.chat_send_all("erruh")
-        
+        local ves = minetest.find_node_near(minetest.get_player_by_name(name):get_pos(), 2, "nc_luxgate:vessicle", true)
+        if(ves and type(ves) == "table")then
+            local struc = minetest.find_nodes_in_area({x = ves.x - 2, y = ves.y - 2, z = ves.z - 2},{x = ves.x + 2, y = ves.y + 2, z = ves.z + 2}, {"group:luxg"})
+                if(struc and type(struc) == "table")then
+                    for n = 1, #struc, 1 do
+                    minetest.remove_node(struc[n])
+                    end
+                else end
         else end
-        
-        end
-    end
-                                  
-})
 
-minetest.register_chatcommand("lgvesremove",
-{
-    params = "<name> <privilege>",
-    description = "Remove privilege from player",
-    privs = {privs=true},
-    func = function(name, param)
-        minetest.chat_send_all("chickle")
         luxgate.core.vestRemove(minetest.get_player_by_name(name):get_pos())
+        
+
     end
                                   
 })
 
-minetest.register_chatcommand("lgvesassert",
+minetest.register_chatcommand("lgassert",
 {
-    params = "<name> <privilege>",
-    description = "Remove privilege from player",
+    params = "luxgate",
+    description = "Register vessicle that is not registered by placement",
     privs = {privs=true},
     func = function(name, param)
         local pos = minetest.get_player_by_name(name):get_pos()
@@ -677,36 +669,36 @@ minetest.register_chatcommand("lgvesassert",
                                   
 })
 
-minetest.register_chatcommand("lglist:msves",
+minetest.register_chatcommand("lglistms",
 {
-    params = "<name> <privilege>",
-    description = "Remove privilege from player",
+    params = "luxgate",
+    description = "List modstored vessicle table",
     privs = {privs=true},
     func = function(name, param)
 
         minetest.chat_send_all(luxgate.box:get_string("vref"))
         if(luxgate.box:get_string("vref") ~= "")then
-        luxgate.log(#minetest.deserialize(luxgate.box:get_string("vref")) or "I'm empty")
+        luxgate.plog(name,#minetest.deserialize(luxgate.box:get_string("vref")) or "I'm empty")
         else end
     end
                                   
 })
-minetest.register_chatcommand("lglist:ves",
+minetest.register_chatcommand("lglist",
 {
-    params = "<name> <privilege>",
-    description = "Remove privilege from player",
+    params = "luxgate",
+    description = "List dynamic vessicle table",
     privs = {privs=true},
     func = function(name, param)
         minetest.chat_send_all(minetest.serialize(luxgate.vests))
-        luxgate.log(#luxgate.vests)
+        luxgate.plog(name,#luxgate.vests)
     end
                                   
 })
 
-minetest.register_chatcommand("lglist:ves:dupclear",
+minetest.register_chatcommand("lgclear",
 {
-    params = "<name> <privilege>",
-    description = "Remove privilege from player",
+    params = "luxgate",
+    description = "Remove duplicates from dynamic table",
     privs = {privs=true},
     func = function(name, param)
         for n = 1, #luxgate.vests, 1 do
@@ -719,7 +711,7 @@ minetest.register_chatcommand("lglist:ves:dupclear",
                     index = index + 1
                     
                 else end
-                luxgate.log(index)
+                --luxgate.log(index)
                 if(index > 1)then
                         luxgate.vests[o] = "R"
                 else end
